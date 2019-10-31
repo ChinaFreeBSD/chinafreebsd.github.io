@@ -35,38 +35,7 @@ header-img: "img/tag-bg.jpg"
                     <li>行业观察、职位、公司优先使用中文</li>
                     <li>外国产品、术语优先使用英文</li>
             </blockquote>-->
-			
-
-			
-			
-			
-			
-			
-			
-			{% include header.html %}
-
-        {{ content }}
-
-    {% include footer.html %}
-    {% include backToTop.html %}
-    <script src="{{ " /js/main.js " | prepend: site.baseurl }}" charset="utf-8"></script>
-    <script src="{{ " /js/smooth-scroll.min.js " | prepend: site.baseurl }}" charset="utf-8"></script>
-    <script type="text/javascript">
-      smoothScroll.init({
-        speed: 500, // Integer. How fast to complete the scroll in milliseconds
-        easing: 'easeInOutCubic', // Easing pattern to use
-        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
-      });
-    </script>
-    <!-- <script src="{{ " /js/scroll.min.js " | prepend: site.baseurl }}" charset="utf-8"></script> -->
-			
-			
-			
-			
-			
-			
-			
-			
+				
 
             <!-- 标签列表 -->
 			{% for tag in site.tags %}
