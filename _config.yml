@@ -4,7 +4,7 @@ SEOTitle: 张诺的博客 | MaMaiPee‘s Blog
 header-img: img/post-bg-desk.jpg
 email: mamaipee@outlook.com
 description: "Every failure is leading towards success."
-keyword: "MaMaiPee, MaMaiPee Blog, 张诺的博客, qiubaiying, 张诺, iOS, Apple, iPhone，FreeBSD， China FreeBSD"
+keyword: "MaMaiPee, MaMaiPee Blog, 张诺的博客, 张诺, iOS,FreeBSD， China FreeBSD"
 url: "http://mamaipee.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/qiubaiying/qiubaiying.github.io.git" # you code repository
@@ -105,11 +105,5 @@ friends: [
     },{
         title: "HUAWEI",
         href: "https://huawei.com"
-    },{
-        title: "Apple",
-        href: "https://apple.com"
     }
 ]
-
-
-destination: docs
