@@ -3,23 +3,23 @@ layout: page
 description: "你好，欢迎来到FreeBSD的世界！"
 ---
 
-{% for postn in paginator.posts %}
+{% for post in paginator.posts %}
 <div class="post-preview">
-    <a href="{{ postn.url | prepend: site.baseurl }}">
+    <a href="{{ post.url | prepend: site.baseurl }}">
         <h2 class="post-title">
-            {{ postn.title }}
+            {{ post.title }}
         </h2>
-        {% if postn.subtitle %}
+        {% if post.subtitle %}
         <h3 class="post-subtitle">
-            {{ postn.subtitle }}
+            {{ post.subtitle }}
         </h3>
         {% endif %}
         <div class="post-content-preview">
-            {{ postn.content | strip_html | truncate:200 }}
+            {{ post.content | strip_html | truncate:200 }}
         </div>
     </a>
     <p class="post-meta">
-        Posted by {% if postn.author %}{{ postn.author }}{% else %}{{ site.title }}{% endif %} on {{ postn.date | date: "%B %-d, %Y" }}
+        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
     </p>
 </div>
 <hr>
