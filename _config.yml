@@ -1,13 +1,13 @@
 # Site settings
 title: MaMaiPee‘s Blog
-SEOTitle: 张诺的博客 | MaMaiPee‘s Blog
+SEOTitle: China FreeBSD Community
 header-img: img/post-bg-desk.jpg
 email: mamaipee@outlook.com
 description: "Every failure is leading towards success."
-keyword: "MaMaiPee, MaMaiPee Blog, 张诺的博客, 张诺, iOS,FreeBSD， China FreeBSD"
+keyword: "freebsd,china freebsd community,FreeBSD,China FreeBSD Community"
 url: "http://mamaipee.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
-github_repo: "https://github.com/qiubaiying/qiubaiying.github.io.git" # you code repository
+github_repo: "https://github.com/chinafreebsd/chinafreebsd.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
@@ -19,7 +19,7 @@ sidebar-avatar: /img/about-mamaipee.jpg      # use absolute URL, seeing it's use
 # SNS settings
 RSS: false
 # weibo_username:     qiubaiying
-github_username:    mamaipee
+github_username:    chinafreebsd
 
 #twitter_username:   qiubaiying
 
@@ -62,9 +62,9 @@ gitalk:
   enable: true    #是否开启Gitalk评论
   clientID: 34963a36cfe653fa56aa                            #生成的clientID
   clientSecret: 7202e23e97d51096102d746dd832520b081ed252    #生成的clientSecret
-  repo: mamaipee.github.io    #仓库名称
-  owner: mamaipee    #github用户名
-  admin: mamaipee
+  repo: chinafreebsd.github.io    #仓库名称
+  owner: chinafreebsd    #github用户名
+  admin: chinafreebsd
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
@@ -76,7 +76,7 @@ ba_track_id: b50bf2b12b5338a1845e33832976fd68
 
 # Google Analytics
 ga_track_id: 'UA-151248165-1'            # Format: UA-xxxxxx-xx
-ga_domain: mamaipee.com               # 默认的是 auto, 这里我是自定义了的域名，你如果没有自己的域名，需要改成auto
+ga_domain: chinafreebsd.org               # 默认的是 auto, 这里我是自定义了的域名，你如果没有自己的域名，需要改成auto
 
 
 
@@ -103,7 +103,7 @@ friends: [
         title: "J3ff",
         href: "http://Chinafreebsd.cn"
     },{
-        title: "HUAWEI",
-        href: "https://huawei.com"
+        title: "Helo/MaMaiPee",
+        href: "mamaipee.com"
     }
 ]
