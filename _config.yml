@@ -11,7 +11,7 @@ github_repo: "https://github.com/chinafreebsd/chinafreebsd.github.io.git" # you 
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "FreeBSD,更好的驱动世界!"
+sidebar-about-description: "FreeBSD, 更好的驱动世界!"
 sidebar-avatar: /img/about-mamaipee.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
