@@ -60,8 +60,8 @@ kramdown:
 # Gitalk
 gitalk:
   enable: true    #是否开启Gitalk评论
-  clientID: c236e20d23707a3ad9c3                            #生成的clientID
-  clientSecret: 0da46137c8768fb7a14d13cffb9feca6e1393444    #生成的clientSecret
+  clientID: 88e4fbaecece0d762a99                            #生成的clientID
+  clientSecret: 60cc9428a57005c75dcc1f706ffaee06719c5eeb    #生成的clientSecret
   repo: chinafreebsd.github.io    #仓库名称
   owner: chinafreebsd    #github用户名
   admin: chinafreebsd
