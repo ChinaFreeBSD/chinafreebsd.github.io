@@ -19,7 +19,7 @@ sidebar-avatar: /img/about-cfb-head.jpg      # use absolute URL, seeing it's use
 # SNS settings
 RSS: false
 # weibo_username:     qiubaiying
-github_username:    ChinaFreeBSD
+github_username:    chinafreebsd
 
 #twitter_username:   qiubaiying
 
@@ -63,8 +63,8 @@ gitalk:
   clientID: 88e4fbaecece0d762a99                            #生成的clientID
   clientSecret: 60cc9428a57005c75dcc1f706ffaee06719c5eeb    #生成的clientSecret
   repo: chinafreebsd.github.io    #仓库名称
-  owner: ChinaFreeBSD    #github用户名
-  admin: ChinaFreeBSD
+  owner: chinafreebsd    #github用户名
+  admin: chinafreebsd
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
