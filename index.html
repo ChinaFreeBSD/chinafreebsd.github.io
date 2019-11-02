@@ -29,7 +29,7 @@ description: "你好，欢迎来到FreeBSD的世界！"
 
 
 {% for post in paginator.posts %}
-{% if post.tags[0] != 'news' %}
+{% if post.tags[0] != 'news' and post.tags[0] != '资源索引' and post.tags[0] != '捐赠'  %}
 <div class="post-preview">
     <a href="{{ post.url | prepend: site.baseurl }}">
         <h2 class="post-title">
