@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      faceswap深度学习AI实现视频换脸详解
-subtitle:   faceswap 详解
+title:      FaceSwap深度学习AI实现视频换脸详解
+subtitle:   FaceSwap 实战详解
 date:       2019-10-30
 author:     FormWeb
 header-img: img/post-bg-ios9-web.jpg
@@ -9,11 +9,12 @@ catalog: true
 tags:
     - FaceSwap
     - AI
+    - 
 --- 
 
-给大家介绍最近超级火的黑科技应用deepfake，这是一个实现图片和视频换脸的app。前段时间神奇女侠加尔盖朵的脸被换到了爱情动作片上，233333。我们这里将会从github项目faceswap开始一步一步实现一个视频换脸的教程。
+给大家介绍最近超级火的黑科技应用deepfake，这是一个实现图片和视频换脸的app。前段时间神奇女侠加尔盖朵的脸被换到了爱情动作片上，2233。我们这里将会从github项目faceswap开始一步一步实现一个视频换脸的教程。
 
-## 注意：
+##### 注意：
 
 本技术存在一定的使用风险，本教程仅做技术交流，请不要用在其他不应该被使用的地方。
 
