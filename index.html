@@ -4,6 +4,7 @@ description: "你好，欢迎来到FreeBSD的世界！"
 ---
 
 {% for post in paginator.posts %}
+{% if post.tags[0] == 'news' %}
 <div class="post-preview">
     <a href="{{ post.url | prepend: site.baseurl }}">
         <h2 class="post-title">
@@ -23,6 +24,7 @@ description: "你好，欢迎来到FreeBSD的世界！"
     </p>
 </div>
 <hr>
+{% endif %}
 {% endfor %}
 
 <!-- Pager -->
