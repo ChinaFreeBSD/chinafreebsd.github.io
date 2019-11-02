@@ -20,23 +20,23 @@ header-img: "img/tag-bg.jpg"
 </header>
 
     
-{% for post in paginator.posts %}
+{% for post1 in paginator.posts %}
 <div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
+    <a href="{{ post1.url | prepend: site.baseurl }}">
         <h2 class="post-title">
-            {{ post.title }}
+            {{ post1.title }}
         </h2>
-        {% if post.subtitle %}
+        {% if post1.subtitle %}
         <h3 class="post-subtitle">
-            {{ post.subtitle }}
+            {{ post1.subtitle }}
         </h3>
         {% endif %}
         <div class="post-content-preview">
-            {{ post.content | strip_html | truncate:200 }}
+            {{ post1.content | strip_html | truncate:200 }}
         </div>
     </a>
     <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
+        Posted by {% if post1.author %}{{ post1.author }}{% else %}{{ site.title }}{% endif %} on {{ post1.date | date: "%B %-d, %Y" }}
     </p>
 </div>
 <hr>
