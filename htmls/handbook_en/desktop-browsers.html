@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>6.2. Browsers</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD Handbook" /><link rel="up" href="desktop.html" title="Chapter 6. Desktop Applications" /><link rel="prev" href="desktop.html" title="Chapter 6. Desktop Applications" /><link rel="next" href="desktop-productivity.html" title="6.3. Productivity" /><link rel="copyright" href="legalnotice.html" title="Copyright" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.2. Browsers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="desktop.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Desktop Applications</th><td width="20%" align="right"> <a accesskey="n" href="desktop-productivity.html">Next</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="desktop-browsers"></a>6.2. Browsers</h2></div></div></div><a id="idp52457080" class="indexterm"></a><p>FreeBSD does not come with a pre-installed web browser.
+      Instead, the <a class="link" href="https://www.FreeBSD.org/ports/www.html" target="_top">www</a>
+      category of the Ports Collection contains many browsers which
+      can be installed as a package or compiled from the Ports
+      Collection.</p><p>The <span class="application">KDE</span> and
+      <span class="application">GNOME</span> desktop environments include
+      their own HTML browser.  Refer to <a class="xref" href="x11-wm.html" title="5.7. Desktop Environments">Section 5.7, &#8220;Desktop Environments&#8221;</a>
+      for more information on how to set up these complete
+      desktops.</p><p>Some lightweight browsers include
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/dillo2/pkg-descr">www/dillo2</a>, <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/links/pkg-descr">www/links</a>, and
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/w3m/pkg-descr">www/w3m</a>.</p><p>This section demonstrates how to install the following
+      popular web browsers and indicates if the application is
+      resource-heavy, takes time to compile from ports, or has any
+      major dependencies.</p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /><col /><col /></colgroup><thead><tr><th>Application Name</th><th>Resources Needed</th><th>Installation from Ports</th><th>Notes</th></tr></thead><tbody><tr><td><span class="application">Firefox</span></td><td>medium</td><td>heavy</td><td>FreeBSD, <span class="trademark">Linux</span>®, and localized versions are
+	      available</td></tr><tr><td><span class="application">Opera</span></td><td>light</td><td>light</td><td>FreeBSD and <span class="trademark">Linux</span>® versions are available</td></tr><tr><td><span class="application">Konqueror</span></td><td>medium</td><td>heavy</td><td>Requires <span class="application">KDE</span>
+	      libraries</td></tr><tr><td><span class="application">Chromium</span></td><td>medium</td><td>heavy</td><td>Requires <span class="application">Gtk+</span></td></tr></tbody></table></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp52492664"></a>6.2.1. Firefox</h3></div></div></div><a id="idp52493304" class="indexterm"></a><p><span class="application">Firefox</span> is an open source
+	browser that features a
+	standards-compliant HTML display engine, tabbed browsing,
+	popup blocking, extensions, improved security, and more.
+	<span class="application">Firefox</span> is based on the
+	<span class="application">Mozilla</span> codebase.</p><p>To install the package of the latest release version of
+	<span class="application">Firefox</span>, type:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg install firefox</code></strong></pre><p>To instead install <span class="application">Firefox</span>
+	Extended Support Release (ESR) version, use:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg install firefox-esr</code></strong></pre><p>Localized versions are available in
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/firefox-i18n/pkg-descr">www/firefox-i18n</a> and
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/firefox-esr-i18n/pkg-descr">www/firefox-esr-i18n</a>.</p><p>The Ports Collection can instead be used to compile the
+	desired version of <span class="application">Firefox</span> from
+	source code.  This example builds
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/firefox/pkg-descr">www/firefox</a>, where
+	<code class="literal">firefox</code> can be replaced with the ESR or
+	localized version to install.</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/firefox</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp52503416"></a>6.2.2. Opera</h3></div></div></div><a id="idp52504056" class="indexterm"></a><p><span class="application">Opera</span> is a full-featured and
+	standards-compliant browser which is still lightweight and
+	fast.  It comes with a built-in mail and news reader, an IRC
+	client, an RSS/Atom feeds reader, and more.  It is available
+	as a native FreeBSD version and as a version that runs under
+	<span class="trademark">Linux</span>® emulation.</p><p>This command installs the package of the FreeBSD version of
+	<span class="application">Opera</span>.  Replace
+	<code class="literal">opera</code> with <code class="literal">linux-opera</code>
+	to instead install the <span class="trademark">Linux</span>® version.</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg install opera</code></strong></pre><p>Alternately, install either version through the Ports
+	Collection.  This example compiles the native version:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/opera</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>To install the <span class="trademark">Linux</span>® version, substitute
+	<code class="literal">linux-opera</code> in place of
+	<code class="literal">opera</code>.</p><p>To install <span class="trademark">Adobe</span>® <span class="trademark">Flash</span>® plugin support, first compile
+	the <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/linux-flashplayer/pkg-descr">www/linux-flashplayer</a>
+	port.  Licensing restrictions prevent making a package
+	available.  Then install <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/opera-linuxplugins/pkg-descr">www/opera-linuxplugins</a>.  This example
+	compiles both applications from ports:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/linux-flashplayer</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/opera-linuxplugins</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>Once installed, check the presence of the plugin by
+	starting the browser, entering
+	<code class="literal">opera:plugins</code> in the location bar and
+	pressing <span class="keycap"><strong>Enter</strong></span>.  A list should appear with
+	all the currently available plugins.</p><p>To add the <span class="application"><span class="trademark">Java</span>&#8482;</span> plugin,
+	follow install
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/java/icedtea-web/pkg-descr">java/icedtea-web</a>.</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp52537464"></a>6.2.3. Konqueror</h3></div></div></div><a id="idp52538104" class="indexterm"></a><p><span class="application">Konqueror</span> is more than a web
+	browser as it is also a file manager and a multimedia
+	viewer.  It is included in the
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11/kde4-baseapps/pkg-descr">x11/kde4-baseapps</a> package or port.</p><p><span class="application">Konqueror</span> supports WebKit as
+	well as its own KHTML.  WebKit is a rendering engine used by
+	many modern browsers including Chromium.  To use WebKit with
+	<span class="application">Konqueror</span> on FreeBSD, install the
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/kwebkitpart/pkg-descr">www/kwebkitpart</a> package
+	or port.  This example installs the package:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg install kwebkitpart</code></strong></pre><p>To install from the Ports Collection:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/kwebkitpart</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>To enable WebKit within
+	<span class="application">Konqueror</span>, click
+	<span class="quote">&#8220;<span class="quote">Settings</span>&#8221;</span>, <span class="quote">&#8220;<span class="quote">Configure Konqueror</span>&#8221;</span>.
+	In the <span class="quote">&#8220;<span class="quote">General</span>&#8221;</span> settings page, click the
+	drop-down menu next to <span class="quote">&#8220;<span class="quote">Default web browser
+	engine</span>&#8221;</span> and change <span class="quote">&#8220;<span class="quote">KHTML</span>&#8221;</span> to
+	<span class="quote">&#8220;<span class="quote">WebKit</span>&#8221;</span>.</p><p><span class="application">Konqueror</span> also supports
+	<span class="application"><span class="trademark">Flash</span>®</span>.  A <span class="quote">&#8220;<span class="quote">How To</span>&#8221;</span>
+	guide for getting <span class="application"><span class="trademark">Flash</span>®</span> support
+	on <span class="application">Konqueror</span> is available at <code class="uri"><a class="uri" href="http://freebsd.kde.org/howtos/konqueror-flash.php" target="_top">http://freebsd.kde.org/howtos/konqueror-flash.php</a></code>.</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp52558968"></a>6.2.4. Chromium</h3></div></div></div><a id="idp52559608" class="indexterm"></a><p><span class="application">Chromium</span> is an open source
+	browser project that aims to build a safer, faster, and more
+	stable web browsing experience.
+	<span class="application">Chromium</span> features tabbed browsing,
+	popup blocking, extensions, and much more.
+	<span class="application">Chromium</span> is the open source project
+	upon which the Google Chrome web browser is based.</p><p><span class="application">Chromium</span> can be installed as a
+	package by typing:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg install chromium</code></strong></pre><p>Alternatively, <span class="application">Chromium</span> can be
+	compiled from source using the Ports Collection:</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/chromium</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><div xmlns="" class="note"><h3 class="admontitle">Note: </h3><p xmlns="http://www.w3.org/1999/xhtml">The executable for <span class="application">Chromium</span>
+	  is <code class="filename">/usr/local/bin/chrome</code>, not
+	  <code class="filename">/usr/local/bin/chromium</code>.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="desktop.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="desktop.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="desktop-productivity.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. Desktop Applications </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6.3. Productivity</td></tr></table></div><p xmlns="" align="center"><small>All FreeBSD documents are available for download
+    at <a href="https://download.freebsd.org/ftp/doc/">https://download.freebsd.org/ftp/doc/</a></small></p><p xmlns="" align="center"><small>Questions that are not answered by the
+    <a href="https://www.FreeBSD.org/docs.html">documentation</a> may be
+    sent to &lt;<a href="mailto:freebsd-questions@FreeBSD.org">freebsd-questions@FreeBSD.org</a>&gt;.<br />
+    Send questions about this document to &lt;<a href="mailto:freebsd-doc@FreeBSD.org">freebsd-doc@FreeBSD.org</a>&gt;.</small></p></body></html>

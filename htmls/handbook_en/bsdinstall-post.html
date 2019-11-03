@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>2.8. Post-Installation</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD Handbook" /><link rel="up" href="bsdinstall.html" title="Chapter 2. Installing FreeBSD" /><link rel="prev" href="bsdinstall-final-warning.html" title="2.7. Committing to the Installation" /><link rel="next" href="bsdinstall-install-trouble.html" title="2.9. Troubleshooting" /><link rel="copyright" href="legalnotice.html" title="Copyright" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8. Post-Installation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="bsdinstall-final-warning.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Installing FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="bsdinstall-install-trouble.html">Next</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="bsdinstall-post"></a>2.8. Post-Installation</h2></div></div></div><p>Once FreeBSD is installed,
+      <span class="application">bsdinstall</span> will prompt to configure
+      several options before booting into the newly installed system.
+      This section describes these configuration options.</p><div xmlns="" class="tip"><h3 class="admontitle">Tip: </h3><p xmlns="http://www.w3.org/1999/xhtml">Once the system has booted,
+	<code class="command">bsdconfig</code> provides a menu-driven method for
+	configuring the system using these and additional
+	options.</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-post-root"></a>2.8.1. Setting the
+	<code class="systemitem">root</code>
+	Password</h3></div></div></div><p>First, the <code class="systemitem">root</code>
+	password must be set.  While entering the password, the
+	characters being typed are not displayed on the screen.  After
+	the password has been entered, it must be entered again.  This
+	helps prevent typing errors.</p><div class="figure"><a id="bsdinstall-post-set-root-passwd"></a><div class="figure-title">Figure 2.29. Setting the <code class="systemitem">root</code> Password</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-post-root-passwd.png" alt="Setting the root Password" /></div></div></div><br class="figure-break" /></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-config-network-dev"></a>2.8.2. Configuring Network Interfaces</h3></div></div></div><p>Next, a list of the network interfaces found on the
+	computer is shown.  Select the interface to configure.</p><div xmlns="" class="note"><h3 class="admontitle">Note: </h3><p xmlns="http://www.w3.org/1999/xhtml">The network configuration menus will be skipped if the
+	  network was previously configured as part of a
+	  <span class="emphasis"><em>bootonly</em></span> installation.</p></div><div class="figure"><a id="bsdinstall-configure-net-interface"></a><div class="figure-title">Figure 2.30. Choose a Network Interface</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface.png" alt="Choose a Network Interface" /></div></div></div><br class="figure-break" /><p>If an Ethernet interface is selected, the installer will
+	skip ahead to the menu shown in <a class="xref" href="bsdinstall-post.html#bsdinstall-configure-net-ipv4" title="Figure 2.34. Choose IPv4 Networking">Figure 2.34, &#8220;Choose <acronym class="acronym">IPv4</acronym> Networking&#8221;</a>.  If a wireless
+	network interface is chosen, the system will instead scan for
+	wireless access points:</p><div class="figure"><a id="bsdinstall-wireless-scan"></a><div class="figure-title">Figure 2.31. Scanning for Wireless Access Points</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-wireless-scan.png" alt="Scanning for Wireless Access Points" /></div></div></div><br class="figure-break" /><p>Wireless networks are identified by a Service Set
+	Identifier (<acronym class="acronym">SSID</acronym>), a short, unique name
+	given to each network.  <acronym class="acronym">SSIDs</acronym> found during
+	the scan are listed, followed by a description of the
+	encryption types available for that network.  If the desired
+	<acronym class="acronym">SSID</acronym> does not appear in the list, select
+	<span class="guibutton">[ Rescan ]</span> to scan again.  If
+	the desired network still does not appear, check for problems
+	with antenna connections or try moving the computer closer to
+	the access point.  Rescan after each change is made.</p><div class="figure"><a id="bsdinstall-wireless-accesspoints"></a><div class="figure-title">Figure 2.32. Choosing a Wireless Network</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-wireless-accesspoints.png" alt="Choosing a Wireless Network" /></div></div></div><br class="figure-break" /><p>Next, enter the encryption information for connecting to
+	the selected wireless network.  <acronym class="acronym">WPA2</acronym>
+	encryption is strongly recommended as older encryption types,
+	like <acronym class="acronym">WEP</acronym>, offer little security.  If the
+	network uses <acronym class="acronym">WPA2</acronym>, input the password, also
+	known as the Pre-Shared Key (<acronym class="acronym">PSK</acronym>).  For
+	security reasons, the characters typed into the input box are
+	displayed as asterisks.</p><div class="figure"><a id="bsdinstall-wireless-wpa2"></a><div class="figure-title">Figure 2.33. WPA2 Setup</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-wireless-wpa2setup.png" alt="WPA2 Setup" /></div></div></div><br class="figure-break" /><p>Next, choose whether or not an <acronym class="acronym">IPv4</acronym>
+	address should be configured on the Ethernet or wireless
+	interface:</p><div class="figure"><a id="bsdinstall-configure-net-ipv4"></a><div class="figure-title">Figure 2.34. Choose <acronym class="acronym">IPv4</acronym> Networking</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface-ipv4.png" alt="Choose IPv4 Networking" /></div></div></div><br class="figure-break" /><p>There are two methods of <acronym class="acronym">IPv4</acronym>
+	configuration.  <acronym class="acronym">DHCP</acronym> will automatically
+	configure the network interface correctly and should be used
+	if the network provides a <acronym class="acronym">DHCP</acronym> server.
+	Otherwise, the addressing information needs to be input
+	manually as a static configuration.</p><div xmlns="" class="note"><h3 class="admontitle">Note: </h3><p xmlns="http://www.w3.org/1999/xhtml">Do not enter random network information as it will not
+	  work.  If a <acronym class="acronym">DHCP</acronym> server is not available,
+	  obtain the information listed in <a class="xref" href="bsdinstall-pre.html#bsdinstall-collect-network-information" title="Required Network Information">Required Network Information</a> from
+	  the network administrator or Internet service
+	  provider.</p></div><p>If a <acronym class="acronym">DHCP</acronym> server is available, select
+	<span class="guibutton">[ Yes ]</span> in the next menu to
+	automatically configure the network interface.  The installer
+	will appear to pause for a minute or so as it finds the
+	<acronym class="acronym">DHCP</acronym> server and obtains the addressing
+	information for the system.</p><div class="figure"><a id="bsdinstall-net-ipv4-dhcp"></a><div class="figure-title">Figure 2.35. Choose <acronym class="acronym">IPv4</acronym> <acronym class="acronym">DHCP</acronym>
+	  Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface-ipv4-dhcp.png" alt="Choose IPv4 DHCP Configuration" /></div></div></div><br class="figure-break" /><p>If a <acronym class="acronym">DHCP</acronym> server is not available,
+	select <span class="guibutton">[ No ]</span> and input the
+	following addressing information in this menu:</p><div class="figure"><a id="bsdinstall-net-ipv4-static"></a><div class="figure-title">Figure 2.36. <acronym class="acronym">IPv4</acronym> Static Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface-ipv4-static.png" alt="IPv4 Static Configuration" /></div></div></div><br class="figure-break" /><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">IP Address</code> - The
+	    <acronym class="acronym">IPv4</acronym> address assigned to this computer.
+	    The address must be unique and not already in use by
+	    another piece of equipment on the local network.</p></li><li class="listitem"><p><code class="literal">Subnet Mask</code> - The subnet mask for
+	    the network.</p></li><li class="listitem"><p><code class="literal">Default Router</code> - The
+	    <acronym class="acronym">IP</acronym> address of the network's default
+	    gateway.</p></li></ul></div><p>The next screen will ask if the interface should be
+	configured for <acronym class="acronym">IPv6</acronym>.  If
+	<acronym class="acronym">IPv6</acronym> is available and desired, choose
+	<span class="guibutton">[ Yes ]</span> to select it.</p><div class="figure"><a id="bsdinstall-net-ipv6"></a><div class="figure-title">Figure 2.37. Choose IPv6 Networking</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface-ipv6.png" alt="Choose IPv6 Networking" /></div></div></div><br class="figure-break" /><p><acronym class="acronym">IPv6</acronym> also has two methods of
+	configuration.    StateLess Address AutoConfiguration
+	(<acronym class="acronym">SLAAC</acronym>) will automatically request the
+	correct configuration information from a local router.  Refer
+	to <a class="link" href="http://tools.ietf.org/html/rfc4862" target="_top">http://tools.ietf.org/html/rfc4862</a>
+	for more information.  Static configuration requires manual
+	entry of network information.</p><p>If an <acronym class="acronym">IPv6</acronym> router is available, select
+	<span class="guibutton">[ Yes ]</span> in the next menu to
+	automatically configure the network interface.  The installer
+	will appear to pause for a minute or so as it finds the router
+	and obtains the addressing information for the system.</p><div class="figure"><a id="bsdinstall-net-ipv6-slaac"></a><div class="figure-title">Figure 2.38. Choose IPv6 SLAAC Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface-slaac.png" alt="Choose IPv6 SLAAC Configuration" /></div></div></div><br class="figure-break" /><p>If an <acronym class="acronym">IPv6</acronym> router is not available,
+	select <span class="guibutton">[ No ]</span> and input the
+	following addressing information in this menu:</p><div class="figure"><a id="bsdinstall-net-ipv6-static"></a><div class="figure-title">Figure 2.39. IPv6 Static Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-interface-ipv6-static.png" alt="IPv6 Static Configuration" /></div></div></div><br class="figure-break" /><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">IPv6 Address</code> - The
+	    <acronym class="acronym">IPv6</acronym> address assigned to this computer.
+	    The address must be unique and not already in use by
+	    another piece of equipment on the local network.</p></li><li class="listitem"><p><code class="literal">Default Router</code> - The
+	    <acronym class="acronym">IPv6</acronym> address of the network's default
+	    gateway.</p></li></ul></div><p>The last network configuration menu is used to configure
+	the Domain Name System (<acronym class="acronym">DNS</acronym>) resolver,
+	which converts hostnames to and from network addresses.  If
+	<acronym class="acronym">DHCP</acronym> or <acronym class="acronym">SLAAC</acronym> was used
+	to autoconfigure the network interface, the <code class="literal">Resolver
+	  Configuration</code> values may already be filled in.
+	Otherwise, enter the local network's domain name in the
+	<code class="literal">Search</code> field.  <code class="literal">DNS #1</code>
+	and <code class="literal">DNS #2</code> are the <acronym class="acronym">IPv4</acronym>
+	and/or <acronym class="acronym">IPv6</acronym> addresses of the
+	<acronym class="acronym">DNS</acronym> servers.  At least one
+	<acronym class="acronym">DNS</acronym> server is required.</p><div class="figure"><a id="bsdinstall-net-dns-config"></a><div class="figure-title">Figure 2.40. DNS Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-configure-network-ipv4-dns.png" alt="DNS Configuration" /></div></div></div><br class="figure-break" /></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-timezone"></a>2.8.3. Setting the Time Zone</h3></div></div></div><p>The next menu asks if the system clock uses
+	<acronym class="acronym">UTC</acronym> or local time.  When in doubt, select
+	<span class="guibutton">[ No ]</span> to choose the more
+	commonly-used local time.</p><div class="figure"><a id="bsdinstall-local-utc"></a><div class="figure-title">Figure 2.41. Select Local or UTC Clock</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-set-clock-local-utc.png" alt="Select Local or UTC Clock" /></div></div></div><br class="figure-break" /><p>The next series of menus are used to determine the correct
+	local time by selecting the geographic region, country, and
+	time zone.  Setting the time zone allows the system to
+	automatically correct for regional time changes, such as
+	daylight savings time, and perform other time zone related
+	functions properly.</p><p>The example shown here is for a machine located in the
+	Eastern time zone of the United States.  The selections will
+	vary according to the geographical location.</p><div class="figure"><a id="bsdinstall-timezone-region"></a><div class="figure-title">Figure 2.42. Select a Region</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-timezone-region.png" alt="Select a Region" /></div></div></div><br class="figure-break" /><p>The appropriate region is selected using the arrow keys
+	and then pressing <span class="keycap"><strong>Enter</strong></span>.</p><div class="figure"><a id="bsdinstall-timezone-country"></a><div class="figure-title">Figure 2.43. Select a Country</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-timezone-country.png" alt="Select a Country" /></div></div></div><br class="figure-break" /><p>Select the appropriate country using the arrow keys and
+	press <span class="keycap"><strong>Enter</strong></span>.</p><div class="figure"><a id="bsdinstall-timezone-zone"></a><div class="figure-title">Figure 2.44. Select a Time Zone</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-timezone-zone.png" alt="Select a Time Zone" /></div></div></div><br class="figure-break" /><p>The appropriate time zone is selected using the arrow keys
+	and pressing <span class="keycap"><strong>Enter</strong></span>.</p><div class="figure"><a id="bsdinstall-timezone-confirmation"></a><div class="figure-title">Figure 2.45. Confirm Time Zone</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-timezone-confirm.png" alt="Confirm Time Zone" /></div></div></div><br class="figure-break" /><p>Confirm the abbreviation for the time zone is correct.  If
+	it is, press <span class="keycap"><strong>Enter</strong></span> to continue with the
+	post-installation configuration.</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-sysconf"></a>2.8.4. Enabling Services</h3></div></div></div><p>The next menu is used to configure which system services
+	will be started whenever the system boots.  All of these
+	services are optional.  Only start the services that are
+	needed for the system to function.</p><div class="figure"><a id="bsdinstall-config-serv"></a><div class="figure-title">Figure 2.46. Selecting Additional Services to Enable</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-config-services.png" alt="Selecting Additional Services to Enable" /></div></div></div><br class="figure-break" /><p>Here is a summary of the services which can be enabled in
+	this menu:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">sshd</code> - The Secure Shell
+	    (<acronym class="acronym">SSH</acronym>) daemon is used to remotely access
+	    a system over an encrypted connection.  Only enable this
+	    service if the system should be available for remote
+	    logins.</p></li><li class="listitem"><p><code class="literal">moused</code> - Enable this service if the
+	    mouse will be used from the command-line system
+	    console.</p></li><li class="listitem"><p><code class="literal">ntpd</code> - The Network Time Protocol
+	    (<acronym class="acronym">NTP</acronym>) daemon for automatic clock
+	    synchronization.  Enable this service if there is a
+	    <span class="trademark">Windows</span>®, Kerberos, or <acronym class="acronym">LDAP</acronym> server on
+	    the network.</p></li><li class="listitem"><p><code class="literal">powerd</code> - System power control
+	    utility for power control and energy saving.</p></li></ul></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-crashdump"></a>2.8.5. Enabling Crash Dumps</h3></div></div></div><p>The next menu is used to configure whether or not crash
+	dumps should be enabled.  Enabling crash dumps can be useful
+	in debugging issues with the system, so users are encouraged
+	to enable crash dumps.</p><div class="figure"><a id="bsdinstall-config-crashdump"></a><div class="figure-title">Figure 2.47. Enabling Crash Dumps</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-config-crashdump.png" alt="Enabling Crash Dumps" /></div></div></div><br class="figure-break" /></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-addusers"></a>2.8.6. Add Users</h3></div></div></div><p>The next menu prompts to create at least one user account.
+	It is recommended to login to the system using a user account
+	rather than as <code class="systemitem">root</code>.
+	When logged in as <code class="systemitem">root</code>, there are essentially no
+	limits or protection on what can be done.  Logging in as a
+	normal user is safer and more secure.</p><p>Select <span class="guibutton">[ Yes ]</span> to add new
+	users.</p><div class="figure"><a id="bsdinstall-add-user1"></a><div class="figure-title">Figure 2.48. Add User Accounts</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-adduser1.png" alt="Add User Accounts" /></div></div></div><br class="figure-break" /><p>Follow the prompts and input the requested information for
+	the user account.  The example shown in <a class="xref" href="bsdinstall-post.html#bsdinstall-add-user2" title="Figure 2.49. Enter User Information">Figure 2.49, &#8220;Enter User Information&#8221;</a> creates the <code class="systemitem">asample</code> user account.</p><div class="figure"><a id="bsdinstall-add-user2"></a><div class="figure-title">Figure 2.49. Enter User Information</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-adduser2.png" alt="Enter User Information" /></div></div></div><br class="figure-break" /><p>Here is a summary of the information to input:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">Username</code> - The name the user will
+	    enter to log in.  A common convention is to use the first
+	    letter of the first name combined with the last name, as
+	    long as each username is unique for the system.  The
+	    username is case sensitive and should not contain any
+	    spaces.</p></li><li class="listitem"><p><code class="literal">Full name</code> - The user's full name.
+	    This can contain spaces and is used as a description for
+	    the user account.</p></li><li class="listitem"><p><code class="literal">Uid</code> - User <acronym class="acronym">ID</acronym>.
+	    Typically, this is left blank so the system will assign a
+	    value.</p></li><li class="listitem"><p><code class="literal">Login group</code> - The user's group.
+	    Typically this is left blank to accept the default.</p></li><li class="listitem"><p><code class="literal">Invite <em class="replaceable"><code>user</code></em> into
+	      other groups?</code> - Additional groups to which the
+	    user will be added as a member.  If the user needs
+	    administrative access, type <code class="literal">wheel</code>
+	    here.</p></li><li class="listitem"><p><code class="literal">Login class</code> - Typically left blank
+	    for the default.</p></li><li class="listitem"><p><code class="literal">Shell</code> - Type in one of the listed
+	    values to set the interactive shell for the user.  Refer
+	    to <a class="xref" href="shells.html" title="3.9. Shells">Section 3.9, &#8220;Shells&#8221;</a> for more information about
+	    shells.</p></li><li class="listitem"><p><code class="literal">Home directory</code> - The user's home
+	    directory.  The default is usually correct.</p></li><li class="listitem"><p><code class="literal">Home directory permissions</code> -
+	    Permissions on the user's home directory.  The default is
+	    usually correct.</p></li><li class="listitem"><p><code class="literal">Use password-based authentication?</code>
+	    - Typically <code class="literal">yes</code> so that the user is
+	    prompted to input their password at login.</p></li><li class="listitem"><p><code class="literal">Use an empty password?</code> -
+	    Typically <code class="literal">no</code> as it is insecure to have
+	    a blank password.</p></li><li class="listitem"><p><code class="literal">Use a random password?</code> - Typically
+	    <code class="literal">no</code> so that the user can set their own
+	    password in the next prompt.</p></li><li class="listitem"><p><code class="literal">Enter password</code> - The password for
+	    this user.  Characters typed will not show on the
+	    screen.</p></li><li class="listitem"><p><code class="literal">Enter password again</code> - The password
+	    must be typed again for verification.</p></li><li class="listitem"><p><code class="literal">Lock out the account after
+	      creation?</code> - Typically <code class="literal">no</code> so
+	    that the user can login.</p></li></ul></div><p>After entering everything, a summary is shown for review.
+	If a mistake was made, enter <code class="literal">no</code> and try
+	again.  If everything is correct, enter <code class="literal">yes</code>
+	to create the new user.</p><div class="figure"><a id="bsdinstall-add-user3"></a><div class="figure-title">Figure 2.50. Exit User and Group Management</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-adduser3.png" alt="Exit User and Group Management" /></div></div></div><br class="figure-break" /><p>If there are more users to add, answer the <code class="literal">Add
+	  another user?</code> question with
+	<code class="literal">yes</code>.  Enter <code class="literal">no</code> to finish
+	adding users and continue the installation.</p><p>For more information on adding users and user management,
+	see <a class="xref" href="users-synopsis.html" title="3.3. Users and Basic Account Management">Section 3.3, &#8220;Users and Basic Account Management&#8221;</a>.</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="bsdinstall-final-conf"></a>2.8.7. Final Configuration</h3></div></div></div><p>After everything has been installed and configured, a
+	final chance is provided to modify settings.</p><div class="figure"><a id="bsdinstall-final-config"></a><div class="figure-title">Figure 2.51. Final Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-finalconfiguration.png" alt="Final Configuration" /></div></div></div><br class="figure-break" /><p>Use this menu to make any changes or do any additional
+	configuration before completing the installation.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">Add User</code> - Described in <a class="xref" href="bsdinstall-post.html#bsdinstall-addusers" title="2.8.6. Add Users">Section 2.8.6, &#8220;Add Users&#8221;</a>.</p></li><li class="listitem"><p><code class="literal">Root Password</code> - Described in <a class="xref" href="bsdinstall-post.html#bsdinstall-post-root" title="2.8.1. Setting the root Password">Section 2.8.1, &#8220;Setting the
+	<code class="systemitem">root</code>
+	Password&#8221;</a>.</p></li><li class="listitem"><p><code class="literal">Hostname</code> - Described in <a class="xref" href="using-bsdinstall.html#bsdinstall-hostname" title="2.5.2. Setting the Hostname">Section 2.5.2, &#8220;Setting the Hostname&#8221;</a>.</p></li><li class="listitem"><p><code class="literal">Network</code> - Described in <a class="xref" href="bsdinstall-post.html#bsdinstall-config-network-dev" title="2.8.2. Configuring Network Interfaces">Section 2.8.2, &#8220;Configuring Network Interfaces&#8221;</a>.</p></li><li class="listitem"><p><code class="literal">Services</code> - Described in <a class="xref" href="bsdinstall-post.html#bsdinstall-sysconf" title="2.8.4. Enabling Services">Section 2.8.4, &#8220;Enabling Services&#8221;</a>.</p></li><li class="listitem"><p><code class="literal">Time Zone</code> - Described in <a class="xref" href="bsdinstall-post.html#bsdinstall-timezone" title="2.8.3. Setting the Time Zone">Section 2.8.3, &#8220;Setting the Time Zone&#8221;</a>.</p></li><li class="listitem"><p><code class="literal">Handbook</code> - Download and install the
+	    FreeBSD Handbook.</p></li></ul></div><p>After any final configuration is complete, select
+	<span class="guibutton">Exit</span>.</p><div class="figure"><a id="bsdinstall-final-modification-shell"></a><div class="figure-title">Figure 2.52. Manual Configuration</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-final-modification-shell.png" alt="Manual Configuration" /></div></div></div><br class="figure-break" /><p><span class="application">bsdinstall</span> will prompt if there
+	are any additional configuration that needs to be done before
+	rebooting into the new system.  Select
+	<span class="guibutton">[ Yes ]</span> to exit to a shell
+	within the new system or
+	<span class="guibutton">[ No ]</span> to proceed to the last
+	step of the installation.</p><div class="figure"><a id="bsdinstall-final-main"></a><div class="figure-title">Figure 2.53. Complete the Installation</div><div class="figure-contents"><div class="mediaobject"><img src="bsdinstall/bsdinstall-mainexit.png" alt="Complete the Installation" /></div></div></div><br class="figure-break" /><p>If further configuration or special setup is needed,
+	select <span class="guibutton">[ Live CD ]</span> to
+	boot the install media into Live <acronym class="acronym">CD</acronym>
+	mode.</p><p>If the installation is complete, select
+	<span class="guibutton">[ Reboot ]</span> to reboot the
+	computer and start the new FreeBSD system.  Do not forget to
+	remove the FreeBSD install media or the computer may boot from it
+	again.</p><p>As FreeBSD boots, informational messages are displayed.
+	After the system finishes booting, a login prompt is
+	displayed.  At the <code class="prompt">login:</code> prompt, enter the
+	username added during the installation.  Avoid logging in as
+	<code class="systemitem">root</code>.  Refer to
+	<a class="xref" href="users-synopsis.html#users-superuser" title="3.3.1.3. The Superuser Account">Section 3.3.1.3, &#8220;The Superuser Account&#8221;</a> for instructions on how to
+	become the superuser when administrative access is
+	needed.</p><p>The messages that appeared during boot can be reviewed by
+	pressing <span class="keycap"><strong>Scroll-Lock</strong></span> to turn on the
+	scroll-back buffer.  The <span class="keycap"><strong>PgUp</strong></span>,
+	<span class="keycap"><strong>PgDn</strong></span>, and arrow keys can be used to scroll
+	back through the messages.  When finished, press
+	<span class="keycap"><strong>Scroll-Lock</strong></span> again to unlock the display and
+	return to the console.  To review these messages once the
+	system has been up for some time, type <code class="command">less
+	  /var/run/dmesg.boot</code> from a command prompt.  Press
+	<span class="keycap"><strong>q</strong></span> to return to the command line after
+	viewing.</p><p>If <span class="application">sshd</span> was enabled in <a class="xref" href="bsdinstall-post.html#bsdinstall-config-serv" title="Figure 2.46. Selecting Additional Services to Enable">Figure 2.46, &#8220;Selecting Additional Services to Enable&#8221;</a>, the first boot may be
+	a bit slower as the system will generate the
+	<acronym class="acronym">RSA</acronym> and <acronym class="acronym">DSA</acronym> keys.
+	Subsequent boots will be faster.  The fingerprints of the keys
+	will be displayed, as seen in this example:</p><pre class="screen">Generating public/private rsa1 key pair.
+Your identification has been saved in /etc/ssh/ssh_host_key.
+Your public key has been saved in /etc/ssh/ssh_host_key.pub.
+The key fingerprint is:
+10:a0:f5:af:93:ae:a3:1a:b2:bb:3c:35:d9:5a:b3:f3 root@machine3.example.com
+The key's randomart image is:
++--[RSA1 1024]----+
+|    o..          |
+|   o . .         |
+|  .   o          |
+|       o         |
+|    o   S        |
+|   + + o         |
+|o . + *          |
+|o+ ..+ .         |
+|==o..o+E         |
++-----------------+
+Generating public/private dsa key pair.
+Your identification has been saved in /etc/ssh/ssh_host_dsa_key.
+Your public key has been saved in /etc/ssh/ssh_host_dsa_key.pub.
+The key fingerprint is:
+7e:1c:ce:dc:8a:3a:18:13:5b:34:b5:cf:d9:d1:47:b2 root@machine3.example.com
+The key's randomart image is:
++--[ DSA 1024]----+
+|       ..     . .|
+|      o  .   . + |
+|     . ..   . E .|
+|    . .  o o . . |
+|     +  S = .    |
+|    +  . = o     |
+|     +  . * .    |
+|    . .  o .     |
+|      .o. .      |
++-----------------+
+Starting sshd.</pre><p>Refer to <a class="xref" href="openssh.html" title="13.8. OpenSSH">Section 13.8, &#8220;OpenSSH&#8221;</a> for more information
+	about fingerprints and <acronym class="acronym">SSH</acronym>.</p><p>FreeBSD does not install a graphical environment by default.
+	Refer to <a class="xref" href="x11.html" title="Chapter 5. The X Window System">Chapter 5, <em>The X Window System</em></a> for more information about
+	installing and configuring a graphical window manager.</p><p>Proper shutdown of a FreeBSD computer helps protect data and
+	hardware from damage.  <span class="emphasis"><em>Do not turn off the power
+	before the system has been properly shut down!</em></span>  If
+	the user is a member of the <code class="systemitem">wheel</code> group, become the
+	superuser by typing <code class="command">su</code> at the command line
+	and entering the <code class="systemitem">root</code> password.  Then, type
+	<code class="command">shutdown -p now</code> and the system will shut
+	down cleanly, and if the hardware supports it, turn itself
+	off.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="bsdinstall-final-warning.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="bsdinstall.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="bsdinstall-install-trouble.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7. Committing to the Installation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.9. Troubleshooting</td></tr></table></div><p xmlns="" align="center"><small>All FreeBSD documents are available for download
+    at <a href="https://download.freebsd.org/ftp/doc/">https://download.freebsd.org/ftp/doc/</a></small></p><p xmlns="" align="center"><small>Questions that are not answered by the
+    <a href="https://www.FreeBSD.org/docs.html">documentation</a> may be
+    sent to &lt;<a href="mailto:freebsd-questions@FreeBSD.org">freebsd-questions@FreeBSD.org</a>&gt;.<br />
+    Send questions about this document to &lt;<a href="mailto:freebsd-doc@FreeBSD.org">freebsd-doc@FreeBSD.org</a>&gt;.</small></p></body></html>
