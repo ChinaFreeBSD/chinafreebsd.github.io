@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>25.7. 重新编译 “world”</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="updating-upgrading.html" title="第 25 章 更新与升级 FreeBSD" /><link rel="prev" href="synching.html" title="25.6. 同步您的源码" /><link rel="next" href="make-delete-old.html" title="25.8. 删除过时的文件、 目录和函数库" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">25.7. 重新编译 <span class="quote">“<span class="quote">world</span>”</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="synching.html">上一页</a> </td><th width="60%" align="center">第 25 章 更新与升级 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="make-delete-old.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="makeworld"></a>25.7. 重新编译 <span class="quote">“<span class="quote">world</span>”</span></h2></div></div></div><a id="idp66660728" class="indexterm"></a><p>只要您根据一定版本的 FreeBSD (FreeBSD-STABLE、FreeBSD-CURRENT 等等)，
+      已经同步了您本地的源码树，那么您就可以使用这些源码树来重建系统。</p><div xmlns="" class="warning"><h3 class="admontitle">做好备份: </h3><p xmlns="http://www.w3.org/1999/xhtml">无需强调在行动 <span class="emphasis"><em>之前</em></span> 备份整个系统是多么的重要。
+	尽管重新编译系统是 (如果您按照文档的指示做的话) 一件很容易完成的工作，
+	但出错也是在所难免的， 另外， 别人在源码里面引入的错误也可能造成系统无法引导。</p><p xmlns="http://www.w3.org/1999/xhtml">请确信自己已经做过备份， 并且在手边有恢复软盘或可以引导的光盘。
+	您可能永远也不会用到它， 但安全第一嘛！</p></div><div xmlns="" class="warning"><h3 class="admontitle">订阅恰当的邮件列表: </h3><a xmlns="http://www.w3.org/1999/xhtml" id="idp66664696" class="indexterm"></a><p xmlns="http://www.w3.org/1999/xhtml">FreeBSD-STABLE 和 FreeBSD-CURRENT 分支自然是
+	<span class="emphasis"><em>发展中的</em></span>。为 FreeBSD
+	做贡献的都是人，偶尔也会犯错误。</p><p xmlns="http://www.w3.org/1999/xhtml">有时这些错误没什么危害，只是引起您的系统生成新的诊断警告。
+	有时是灾难性的，并导致您的系统不能启动或破坏您的文件系统
+	(甚至更糟)。</p><p xmlns="http://www.w3.org/1999/xhtml">如果出现了类似的问题，
+	贴一封<span class="quote">“<span class="quote">小心(heads up)</span>”</span>帖到相关的邮件列表里，
+	讲清问题的本质以及受影响的系统。在问题解决后，再贴封<span class="quote">“<span class="quote">解除(all
+	clear)</span>”</span>声明。</p><p xmlns="http://www.w3.org/1999/xhtml">如果使用 FreeBSD-STABLE 或 FreeBSD-CURRENT
+	而又不阅读 <a class="link" href="http://lists.FreeBSD.org/mailman/listinfo/freebsd-stable" target="_top">FreeBSD-STABLE 邮件列表</a> 和 <a class="link" href="http://lists.FreeBSD.org/mailman/listinfo/freebsd-current" target="_top">FreeBSD-CURRENT 邮件列表</a> 各自的邮件列表，
+	那么您是自找麻烦。</p></div><div xmlns="" class="warning"><h3 class="admontitle">不要使用 <code xmlns="http://www.w3.org/1999/xhtml" class="command">make world</code>: </h3><p xmlns="http://www.w3.org/1999/xhtml">许多较早的文档推荐使用
+	<code class="command">make world</code> 来完成这项工作。 这样做会跳过一些必要的步骤，
+	因此只有在您知道自己在做什么的时候才可以这样做。 几乎所有的情况下
+	<code class="command">make world</code> 都是不应该做的事情， 您应该使用这里描述的方法。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="canonical-build"></a>25.7.1. 更新系统的规范方法</h3></div></div></div><p>在更新系统时， 一定要首先查看
+	<code class="filename">/usr/src/UPDATING</code> 文件， 以便了解在 buildworld
+	之前需要进行的操作， 然后按照下面列出的步骤进行操作：</p><p>这些更新步骤假定您使用的是包含旧编译器、 内核以及用户态工具及配置的旧版
+	FreeBSD。 我们使用 <span class="quote">“<span class="quote">world</span>”</span> 来表示系统中的核心执行文件、
+	函数库和程序文件。 编译器是 <span class="quote">“<span class="quote">world</span>”</span> 的一部分，
+	但有其特殊性。</p><p>此外， 我们还假定您已经获得了较新版本操作系统的源代码。
+	如果您正更新的系统中的源代码也是旧版系统所附带的，
+	您还需要参阅 <a class="xref" href="synching.html" title="25.6. 同步您的源码">第 25.6 节 “同步您的源码”</a> 来把代码同步到较新的版本。</p><p>从源代码更新系统， 有时会比初看上去的时候更麻烦一些，
+	另一方面， FreeBSD 的开发人员有时会不得不修改推荐的更新步骤，
+	特别是当出现了一些无法避免的依赖关系的时候。 这一节余下的部分，
+	将介绍目前推荐的更新步骤背后的原理。</p><p>成功的更新操作必须解决下面的这些问题：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>旧的编译器可能无法编译新的内核。 (另一方面，
+	    旧的编译器很可能有 bug。) 因此， 新的内核应该以新的编译器编译。
+	    更具体地说， 新的编译器应在新内核开始联编之前已经完成了联编步骤。
+	    请注意， 新的编译器并不一定需要在联编新内核之前
+	    <span class="emphasis"><em>安装</em></span> 到系统中。</p></li><li class="listitem"><p>新的 world 有可能依赖一些新的内核特性。
+	    因此， 新内核必须在新的 world 之前安装。</p></li></ul></div><p>这两个问题就是为什么我们将在后面的章节中介绍的，
+	需要按照 <code class="buildtarget">buildworld</code>、
+	<code class="buildtarget">buildkernel</code>、
+	<code class="buildtarget">installkernel</code>、
+	<code class="buildtarget">installworld</code> 的顺序来更新系统的原因。
+	这并不是您需要遵守推荐的更新操作的全部原因，
+	除了这两个最重要的理由之外， 还有一些并不那么显而易见的原因：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>旧的 world 可能无法配合新的内核正常工作，
+	    因此， 您在安装完新内核之后， 应尽快将 world 也随之更新。</p></li><li class="listitem"><p>有些配置文件的变动必须在安装新的 world 之前完成，
+	    而另一些配置文件的变动则有可能导致旧 world 工作不正常。
+	    因此， 通常而言会需要两次不同的配置文件更新步骤。</p></li><li class="listitem"><p>多数情况下， 更新步骤只会替换或增加文件；
+	    换言之， 现有的旧文件并不会被删除。 有时，
+	    这可能会导致一些其他问题。 因此， 有时安装操作会指明，
+	    必须在某些操作之前手工删除一些文件。 这些在未来可能会被自动化，
+	    也可能不会自动化。</p></li></ul></div><p>由于有这些考虑， 因此一般情况下我们建议使用下列更新步骤。
+	请注意， 具体的更新操作中可能会需要一些附加的步骤，
+	但核心的过程应该是不会轻易发生变化的：</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><code class="command">make buildworld</code></p><p>这步操作会联编新的编译器， 以及少量相关工具，
+	    并在随后使用新的编译器来联编
+	    world。 联编的结果会存放在 <code class="filename">/usr/obj</code>。</p></li><li class="listitem"><p><code class="command">make buildkernel</code></p><p>与旧式的、 使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=config&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">config</span>(8)</span></a> 和
+	    <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 的方法不同，
+	    这种做法会使用存放于 <code class="filename">/usr/obj</code>
+	    中的 <span class="emphasis"><em>新的</em></span> 编译器。
+	    这种做法使得您免去了由于编译器与内核源代码不一致导致的问题。</p></li><li class="listitem"><p><code class="command">make installkernel</code></p><p>安装新的内核及其模块，
+	    使系统能够以更新后的内核启动。</p></li><li class="listitem"><p>重启系统并进入单用户模式。</p><p>单用户模式使得更新正在运行的软件可能导致的问题减到最少。
+	    此外， 它也使配合新内核运行旧 world 可能出现的问题减到最少。</p></li><li class="listitem"><p><code class="command">mergemaster -p</code></p><p>这步操作会进行完成安装新的 world 所需的配置文件更新操作。
+	    例如， 它可能会在系统的密码数据库中添加新的用户组或用户。
+	    这些操作通常在上次更新之后增加了新的用户组或特殊系统用户之后是需要的，
+	    因为 <code class="buildtarget">installworld</code> 这步操作会需要这些用户或组才能顺利完成。</p></li><li class="listitem"><p><code class="command">make installworld</code></p><p>从 <code class="filename">/usr/obj</code> 中复制 world。
+	    这步操作之后， 您在盘上的系统， 包括内核和 world 就都是新的了。</p></li><li class="listitem"><p><code class="command">mergemaster</code></p><p>更新余下的配置文件，
+	    因为您的 world 已经更新完成了。</p></li><li class="listitem"><p>重启系统。</p><p>这步操作将加在新的内核， 以及新的 world 和更新过的配置文件。</p></li></ol></div><p>注意， 如果您正从同一 FreeBSD 版本分支升级， 例如， 从 7.0 到
+	7.1， 则上述过程可能没有那么必要， 因为您不太可能遇到严重的编译器、
+	内核源代码、 用户态程序源代码或配置文件不匹配的情形。
+	旧式的 <code class="command">make world</code>
+	然后再联编新内核的升级方法， 很可能有机会能够正常运作而完成升级工作。</p><p>但是， 在大版本升级的过程中， 不按照前面所介绍的操作来进行升级时，
+	便很可能遇到一些问题。</p><p>此外， 还需要注意的是， 有些时候升级的过程中
+	(例如从 4.<em class="replaceable"><code>X</code></em> 到 5.0) 可能会需要一些额外的步骤
+	(例如在 installworld 之前更名或删除一些文件)。 请仔细阅读
+	<code class="filename">/usr/src/UPDATING</code> 这个文件，
+	特别是它的结尾部分所介绍的推荐的升级操作顺序。</p><p>由于开发人员发现不可能完全避免一些不匹配方面的问题，
+	这个过程一直在演化过程中。 不过幸运的是， 目前推荐的这个升级步骤，
+	应该能够在很长一段时间内不需要做任何调整。</p><p>总结一下， 目前推荐的从源代码升级 FreeBSD
+	的方法是：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make buildworld</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make buildkernel</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make installkernel</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>shutdown -r now</code></strong></pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">有时， 可能需要额外地执行一次
+	  <code class="command">mergemaster -p</code> 才能够完成
+	  <code class="buildtarget">buildworld</code> 步骤。
+	  这些要求， 会在 <code class="filename">UPDATING</code> 中进行描述。
+	  一般而言， 您可以简单地跳过这一步， 只要进行的不是大跨度的
+	  FreeBSD 版本升级。</p></div><p>在 <code class="buildtarget">installkernel</code> 成功完成之后，
+	您需要引导到单用户模式 (举例而言，
+	可以在加载器提示后输入 <code class="command">boot -s</code>)。
+	接下来执行：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>adjkerntz -i</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>mount -a -t ufs</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>mergemaster -p</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make installworld</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>mergemaster</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>reboot</code></strong></pre><div xmlns="" class="warning"><h3 class="admontitle">阅读进一步的说明: </h3><p xmlns="http://www.w3.org/1999/xhtml">前面所给出的， 只是帮助您开始工作的简要说明。
+	  要清楚地理解每一步， 特别是如果打算自行定制内核配置，
+	  就应阅读下面的内容。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="src-updating"></a>25.7.2. 阅读 <code class="filename">/usr/src/UPDATING</code></h3></div></div></div><p>在您做其它事之前，请阅读
+	<code class="filename">/usr/src/UPDATING</code> (或在您的源码里的等效的文件)。
+	这个文件要包含有关于您可能遇到的问题的重要信息，
+	或指定了您可能使用到的命令的执行顺序。如果
+	<code class="filename">UPDATING</code> 与您这里读到相矛盾，那就先依据
+	<code class="filename">UPDATING</code>。</p><div xmlns="" class="important"><h3 class="admontitle">重要: </h3><p xmlns="http://www.w3.org/1999/xhtml">正如先前所述，阅读 <code class="filename">UPDATING</code>
+	  并不能替代订阅正确的邮件列表。两都是互补的，并不彼此排斥。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="make-conf"></a>25.7.3. 检查 <code class="filename">/etc/make.conf</code></h3></div></div></div><a id="idp66747512" class="indexterm"></a><p>检查
+	<code class="filename">/usr/share/examples/etc/make.conf</code>
+	以及
+	<code class="filename">/etc/make.conf</code>。 第一个文件包含了一些默认的定义
+	– 它们中的绝大多数都注释掉了。
+	为了在重新编译系统时能够使用它们，
+	请把这些选项加入到 <code class="filename">/etc/make.conf</code>。
+	请注意在 <code class="filename">/etc/make.conf</code> 中的任何设置同时也会影响每次运行
+	<code class="command">make</code> 的结果， 因此设置一些适合自己系统的选项是一个好习惯。</p><p>一般的用户通常会从 <code class="filename">/usr/share/examples/etc/make.conf</code>
+	复制
+	<code class="varname">CFLAGS</code> 和
+	<code class="varname">NO_PROFILE</code> 这样的设置到
+	<code class="filename">/etc/make.conf</code> 中并令它们生效。</p><p>请考虑其他的一些选项 (例如 <code class="varname">COPTFLAGS</code>、
+	<code class="varname">NOPORTDOCS</code> 等等)， 看看是否合用。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-etc"></a>25.7.4. 更新 <code class="filename">/etc</code> 里的文件</h3></div></div></div><p><code class="filename">/etc</code>
+	目录包含有除了您的系统启动时执行的脚本外大部分的系统配置信息。
+	有些脚本随 FreeBSD 的版本而不同。</p><p>有些配置文件在天天运行的系统里也是要使用到的。尤其是
+	<code class="filename">/etc/group</code>。</p><p>偶尔， 作为安装过程的一部分，
+        <code class="command">make installworld</code> 会要求事先创建某些特定的用户或组。
+	在进行升级时， 它们可能并不存在。 这会给升级造成问题。
+	有时， <code class="command">make buildworld</code> 会检查它们是否已经存在。</p><p>最近就有个这样的例子， 当时新增了 <code class="systemitem">smmsp</code>
+	用户。 当用户尝试完成安装操作时， 在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mtree&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mtree</span>(8)</span></a> 尝试建立
+	<code class="filename">/var/spool/clientmqueue</code> 时失败了。</p><p>解决办法是通过使用 <code class="option">-p</code>
+	选项以构建前 (pre-buildworld) 模式运行 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a>。
+	这表示只对比那些对于成功执行 <code class="buildtarget">buildworld</code>
+	或 <code class="buildtarget">installworld</code> 起关键作用的文件。
+	在第一次这样做时， 如果使用的是早期的不支持
+	<code class="option">-p</code> 的 <code class="command">mergemaster</code> 版本的话，
+	使用源码中的新版本即可。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src/usr.sbin/mergemaster</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>./mergemaster.sh -p</code></strong></pre><div xmlns="" class="tip"><h3 class="admontitle">提示: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果您是个偏执狂 (paranoid)，
+	  您可以检查您的系统看看哪个文件属于您已更名或删除了的那个组。</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>find / -group GID -print</code></strong></pre><p xmlns="http://www.w3.org/1999/xhtml">将显示所有 <em class="replaceable"><code>GID</code></em> 组
+	  (可以是组名也可以是数字地组 ID)所有的文件。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="makeworld-singleuser"></a>25.7.5. 改为单用户模式</h3></div></div></div><a id="idp66788344" class="indexterm"></a><p>您可能想在单用户模式下编译系统。
+	除了对更快处理事情显然有好处外， 重装系统将触及许多重要的系统文件，
+	包括所有标准系统二进制文件、库文件、包含 (include)
+	文件等等。 在正运行的系统 (尤其是在有活跃的用户的时候)
+	中更改这些文件是自寻烦恼。</p><a id="idp66789240" class="indexterm"></a><p>另一种模式是在多用户模式下编译系统，然后转换到单用户模式下安装。
+	如果您喜欢这种方式，只需在建立 (build) 完成后才执行下边的步骤。
+	您推迟转换到单用户模式下直到您必须 <code class="buildtarget">installkernel</code>
+	或 <code class="buildtarget">installworld</code>。</p><p>从运行的系统里，以超级用户方式执行：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>shutdown now</code></strong></pre><p>这样就会转换到单用户模式。</p><p>除此之外， 也可以重启系统， 并在启动菜单处选择
+        <span class="quote">“<span class="quote">single user</span>”</span>(单用户) 选项。 这样系统将以单用户模式启动。
+	接着， 在 shell 提示符处执行：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>fsck -p</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>mount -u /</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>mount -a -t ufs</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>swapon -a</code></strong></pre><p>这会检查文件系统，重新将 <code class="filename">/</code>
+	以读/写模式挂接， 参考 <code class="filename">/etc/fstab</code>
+	挂接其它所有的 UFS 文件系统，然后启用交换区。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果您的 CMOS 时钟是设置为本地时间，而不是 GMT
+	    (如果 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=date&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">date</span>(1)</span></a> 命令输出不能显示正确的时间和地区也确有其事)，
+	    您可能也需要执行下边的命令：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>adjkerntz -i</code></strong></pre><p xmlns="http://www.w3.org/1999/xhtml">这样可以确定您正确的本地时区设置──不这样做，
+	    您以后可能会碰到一些问题。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="cleaning-usr-obj"></a>25.7.6. 删除 <code class="filename">/usr/obj</code></h3></div></div></div><p>随着重新构建系统的进行， 编译结果会放到 (默认情况下)
+	<code class="filename">/usr/obj</code> 下。 这些目录会映射到
+	<code class="filename">/usr/src</code>。</p><p>通过删除这个目录， 可以加速 <code class="command">make buildworld</code>
+	的过程， 并避免相互依赖关系等复杂的问题。</p><p><code class="filename">/usr/obj</code>
+	中的某些文件可能设置了不可改标记 (详情参见 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chflags&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chflags</span>(1)</span></a>)，
+	需要首先去掉这些标志。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/obj</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>chflags -R noschg *</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>rm -rf *</code></strong></pre></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-upgrading-compilebase"></a>25.7.7. 重新编译基本系统</h3></div></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp66816760"></a>25.7.7.1. 保存输出</h4></div></div></div><p>建议把执行 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 后得到的输出存成一个文件。
+	  如果什么地方出了错，您就会有个错误信息的备份。
+	  尽管这样不能帮您分析哪里出了错，
+	  但如果您把您的问题贴到某个邮件列表里就能帮助其他的人。</p><p>这样做最简单的办法是使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=script&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">script</span>(1)</span></a>
+	  命令，同是带上参数指定存放输出的文件名。
+	  您应在重建系统之前立即这样做，然后在过程完成时输入
+	  <strong class="userinput"><code>exit</code></strong>。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>script /var/tmp/mw.out</code></strong>
+Script started, output file is /var/tmp/mw.out
+<code class="prompt">#</code> <strong class="userinput"><code>make TARGET</code></strong>
+<span class="emphasis"><em>… compile, compile, compile …</em></span>
+<code class="prompt">#</code> <strong class="userinput"><code>exit</code></strong>
+Script done, …</pre><p>如果您这样做，就 <span class="emphasis"><em>不要</em></span> 把文件存到
+	  <code class="filename">/tmp</code> 里边。下次启动时，这个目录就会被清除掉。
+	  存放的最好地方是 <code class="filename">/var/tmp</code> (如上个实例)或
+	  <code class="systemitem">root</code> 的主目录。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="make-buildworld"></a>25.7.7.2. 编译基本系统</h4></div></div></div><p>您必须在<code class="filename">/usr/src</code>目录里边：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong></pre><p>(当然，除非您的源码是在其它地方，真是这样的话更换成那个目录就行了)。</p><a id="idp66848504" class="indexterm"></a><p>使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 命令重建系统。这个命令会从
+	  <code class="filename">Makefile</code> (描述组成 FreeBSD 的程序应该怎样被重建，
+	  以什么样的顺序建立等等) 里读取指令。</p><p>输入的一般命令格式如下：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make -x -DVARIABLE target</code></strong></pre><p>这个例子里，<code class="option">-<em class="replaceable"><code>x</code></em></code>
+	  是会传递给 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 的一个选项。查看 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a>
+	  手册有您可用的选项例子。</p><p><code class="option">-D<em class="replaceable"><code>VARIABLE</code></em></code>
+	  传递一个变量给 <code class="filename">Makefile</code>。这些变量控制了
+	  <code class="filename">Makefile</code> 的行为。这些同
+	  <code class="filename">/etc/make.conf</code> 设置的变量一样，
+	  只是提供了另一种设置它们的方法。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make -DNO_PROFILE target</code></strong></pre><p>是另一种指定不被建立 (built) 的先定库
+	  (profiled libraries) 的方式，协同
+	  <code class="filename">/etc/make.conf</code> 里的</p><pre class="programlisting">NO_PROFILE=    true 	#    避免编译性能分析库</pre><p>一起使用。</p><p><em class="replaceable"><code>目标 (target)</code></em> 告诉
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 什么该做。每个 <code class="filename">Makefile</code>
+	  定义了一定数量不同的<span class="quote">“<span class="quote">目标 (targets)</span>”</span>，
+	  然后您选择的目标就决定了什么会发生。</p><p>有些目标列在 <code class="filename">Makefile</code>
+	  里的，但并不意味着您要执行。相反，建立过程 (build process)
+	  利用它们把重建系统的一些必要的步骤分割成几个子步骤。</p><p>大部分的时间不需要向 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a>
+	  传递参数，因此您的命令看起来可能象这样：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make target</code></strong></pre><p>此处 <em class="replaceable"><code>target</code></em> 表示的是若干编译选项。
+	  多数情况下， 第一个 target 都应该是
+	  <code class="varname">buildworld</code>。</p><p>正如名字所暗示的，<code class="buildtarget">buildworld</code>
+	  在 <code class="filename">/usr/obj</code> 下边建立了一个全新的树， 然后使用另一个 target，
+	  <code class="buildtarget">installworld</code> 在当前的机器里安装它。</p><p>将这些选项分开有两个优点。 首先， 它允许您安全地完成建立
+	  (build)， 而不对正在运行的系统的组件产生影响。
+	  构建过程是 <span class="quote">“<span class="quote">自主的 (self hosted)</span>”</span>。 因为这样，
+	  您可以安全地在以多用户模式运行的机器里执行
+	  <code class="buildtarget">buildworld</code> ，而不用当心不良影响。
+	  但是依然推荐您在单用户模式时运行
+	  <code class="buildtarget">installworld</code>。</p><p>第二，允许您使用 NFS 挂接 (NFS mounts)
+	  升级您网络里的多台计算机。如果您有三台
+	  <code class="systemitem">A</code>、<code class="systemitem">B</code> 和 <code class="systemitem">C</code>
+	  想进行升级，在<code class="systemitem">A</code> 执行
+	  <code class="command">make buildworld</code> 和
+	  <code class="command">make installworld</code>。 然后将
+	  <code class="systemitem">A</code> 上的
+	  <code class="filename">/usr/src</code> 和
+	  <code class="filename">/usr/obj</code> 通过 NFS 挂接到
+	  <code class="systemitem">B</code> 和 <code class="systemitem">C</code> 上， 接下来， 只需在
+	  <code class="systemitem">B</code> 和 <code class="systemitem">C</code> 上使用
+	  <code class="command">make installworld</code>
+	  来安装构建的结果就可以了。</p><p>尽管 <code class="buildtarget">world</code> target
+	  仍然存在，强烈建议您不要用它。</p><p>运行</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make buildworld</code></strong></pre><p>我们提供了一个试验性的功能， 可以在构建过程中为
+          <code class="command">make</code> 指定 <code class="option">-j</code> 参数，
+          令其在构建过程中同时启动多个并发的进程。 对于多 CPU 的机器而言，
+          这样做有助于发挥其性能。 不过， 由于编译过程中的瓶颈主要是在 IO
+          而不是 CPU 上， 因此它也会对单 CPU 的机器带来好处。</p><p>对典型的单 CPU 机器， 可以使用：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make -j4 buildworld</code></strong></pre><p>这样， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 会最多同时启动 4 个进程。
+	  从发到邮件列表中的经验看， 这样做能带来最佳的性能。</p><p>如果您使用的机器有多颗 CPU， 并且配置了 SMP 的内核，
+	  也可以试试看 6 到 10 的数值， 并观察是否能带来构建性能上的改善。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp66900856"></a>25.7.7.3. 耗时</h4></div></div></div><a id="idp66901496" class="indexterm"></a><p>联编基本系统所需的时间会受到很多因素的影响，
+          不过， 较新的机器应该都能在一两个小时之内完成 FreeBSD-STABLE 源代码的构建，
+          而无须任何技巧或捷径。 完成 FreeBSD-CURRENT 源代码的联编，
+          则通常需要更长一些的时间。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="new-kernel"></a>25.7.8. 编译和安装新内核</h3></div></div></div><a id="idp66904312" class="indexterm"></a><p>要充分利用您的新系统，您应该重新编译内核。
+	这是很有必要的，因为特定的内存结构已经发生了改变，像
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ps&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ps</span>(1)</span></a> 和 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=top&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">top</span>(1)</span></a> 这样的程序会不能工作，
+	除非内核同源码树的版本是一样的。</p><p>最简单、最安全的方式是 build 并安装一个基于
+	<code class="filename">GENERIC</code> 的内核。虽然
+	<code class="filename">GENERIC</code>
+	可能没有适合您的系统的所有必要的设备，
+	但它包括了启动您的系统到单用户模式所必需的内容。
+	这是个不错的检测新系统是否工作正常的测试。在从
+	<code class="filename">GENERIC</code> 启动、核实系统可以工作后，
+	您就可以建立 (build) 一个基于您的正常内核配置文件的新的内核了。</p><p>在 FreeBSD 中， 首先完成 <a class="link" href="makeworld.html#make-buildworld" title="25.7.7.2. 编译基本系统">build world</a> 然后再编译新内核非常重要。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果您想建立一个定制内核，而且已经有了配置文件，
+	只需象这样使用 <code class="literal">KERNCONF=MYKERNEL：</code></p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make buildkernel KERNCONF=MYKERNEL</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make installkernel KERNCONF=MYKERNEL</code></strong></pre></div><p>注意，如果您已把 <code class="literal">内核安全级别(kern.securelevel)</code>
+	调高到了 1 以上，而且还设置了 <code class="literal">noschg</code>
+	或相似的标识到了您的内核二进制里边，您可能会发现转换到单用户模式里使用
+	<code class="buildtarget">installkernel</code> 是很有必要的。
+	如果您没有设置它， 则应该也能毫无问题地在多用户模式执行这两个命令。 请参考
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=init&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">init</span>(8)</span></a> 以了解更多关于 <code class="literal">内核安全级(kern.securelevel)</code>
+	的信息；查看 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chflags&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chflags</span>(1)</span></a> 了解更多关于不同文件标识的信息。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="new-kernel-singleuser"></a>25.7.9. 重启到单用户模式</h3></div></div></div><a id="idp66929784" class="indexterm"></a><p>您应该单用户模式测试新内核。照<a class="xref" href="makeworld.html#makeworld-singleuser" title="25.7.5. 改为单用户模式">第 25.7.5 节 “改为单用户模式”</a>处的说明去做。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="make-installworld"></a>25.7.10. 安装编译好的新系统</h3></div></div></div><p>您现在应使用
+	<code class="buildtarget">installworld</code> 来安装新的系统二进制。</p><p>执行</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make installworld</code></strong></pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果在 <code class="command">make buildworld</code>
+	  的命令行指定了变量，您就必须在
+	  <code class="command">make installworld</code> 命令行里指定同样的变量。
+	  对于其它的选项并不是必需的，如，<code class="option">-j</code>
+	  就不能同 <code class="buildtarget">installworld</code> 一起使用。</p><p xmlns="http://www.w3.org/1999/xhtml">举例，您执行了：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make -DNO_PROFILE buildworld</code></strong></pre><p xmlns="http://www.w3.org/1999/xhtml">您就必须使用：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make -DNO_PROFILE installworld</code></strong></pre><p xmlns="http://www.w3.org/1999/xhtml">来安装结果，否则就要试着安装先定 (profiled) 的在
+	  <code class="command">make buildworld</code> 阶段没有建立 (built)
+	  的二进制文件。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="post-installworld-updates"></a>25.7.11. 不是由 <code class="command">make installworld</code> 更新的更新文件</h3></div></div></div><p>重新编译整个系统不会使用新的或改过的配置文件更新某些目录
+	(尤其像 <code class="filename">/etc</code>、<code class="filename">/var</code>
+	和 <code class="filename">/usr</code>)</p><p>更新这些文件最简单的方式就是使用
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a>，手工去做也是可以的，只要您愿意。
+	不管您选择哪一种，一定记得备份
+	<code class="filename">/etc</code> 以防出错。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="mergemaster"></a>25.7.11.1. <code class="command">mergemaster</code></h4></div><div><span class="authorgroup">贡献者：<span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Tom</span> <span class="surname">Rhodes</span></span>. </span></div></div></div><a id="idp66951544" class="indexterm"></a><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> 工具是个 Bourne 脚本，用于检测
+	<code class="filename">/etc</code> 和 <code class="filename">/usr/src/etc</code>
+	源码树里边的配置文件的不同点。
+	这是保持系统配置文件同源码树里的一起更新的推荐方式。</p><p>在提示符里简单地输入 <code class="command">mergemaster</code>
+	就可以开始，并观看它的开始过程。<code class="command">mergemaster</code>
+	会建立一个临时的根(root)环境，在 <code class="filename">/</code> 下，
+	放置各种系统配置文件。这些文件然后同当前安装到您系统里的进行比较。
+	此时，不同的文件会以 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a> 格式进行显示，使用
+	<code class="option">+</code> 符号标识增加或修改的行，<code class="option">-</code>
+	标识将完全删除的行或将被替换成新行。查看 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a>
+	手册可以得到更多关于 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a> 语法和文件不同点怎样显示的信息。</p><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> 会给您显示每个文件的不同处，
+	这样您就可以选择是删除新文件 (相对临时文件)，
+	是以未改状态安装临时文件，是以当前安装的文件合并临时文件，
+	还是再看一次 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a> 结果。</p><p><span class="quote">“<span class="quote">选择删除临时文件</span>”</span>将使 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a>
+	知道我们希望保留我们当前的文件不改，并删除新的。
+	并不推荐这个选择，除非您没有更改当前文件的理由。任何时候在
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> 提示符里输入 <span class="keycap"><strong>?</strong></span>，您就会得到帮助。
+	如果选择跳过文件，将在其它文件处理完后再次进行。</p><p><span class="quote">“<span class="quote">选择安装未修改临时文件</span>”</span>将会使新文件替换当前的。
+	对大部分未改的文件，这是个最好的选择。</p><p><span class="quote">“<span class="quote">选择合并文件</span>”</span>将为您打开一个文本编辑器，
+	里边是两个文件的内容。您现在就可以一边合并它们，
+	一边在屏幕里查看，同时从两者中选取部分生成最终文件。
+	当两个文件一起比较时，<span class="keycap"><strong>l</strong></span> 键会选择左边的内容，
+	<span class="keycap"><strong>r</strong></span> 会选择右边的。最终的输出是由两个部分组成的一个文件，
+	用它就可以安装了。这个选项通常用于用户修改了设置的文件。</p><p><span class="quote">“<span class="quote">选择再次查看 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a> 结果</span>”</span>将会在提供给选择之前，
+	显示文件的不同处，就象 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> 所做的一样。</p><p>在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> 完成了对系统文件的处理后，
+	您会得到其它的选项。<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> 可能会问您是否要重建密码文件，
+	并在最后提示您是否要删除余下的临时文件。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp66985720"></a>25.7.11.2. 手动更新</h4></div></div></div><p>如果想要手工更新，但不要只是从
+	<code class="filename">/usr/src/etc</code> 把文件复制到
+	<code class="filename">/etc</code> 就了事。有些文件是必须先<span class="quote">“<span class="quote">安装</span>”</span>的。
+	这是因为 <code class="filename">/usr/src/etc</code> 目录并 <span class="emphasis"><em>不是</em></span>
+	想像的那样是 <code class="filename">/etc</code> 目录的一个复制。事实上，有些是文件是
+	<code class="filename">/etc</code> 有的，而 <code class="filename">/usr/src/etc</code> 里边没有。</p><p>如果您使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mergemaster&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mergemaster</span>(8)</span></a> (作为推荐)，您可以向前跳到
+	<a class="link" href="makeworld.html#updating-upgrading-rebooting" title="25.7.12. 重启">下一节</a>。</p><p>手工做最简单的方式是安装这些文件到一个新的目录，完成后再来查找不同处。</p><div xmlns="" class="warning"><h3 class="admontitle">备份您已有的 <code xmlns="http://www.w3.org/1999/xhtml" class="filename">/etc</code>: </h3><p xmlns="http://www.w3.org/1999/xhtml">虽然，理论上，没有什么会自动访问这个目录，
+	  事情还是做稳操胜当一点。复制已有 <code class="filename">/etc</code>
+	  到一个安全的地方，如：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cp -Rp /etc /etc.old</code></strong></pre><p xmlns="http://www.w3.org/1999/xhtml"><code class="option">-R</code> 完成递归复制
+	  (译者注：即可以复制目录以下的所有内容)，<code class="option">-p</code>
+	  保留文件的时间、所属等等。</p></div><p>您需要建立一个虚目录 (a dummy set of directories)
+	来安装新的 <code class="filename">/etc</code> 和其它文件。
+	<code class="filename">/var/tmp/root</code> 是个不错的选择，
+	除此之外，还有一些子目录是需要的。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mkdir /var/tmp/root</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src/etc</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make DESTDIR=/var/tmp/root distrib-dirs distribution</code></strong></pre><p>这样就建好了需要的目录结构，然后安装文件。在
+	<code class="filename">/var/tmp/root</code> 下建立的大部分子目录是空的，
+	而且要删除掉。最简单的方式是：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /var/tmp/root</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>find -d . -type d | xargs rmdir 2&gt;/dev/null</code></strong></pre><p>这样会删除所有的空目录。(标准的错误信息被重定向到了
+	<code class="filename">/dev/null</code>，以防止关于非空目录的警告。)</p><p><code class="filename">/var/tmp/root</code> 现在包含了应放在
+	<code class="filename">/</code> 下某个位置的所有文件。
+	您现在必须仔细检查每一个文件，检测它们与您已有的文件有多大不同。</p><p>注意，有些已经安装在 <code class="filename">/var/tmp/root</code>
+	下的文件有个<span class="quote">“<span class="quote">.</span>”</span>在开头。在写的时候，像这样唯一的文件是
+	<code class="filename">/var/tmp/root/</code> 和 <code class="filename">/var/tmp/root/root/</code>
+	里 shell 启动文件，尽管可能有其它的(依赖于您什么时候读取这个)。
+	确信使用 <code class="command">ls -a</code> 可以看到它们。</p><p>最简单的方式是使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a> 去比较两个文件：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>diff /etc/shells /var/tmp/root/etc/shells</code></strong></pre><p>这会显示出 <code class="filename">/etc/shells</code> 文件和新的
+	<code class="filename">/var/tmp/root/etc/shells</code> 文件的不同处。
+	用这些来决定是合并您已做的变化还是复制您的旧文件过来。</p><div xmlns="" class="tip"><h3 class="admontitle">使用日戳 (Time Stamp) 命名新的 Root(根)目录(<code xmlns="http://www.w3.org/1999/xhtml" class="filename">/var/tmp/root</code>)，这样您可以轻松地比较两个版本的不同: </h3><p xmlns="http://www.w3.org/1999/xhtml">频繁重建系统意味着必须频繁更新
+	  <code class="filename">/etc</code>，而这可能会有点烦琐。</p><p xmlns="http://www.w3.org/1999/xhtml">在合并到 <code class="filename">/etc</code> 的文件里，
+	  最新更改的您可以做个复制，由此加快这个(指更新)过程。
+	  下边就给出了一个怎样做的主意。</p><div xmlns="http://www.w3.org/1999/xhtml" class="procedure"><ol class="procedure" type="1"><li class="step"><p>像平常一样建立系统 (Make the world)。当您想更新
+	      <code class="filename">/etc</code> 和其它目录里，
+	      给目标目录一个含有当前日期的名字。假如您是 1998 年 2 月 14
+	      日做的，您可以执行下边的：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mkdir /var/tmp/root-19980214</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src/etc</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make DESTDIR=/var/tmp/root-19980214 \
+    distrib-dirs distribution</code></strong></pre></li><li class="step"><p>如上边列出的，从这个目录合并变化。</p><p>在您完成后，<span class="emphasis"><em>不要</em></span> 删除
+	      <code class="filename">/var/tmp/root-19980214</code> 目录。</p></li><li class="step"><p>在您下载了最新版的源码并改过后，执行第一步。
+	      这样将得到一个新的目录，可能叫做
+	      <code class="filename">/var/tmp/root-19980221</code>
+	      (如果等了一周做的升级)。</p></li><li class="step"><p>您现在能看到两个目录间的不同了---在隔周的时间里使用
+	      <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=diff&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">diff</span>(1)</span></a> 建立递归 diff 产生的不同：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /var/tmp</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>diff -r root-19980214 root-19980221</code></strong></pre><p>一般情况下，这两种间的不同处比
+	      <code class="filename">/var/tmp/root-19980221/etc</code> 和
+	      <code class="filename">/etc</code> 之间的不同要小很多。
+	      因为不同点更小，也就更容易把这些变化移到您的
+	      <code class="filename">/etc</code> 目录里边。</p></li><li class="step"><p>您现在可以删除早先的两个
+	      <code class="filename">/var/tmp/root-*</code> 目录：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>rm -rf /var/tmp/root-19980214</code></strong></pre></li><li class="step"><p>每次您需要合并这些变化到 <code class="filename">/etc</code>
+	      里，就重复这个流程。</p></li></ol></div><p xmlns="http://www.w3.org/1999/xhtml">您可以使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=date&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">date</span>(1)</span></a> 自动产生目录的名称：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mkdir /var/tmp/root-`date "+%Y%m%d"`</code></strong></pre></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-upgrading-rebooting"></a>25.7.12. 重启</h3></div></div></div><p>现在完成了。在您检查所有内容都放置正确后，
+	您可以重启系统了。只是简单的 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=shutdown&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">shutdown</span>(8)</span></a> 可以这样做：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>shutdown -r now</code></strong></pre></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp67064824"></a>25.7.13. 结束</h3></div></div></div><p>恭喜！您现在成功升级了您的 FreeBSD 系统。</p><p>如果还有轻微的错误，可以轻易地重建系统的选定部分。
+	例如，在部分升级或合并 <code class="filename">/etc</code> 时，您不小心删除了
+	<code class="filename">/etc/magic</code>，<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=file&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">file</span>(1)</span></a>
+	命令就会停止工作。这种情况下，执行下边进行修复：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src/usr.bin/file</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make all install</code></strong></pre></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-questions"></a>25.7.14. 问题</h3></div></div></div><div class="qandaset"><a id="idp67070328"></a><dl><dt>25.7.14.1. <a href="makeworld.html#idp67070584">每个变化您都须要重建系统吗？</a></dt><dt>25.7.14.2. <a href="makeworld.html#idp67085176">我的编译失败，并伴随有许多
+	      11
+	      (或其它的数字信息) 号错误。是怎么回事呀？</a></dt><dt>25.7.14.3. <a href="makeworld.html#idp67088376">我完成后可以删除 /usr/obj 吗？</a></dt><dt>25.7.14.4. <a href="makeworld.html#idp67092856">中断的 build 可以被恢复吗？</a></dt><dt>25.7.14.5. <a href="makeworld.html#idp67108600">我怎样加快建立系统的速度？</a></dt><dt>25.7.14.6. <a href="makeworld.html#idp67155448">如果出现了错误我该怎么办？</a></dt></dl><table border="0" style="width: 100%;"><colgroup><col align="left" width="1%" /><col /></colgroup><tbody><tr class="question"><td align="left" valign="top"><a id="idp67070584"></a><a id="idp67074936"></a><p><strong>25.7.14.1.</strong></p></td><td align="left" valign="top"><p>每个变化您都须要重建系统吗？</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>这个不好说，因为要看变化的情况。如，如果您刚运行了
+	      <span class="application">CVSup</span>，并得到下边更新的文件：</p><pre class="screen"><code class="filename">src/games/cribbage/instr.c</code>
+<code class="filename">src/games/sail/pl_main.c</code>
+<code class="filename">src/release/sysinstall/config.c</code>
+<code class="filename">src/release/sysinstall/media.c</code>
+<code class="filename">src/share/mk/bsd.port.mk</code></pre><p>这就不必重建整个系统。您只需到相关的子目录里执行
+	      <code class="command">make all install</code>，仅此而已。
+	      但是，如果有重大变化，如 <code class="filename">src/lib/libc/stdlib</code>，
+	      那么您就要重建系统或至少静态连接的那些部分
+	      (除了您增加的部分都是静态连接的)。</p><p>在这天后，就是您的事了。要是说每两个星期重建一下系统的话，
+	      您可能会高兴。或者您可能只想重做改变过的部分，
+	      确信您能找出所有依赖关系。</p><p>当然，所有这些依赖于您想升级的频率，和您是否想跟踪
+	      FreeBSD-STABLE 或 FreeBSD-CURRENT。</p></td></tr><tr class="question"><td align="left" valign="top"><a id="idp67085176"></a><a id="idp67085432"></a><p><strong>25.7.14.2.</strong></p></td><td align="left" valign="top"><p>我的编译失败，并伴随有许多
+	      11<a id="idp67085944" class="indexterm"></a>
+	      (或其它的数字信息) 号错误。是怎么回事呀？</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>这个通常表示硬件错误。
+	      (重)建系统是个强压测试系统硬件的有效地方式，
+	      并且常常产生内存错误。
+	      这些正好表示它们自已做为编译器离奇地死于收到的奇怪信息。</p><p>一个确信的指示器是如果重新开始
+	      make，并且整个过程中会死在不同的点上。</p><p>对于这种情况，您没有什么可做的，除了更换机器里的部件，看是哪一个坏了。</p></td></tr><tr class="question"><td align="left" valign="top"><a id="idp67088376"></a><a id="idp67088632"></a><p><strong>25.7.14.3.</strong></p></td><td align="left" valign="top"><p>我完成后可以删除 <code class="filename">/usr/obj</code> 吗？</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>简短地说，可以。</p><p><code class="filename">/usr/obj</code>
+	      包含了所有在编译阶段生成的目标文件。通常，
+	      在 <code class="command">make buildworld</code> 过程中第一步之一就是删除这个目录重新开始。
+	      这种情况下，在您完成后，保留 <code class="filename">/usr/obj</code>
+	      没有多大意义，还可释放一大堆磁盘空间(目前是 2 GB 左右)。</p><p>不过， 如果您很了解整个过程， 也可以让
+	      <code class="command">make buildworld</code> 跳过这一步。
+	      这会让后续的联编过程执行得更快，
+	      因为大部分的源码都不必再进行编译了。
+	      这样做的负面效果是它可能会触发一些由于敏感的依赖关系导致的问题，
+	      这些问题会导致联编以奇怪的方式出错并失败。
+	      这在 FreeBSD 邮件列表里经常引起沸腾，
+	      当有人抱怨他们 build 失败时，并没意识到这是因为自已是想抄近路。</p></td></tr><tr class="question"><td align="left" valign="top"><a id="idp67092856"></a><a id="idp67093112"></a><p><strong>25.7.14.4.</strong></p></td><td align="left" valign="top"><p>中断的 build 可以被恢复吗？</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>依赖于您在您找到问题之前整个过程进行了多远。</p><p><span class="emphasis"><em>一般而言</em></span> (当然这并不是硬性规定)，
+	      <code class="command">make buildworld</code>
+	      的过程中将会首先构建新版的基本构建工具 (例如 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=gcc&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">gcc</span>(1)</span></a>， 以及
+	      <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a>) 和系统库。 随后会安装这些工具和库。
+	      这些新版本的工具和库在随后将被用于重新编译和连接它们本身。
+	      整个系统 (现在包括了常规的用户程序， 例如
+		<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ls&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ls</span>(1)</span></a> 或 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=grep&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">grep</span>(1)</span></a>) 会同新版的系统文件一起被重新构建。</p><p>如果您正处于最后一个阶段， 并且了解它 (因为您已经看过了所保存的输出)
+	      则可以 (相当安全地) 做：</p><pre class="screen"><span class="emphasis"><em>… 问题修复 …</em></span>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make -DNO_CLEAN all</code></strong></pre><p>这样就不会取消先前的
+	      <code class="command">make buildworld</code> 所做的工作了。</p><p>在<span class="quote">“<span class="quote">make buildworld</span>”</span>的输出中如果看到如下信息：</p><pre class="screen">--------------------------------------------------------------
+Building everything..
+--------------------------------------------------------------</pre><p>出现在 <code class="command">make buildworld</code> 的输出中，
+	      则这样做应该不会有什么问题。</p><p>如果没有看到这样的信息， 或者您不确定，
+	      则从头开始构建将是万无一失的做法。</p></td></tr><tr class="question"><td align="left" valign="top"><a id="idp67108600"></a><a id="idp67108856"></a><p><strong>25.7.14.5.</strong></p></td><td align="left" valign="top"><p>我怎样加快建立系统的速度？</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>以单用户模式运行</p></li><li class="listitem"><p>把 <code class="filename">/usr/src</code> 和 <code class="filename">/usr/obj</code>
+		  目录放到不同磁盘里的独立文件系统里。如果可能，这些磁盘在不同的磁盘控制器里。</p></li><li class="listitem"><p>更好的，是把这些文件系统放置到多个使用
+		  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ccd&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ccd</span>(4)</span></a> (连接磁盘驱动器--concatenated disk driver)设备的磁盘里。</p></li><li class="listitem"><p>关掉 profiling (在 <code class="filename">/etc/make.conf</code>
+		  里设置 <span class="quote">“<span class="quote">NO_PROFILE=true</span>”</span>)。您差不多用不了它。</p></li><li class="listitem"><p>在 <code class="filename">/etc/make.conf</code> 里也为
+		  <code class="varname">CFLAGS</code> 设置上 <code class="option">-O -pipe</code>。
+		  最佳优化 <code class="option">-O2</code> 会更慢，而且 <code class="option">-O</code>
+		  和 <code class="option">-O2</code> 之间的优化差别基本上可以忽略。
+		  <code class="option">-pipe</code> 让编译器使用管道而不用临时文件进行通信，
+		  这样可以减少磁盘存取 (以内存作为代价)。</p></li><li class="listitem"><p>传递 <code class="option">-j<em class="replaceable"><code>n</code></em></code> 选项给
+		  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 以便并发运行多个进程。
+		  这样就不会考虑您的是否是单个或多个处理器机器。</p></li><li class="listitem"><p>存放 <code class="filename">/usr/src</code> 的文件系统可以使用
+		<code class="option">noatime</code> 选项来挂接 (或重新挂接)。
+		这样会防止文件系统记录文件的存取时间。 您可能并不需要这些信息。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mount -u -o noatime /usr/src</code></strong></pre><div xmlns="" class="warning"><h3 class="admontitle">警告: </h3><p xmlns="http://www.w3.org/1999/xhtml">这个例子里假定 <code class="filename">/usr/src</code>
+		      是在它自已的文件系统里。如果不是 (例如假设它是
+		      <code class="filename">/usr</code> 的部分)，那么您就需要那个文件系统挂接点，
+		      而不是 <code class="filename">/usr/src</code>。</p></div></li><li class="listitem"><p>存放 <code class="filename">/usr/obj</code> 的文件系统可以使用
+		  <code class="option">async</code> 选项被挂接 (或重新挂接)。
+		  这样做将启用异步写盘。 换句话说， 对应用程序而言写会立即完成，
+		  而数据则延迟几秒才会写到盘里。 这样做能够成批地写下数据，
+		  从而极大地改善性能。</p><div xmlns="" class="warning"><h3 class="admontitle">警告: </h3><p xmlns="http://www.w3.org/1999/xhtml">注意， 这个选项会使您的文件系统变得脆弱。
+		    使用这个选项会提高在电源断掉或机器非正常重启时，
+		    文件系统进入不可恢复状态的概率。</p><p xmlns="http://www.w3.org/1999/xhtml">如果在这个文件系统里 <code class="filename">/usr/obj</code>
+		    是很关键的，这不是问题。如果您有其它有价值的数据在同一个文件系统，
+		    那么在您使用这个选项这前，确认备份一下。</p></div><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mount -u -o async /usr/obj</code></strong></pre><div xmlns="" class="warning"><h3 class="admontitle">警告: </h3><p xmlns="http://www.w3.org/1999/xhtml">同上，如果 <code class="filename">/usr/obj</code>
+		    不在自已的文件系统里，使用相关挂接点的名字把它从例子里边替换掉。</p></div></li></ul></div></td></tr><tr class="question"><td align="left" valign="top"><a id="idp67155448"></a><a id="idp67155704"></a><p><strong>25.7.14.6.</strong></p></td><td align="left" valign="top"><p>如果出现了错误我该怎么办？</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>绝对确信您的环境没有先前 build 留下的残余。这点够简单。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>chflags -R noschg /usr/obj/usr</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>rm -rf /usr/obj/usr</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make cleandir</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make cleandir</code></strong></pre><p>不错，<code class="command">make cleandir</code> 真的要执行两次。</p><p>然后重新开始整个过程，使用 <code class="command">make buildworld</code> 开始。</p><p>如果您还有问题，就把错误和 <code class="command">uname -a</code>
+	      的输出发送到 <a class="link" href="http://lists.FreeBSD.org/mailman/listinfo/freebsd-questions" target="_top">FreeBSD 一般问题邮件列表</a> 邮件列表。准备回答其它关于您的设置的问题！</p></td></tr></tbody></table></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="synching.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="updating-upgrading.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="make-delete-old.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">25.6. 同步您的源码 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 25.8. 删除过时的文件、 目录和函数库</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

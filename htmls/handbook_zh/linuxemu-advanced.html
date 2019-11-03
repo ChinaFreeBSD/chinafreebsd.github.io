@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>11.3. 高级主题</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="linuxemu.html" title="第 11 章 Linux® 二进制兼容模式" /><link rel="prev" href="linuxemu-lbc-install.html" title="11.2. 配置 Linux® 二进制兼容模式" /><link rel="next" href="system-administration.html" title="部分 III. 系统管理" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.3. 高级主题</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="linuxemu-lbc-install.html">上一页</a> </td><th width="60%" align="center">第 11 章 <span class="trademark">Linux</span>® 二进制兼容模式</th><td width="20%" align="right"> <a accesskey="n" href="system-administration.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="linuxemu-advanced"></a>11.3. 高级主题</h2></div></div></div><p>此章节将讲述是 <span class="trademark">Linux</span>® 二进制兼容如何工作的，
+      内容基于 Terry Lambert <code class="email">&lt;<a xmlns="" class="email" href="mailto:tlambert@primenet.com">tlambert@primenet.com</a>&gt;</code> (Message ID:
+      <code class="literal">&lt;199906020108.SAA07001@usr09.primenet.com&gt;</code>)
+      发表在 <a class="link" href="http://lists.FreeBSD.org/mailman/listinfo/freebsd-chat" target="_top">FreeBSD 闲聊邮件列表</a> 的邮件。</p><a id="idp57513848" class="indexterm"></a><p>FreeBSD 有一个叫 <span class="quote">“<span class="quote">execution class loader</span>”</span> 的抽象层。
+      它被嵌入进了 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=execve&amp;sektion=2&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">execve</span>(2)</span></a> 系统调用。</p><p>历史上 <span class="trademark">UNIX</span>® 加载器会依靠查看魔数
+      （通常是文件的开头 4 至 8 个字节）来确认是否是系统已知的的二进制程序，
+      如果是的话， 就会调用二进制程序加载器。</p><p>如果它不是二进制类型的程序， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=execve&amp;sektion=2&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">execve</span>(2)</span></a> 调用会返回一个错误，
+      shell 则会把它当作 shell 命令执行。
+      <span class="quote">“<span class="quote">不论当前是哪一种 shell</span>”</span> 都会默认做出此种假设。</p><p>随后， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=sh&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">sh</span>(1)</span></a> 会检查开头的两个字符，
+      如果它们是 <code class="literal">:\n</code>， 那么就调用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=csh&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">csh</span>(1)</span></a>。</p><p>FreeBSD 有一份加载器列表而不是一个单一的加载器， 并能回退到
+      <code class="literal">#!</code> 加载器来运行 shell 解释器或者 shell 脚本。</p><a id="idp57738744" class="indexterm"></a><a id="idp57739512" class="indexterm"></a><p>为了支持 <span class="trademark">Linux</span>® <acronym class="acronym">ABI</acronym>， FreeBSD 看到了二进制 ELF 程序的魔数。
+      ELF 加载器会查找一个专用的 <span class="emphasis"><em>标记</em></span>，
+      那是在 ELF 镜像中的一个注释部分， 
+      此区域在 SVR4/<span class="trademark">Solaris</span>™ ELF 二进制中并不存在。</p><p>要运行 <span class="trademark">Linux</span>® 二进制程序，
+      必须先使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=brandelf&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">brandelf</span>(1)</span></a> 命令 <span class="emphasis"><em>标记</em></span> 为
+      <code class="literal">Linux</code> 类型：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>brandelf -t Linux file</code></strong></pre><a id="idp57749752" class="indexterm"></a><p>当 ELF 加载器看到了 <code class="literal">Linux</code>
+      标记，便会替换 <code class="literal">proc</code> 结构中的一个指针。
+      所有的系统调用都通过此指针来索引。 除此以外，
+      进程被标记以便对 signal trampoline 代码的陷阱向量做特殊处理，
+      还有一些其他由 <span class="trademark">Linux</span>® 内核模块来处理的（细微）修补。</p><p><span class="trademark">Linux</span>® 系统调用向量包含一个 <code class="literal">sysent[]</code>
+      记录的列表， 它的地址位于内核模块之中。</p><p>当一个系统调用被 <span class="trademark">Linux</span>® 二进制程序调用时，
+      陷阱代码会把系统调用函数指针从 <code class="literal">proc</code> 
+      解引用至 <span class="trademark">Linux</span>® 而不是 FreeBSD 的系统调用入口。</p><p><span class="trademark">Linux</span>® 模式会动态地 <span class="emphasis"><em>reroots</em></span> 查找。
+      这与 <code class="option">union</code> 文件系统选项是等效的。
+      首先会试图在 <code class="filename">/compat/linux/<em class="replaceable"><code>original-path</code></em></code>
+      目录查找文件。 如果失败了， 就会在 <code class="filename">/<em class="replaceable"><code>original-path</code></em></code>
+      目录下查找。 这使得需要其它程序的程序得以运行。 例如，<span class="trademark">Linux</span>®
+      工具链都可以在 <span class="trademark">Linux</span>® <acronym class="acronym">ABI</acronym> 的支持下运行。
+      也就是说 <span class="trademark">Linux</span>® 二进制程序可以加载并执行 FreeBSD 二进制程序，
+      如果当前没有相应的 <span class="trademark">Linux</span>® 二进制程序，
+      可以在 <code class="filename">/compat/linux</code> 目录树中放置一个
+      <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=uname&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">uname</span>(1)</span></a> 命令， 使 <span class="trademark">Linux</span>® 程序不易察觉它们并没有运行在 <span class="trademark">Linux</span>®
+      系统上。</p><p>事实上， 在 FreeBSD 内核中有一个 <span class="trademark">Linux</span>® 内核。
+      所有由内核提供的服务的各种底层功能在 FreeBSD 系统调用表的记录和 <span class="trademark">Linux</span>®
+      系统调用表的记录是一样的： 文件系统操作， 虚拟内存操作，
+      信号发送， 和 System V IPC。 唯一的不同是 FreeBSD 会得到 FreeBSD 的
+      <span class="emphasis"><em>glue</em></span> 功能， 而 <span class="trademark">Linux</span>® 程序会得到 <span class="trademark">Linux</span>® 
+      的 <span class="emphasis"><em>glue</em></span> 功能。 FreeBSD 的 <span class="emphasis"><em>glue</em></span>
+      功能是静态链接入内核的， 而 <span class="trademark">Linux</span>® 的 <span class="emphasis"><em>glue</em></span> 
+      功能可以静态链接， 或者通过内核模块访问。</p><p>严格说来其实并没有真正的模拟， 这是一种 <acronym class="acronym">ABI</acronym>
+      的实现。 有时这被称为 <span class="quote">“<span class="quote"><span class="trademark">Linux</span>® 模拟</span>”</span> 
+      是因为在实现的时候还没有其他适合的词用来描述。
+      要说 FreeBSD 运行 <span class="trademark">Linux</span>® 二进制程序并不确切，
+      因为当时代码并还没有被编译进去。</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="linuxemu-lbc-install.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="linuxemu.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="system-administration.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">11.2. 配置 <span class="trademark">Linux</span>® 二进制兼容模式 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 部分 III. 系统管理</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

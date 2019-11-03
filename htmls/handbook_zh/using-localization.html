@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>24.3. 使用本地化语言</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="l10n.html" title="第 24 章 本地化－I18N/L10N使用和设置" /><link rel="prev" href="l10n-basics.html" title="24.2. 基础知识" /><link rel="next" href="l10n-compiling.html" title="24.4. 编译I18N程序" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">24.3. 使用本地化语言</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="l10n-basics.html">上一页</a> </td><th width="60%" align="center">第 24 章 本地化－I18N/L10N使用和设置</th><td width="20%" align="right"> <a accesskey="n" href="l10n-compiling.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="using-localization"></a>24.3. 使用本地化语言</h2></div></div></div><p>I18N不是FreeBSD特有的，它是一个规则。我们鼓励您帮助FreeBSD完善这一规则。</p><a id="idp65837944" class="indexterm"></a><p>本地化设置需要具备三个条件：语言代码 (Language Code)、 国家代码
+      (Country Code) 和编码(Encoding)。 本地名字可以用下面这些部分来构造：</p><pre class="programlisting"><em class="replaceable"><code>语言代码</code></em>_<em class="replaceable"><code>国家代码</code></em>.<em class="replaceable"><code>编码</code></em></pre><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65840120"></a>24.3.1. 语言和国家代码</h3></div></div></div><a id="idp65840760" class="indexterm"></a><a id="idp65841272" class="indexterm"></a><p>为了用特殊的语言来对FreeBSD系统进行本地化（或其他类<span class="trademark">UNIX</span>®系统），
+      用户必须要知道相应的国家和语言代码（国家代码告诉应用程序使用哪一种语言规范）。
+      此外，WEB浏览器，SMTP/POP服务器，web服务器等都是以这个为基础的。下面就是一个国家和语言代码的例子:
+      </p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /></colgroup><thead><tr><th>语言/国家代码</th><th>描述</th></tr></thead><tbody><tr><td>en_US</td><td>美国英语</td></tr><tr><td>ru_RU</td><td>俄语</td></tr><tr><td>zh_CN</td><td>简体中文</td></tr></tbody></table></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65853432"></a>24.3.2. 编码</h3></div></div></div><a id="idp65854072" class="indexterm"></a><a id="idp65854584" class="indexterm"></a><p>一些语言不使用 ASCII 编码，它们使用8-位， 宽或多字节的字符，
+	更多的信息请参考 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=multibyte&amp;sektion=3&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">multibyte</span>(3)</span></a>。
+	比较老的应用程序可能会无法识别它们， 并误认为是控制字符。
+	比较新的应用程序通常会认出 8-位字符。 随实现的不同，
+	用户可能不得不将宽或多字节字符支持编入应用程序， 或进行一些额外的配置，
+	才能够正常使用它们。 要输入和处理宽或多字节字符， <a class="link" href="https://www.freebsd.org/ports/index.html" target="_top">FreeBSD Ports Collection</a>
+	已经为每种语言提供了不同的程序。 请参考各个 FreeBSD Port 中的 I18N
+	文档。</p><p>特别需要指出的是， 用户可能需要查看应用程序的文档，
+	以确定如何正确地配置它， 或需要为 configure/Makefile/编译器
+	指定什么样的参数。</p><p>记住下面这些:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>特定语言的简单C字符集 (参见 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=multibyte&amp;sektion=3&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">multibyte</span>(3)</span></a>)，例如
+	    ISO8859-1, ISO8859-15, KOI8-R, CP437。</p></li><li class="listitem"><p>宽字节或多字节编码，如EUC, Big5。</p></li></ul></div><p>您可以在<a class="link" href="http://www.iana.org/assignments/character-sets" target="_top">IANA Registry</a>检查一下现行的字符集列表。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">与此不同的是， FreeBSD 使用与 X11-兼容的本地编码模式。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65862136"></a>24.3.3. I18N应用程序</h3></div></div></div><p>在FreeBSD Ports和Package系统里面，I18N应用程序已经使用<code class="literal">I18N</code>
+      来命名。然而它们不是总支持需要的语言。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="setting-locale"></a>24.3.4. 本地化设置</h3></div></div></div><p>通常只要在登入shell里面设置<code class="envar">LANG</code>为本地化，
+      一般通过设置用户的 <code class="filename">~/.login_conf</code>
+	或用户shell的启动文件（<code class="filename">~/.profile</code>，<code class="filename">~/.bashrc</code>,
+	<code class="filename">~/.cshrc</code>）。没有必要设置
+	<code class="envar">LC_CTYPE</code>，<code class="envar">LC_CTIME</code>。
+	更多的信息请参考特定语言的FreeBSD文档。</p><p>您应当在您的配置文件中设置下面两个变量：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="envar">LANG</code> 为<span class="trademark">POSIX</span>®设置本地化语言功能。<a id="idp65500792" class="indexterm"></a></p></li><li class="listitem"><p><code class="envar">MM_CHARSET</code>应用程序的MIME字符集。<a id="idp65506296" class="indexterm"></a></p></li></ul></div><p>这包括用户的shell配置，特定的应用配置和X11配置。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65507448"></a>24.3.4.1. 设置本地化的方法</h4></div></div></div><a id="idp65508088" class="indexterm"></a><a id="idp65508600" class="indexterm"></a><p>有两种方法来设置本地化，接下来都会描述。
+	第一种 (推荐) 就是在 <a class="link" href="using-localization.html#login-class" title="24.3.4.1.1. 登入分类方法">登入分类</a>里面指定环境变量。
+	第二种方法是把环境变量加到shell的<a class="link" href="using-localization.html#startup-file" title="24.3.4.1.2. Shell启动文件方法">启动文件</a>里面。
+	</p><div class="sect4"><div xmlns="" class="titlepage"><div><div><h5 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="login-class"></a>24.3.4.1.1. 登入分类方法</h5></div></div></div><p>这种方法允许把本地化名称和MIME字符集的环境变量赋给可能的shell，
+	   而不是加到每个特定shell的启动文件里面。
+	   <a class="link" href="using-localization.html#usr-setup" title="24.3.4.1.1.1. 用户级设置">用户级设置
+	    Level Setup</a> 允许普通用户自己完成这个设置，而<a class="link" href="using-localization.html#adm-setup" title="24.3.4.1.1.2. 管理员级设置">管理员级设置</a>需要超级用户权限。</p><div class="sect5"><div xmlns="" class="titlepage"><div><div><h6 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="usr-setup"></a>24.3.4.1.1.1. 用户级设置</h6></div></div></div><p>这有一个设置用户根目录文件<code class="filename">.login_conf</code>的小例子，
+	    它为上述两个变量设置了Latin-1编码。</p><pre class="programlisting">me:\
+	:charset=ISO-8859-1:\
+	:lang=de_DE.ISO8859-1:</pre><a id="idp65576056" class="indexterm"></a><p>这是一个为<code class="filename">.login_conf</code>设置繁体中文的BIG-5编码的例子。应该设置下面的大部分变量，
+	    因为很多软件都没有为中文，日文和韩文设置正确的本地化变量。</p><pre class="programlisting">#Users who do not wish to use monetary units or time formats
+#of Taiwan can manually change each variable
+me:\
+	:lang=zh_TW.Big5:\
+	:setenv=LC_ALL=zh_TW.Big5:\
+	:setenv=LC_COLLATE=zh_TW.Big5:\
+	:setenv=LC_CTYPE=zh_TW.Big5:\
+	:setenv=LC_MESSAGES=zh_TW.Big5:\
+	:setenv=LC_MONETARY=zh_TW.Big5:\
+	:setenv=LC_NUMERIC=zh_TW.Big5:\
+	:setenv=LC_TIME=zh_TW.Big5:\
+	:charset=big5:\
+	:xmodifiers="@im=gcin": #Set gcin as the XIM Input Server</pre><p>更多的信息参考<a class="link" href="using-localization.html#adm-setup" title="24.3.4.1.1.2. 管理员级设置">管理员级设置</a>和<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=login.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">login.conf</span>(5)</span></a></p></div><div class="sect5"><div xmlns="" class="titlepage"><div><div><h6 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="adm-setup"></a>24.3.4.1.1.2. 管理员级设置</h6></div></div></div><p>检查用户的登入分类在
+	      <code class="filename">/etc/login.conf</code>里面是否设置了正确的语言。主要确定下面的几个设置：</p><pre class="programlisting"><em class="replaceable"><code>language_name</code></em>|<em class="replaceable"><code>Account Type Description</code></em>:\
+	:charset=<em class="replaceable"><code>MIME_charset</code></em>:\
+	:lang=<em class="replaceable"><code>locale_name</code></em>:\
+	:tc=default:</pre><p>再次使用前面的Latin-1编码的例子：</p><pre class="programlisting">german|German Users Accounts:\
+	:charset=ISO-8859-1:\
+	:lang=de_DE.ISO8859-1:\
+	:tc=default:</pre><p>在修改用户的登入类型之前， 应首先执行下面的命令：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cap_mkdb /etc/login.conf</code></strong></pre><p>以便使在
+	      <code class="filename">/etc/login.conf</code> 中新增的配置生效。</p><h5 class="title"><a id="idp65516152"></a>使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=vipw&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">vipw</span>(8)</span></a> 改变登入类型。</h5><a id="idp65517432" class="indexterm"></a><p>使用<code class="command">vipw</code>添加新用户，看起来像下面这样：
+	    </p><pre class="programlisting">user:password:1111:11:<em class="replaceable"><code>language</code></em>:0:0:User Name:/home/user:/bin/sh</pre><h5 class="title"><a id="idp65519864"></a>用<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=adduser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">adduser</span>(8)</span></a>改变登入类型。</h5><a id="idp65521144" class="indexterm"></a><a id="idp65522040" class="indexterm"></a><p>用<code class="command">adduser</code>添加新用户看起来像下面这样：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>在<code class="filename">/etc/adduser.conf</code>里面设置<code class="literal">defaultclass =
+		  语言</code>。应该记住，您必须为使用其它语言的所有用户设置
+		  <code class="literal">缺省</code>类别。
+		  </p></li><li class="listitem"><p>每一次使用<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=adduser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">adduser</span>(8)</span></a>的时候，一个特定语言的可选择性回答会像下面这样给出：
+                </p><pre class="screen"><code class="prompt">Enter login class: default []: </code></pre><p>
+                </p></li><li class="listitem"><p>如果您打算给每一个用户使用另外一种语言，您应该这样：
+		</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>adduser -class language</code></strong></pre></li></ul></div><h5 class="title"><a id="idp65533432"></a>使用<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pw&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pw</span>(8)</span></a>改变登入类型。</h5><a id="idp65534712" class="indexterm"></a><p>如果您使用<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pw&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pw</span>(8)</span></a>来添加新用户，应该这样使用：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pw useradd user_name -L language</code></strong></pre></div></div><div class="sect4"><div xmlns="" class="titlepage"><div><div><h5 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="startup-file"></a>24.3.4.1.2. Shell启动文件方法</h5></div></div></div><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">不推荐使用这种方法，因为它需要给每一个可能的shell程序一个不同的启动文件。
+	    应该用<a class="link" href="using-localization.html#login-class" title="24.3.4.1.1. 登入分类方法">登入分类方法</a>来代替这种方法。
+	    </p></div><a id="idp65540088" class="indexterm"></a><a id="idp65540600" class="indexterm"></a><p>为了设置本地化名称和MIME字符集，只要在<code class="filename">/etc/profile</code>或
+	    <code class="filename">/etc/csh.login</code>启动文件里面设置这两个变量。下面我们使用德语做例子：
+	    </p><p>在<code class="filename">/etc/profile</code>里面：</p><pre class="programlisting"><code class="envar">LANG=de_DE.ISO8859-1; export LANG</code>
+<code class="envar">MM_CHARSET=ISO-8859-1; export MM_CHARSET</code></pre><p>或在<code class="filename">/etc/csh.login</code>里面：</p><pre class="programlisting"><code class="envar">setenv LANG de_DE.ISO8859-1</code>
+<code class="envar">setenv MM_CHARSET ISO-8859-1</code></pre><p>另外，您可以把上面的设置添加到<code class="filename">/usr/share/skel/dot.profile</code>
+	  （和前面的<code class="filename">/etc/profile</code>一样），或者<code class="filename">/usr/share/skel/dot.login</code>
+	  （和前面的<code class="filename">/etc/csh.login</code>一样）。</p><p>对于X11：</p><p>在<code class="filename">$HOME/.xinitrc</code>里面：</p><pre class="programlisting"><code class="envar">LANG=de_DE.ISO8859-1; export LANG</code></pre><p>或者：</p><pre class="programlisting"><code class="envar">setenv LANG de_DE.ISO8859-1</code></pre><p>依赖您的shell(看上面）。</p></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="setting-console"></a>24.3.5. 控制台设置</h3></div></div></div><p>对于所有的简单C字符集，在<code class="filename">/etc/rc.conf</code>中用正在讨论的语言设置正确的控制台字符：
+      </p><pre class="programlisting">font8x16=<em class="replaceable"><code>font_name</code></em>
+font8x14=<em class="replaceable"><code>font_name</code></em>
+font8x8=<em class="replaceable"><code>font_name</code></em></pre><p>这儿的<em class="replaceable"><code>font_name</code></em>来自于<code class="filename">/usr/share/syscons/fonts</code>目录，
+      不带<code class="filename">.fnt</code>后缀。</p><a id="idp65891192" class="indexterm"></a><a id="idp65892088" class="indexterm"></a><a id="idp65892600" class="indexterm"></a><p>如果需要的话， 还应通过
+	<code class="command">sysinstall</code> 来配置与单字节 C
+	字符集对应的 keymap 和 screenmap。
+	在 <span class="application">sysinstall</span> 中，
+	选择 <span class="guimenuitem">Configure</span> 之后选择
+	<span class="guimenuitem">Console</span> 即可进行配置。
+	除此之外， 您也可以在 <code class="filename">/etc/rc.conf</code> 中加入类似下面的配置：</p><pre class="programlisting">scrnmap=<em class="replaceable"><code>screenmap_name</code></em>
+keymap=<em class="replaceable"><code>keymap_name</code></em>
+keychange="<em class="replaceable"><code>fkey_number sequence</code></em>"</pre><p>这儿的<em class="replaceable"><code>screenmap_name</code></em>是来自<code class="filename">/usr/share/syscons/scrnmaps</code>目录，
+      不带<code class="filename">.scm</code>后缀。 一个带影射字体的屏幕布局通常被作为一个工作区，
+      用来在VGA适配器字体矩阵上扩展8位到9位。 如果屏幕字体是使用一个8位的排列，要移动这些字母离开这些区域。</p><p>
+	如果您在<code class="filename">/etc/rc.conf</code>里面启用了<span class="application">moused</span> daemon：</p><pre class="programlisting">moused_enable="YES"</pre><p>那么需要在下一段检查鼠标指针信息。</p><a id="idp65904632" class="indexterm"></a><p>默认情况下， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=syscons&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">syscons</span>(4)</span></a>驱动程序的鼠标指针在字符集中占用0xd0-0xd3的范围。
+	如果您的语言使用这个范围，您必须把指针范围移出这个范围。
+	要绕过这个问题， 需要在
+	<code class="filename">/etc/rc.conf</code> 中加入：</p><pre class="programlisting">mousechar_start=3</pre><p>这里， <em class="replaceable"><code>keymap_name</code></em>
+        来自于 <code class="filename">/usr/share/syscons/keymaps</code> 目录，
+	但去掉了 <code class="filename">.kbd</code> 后缀。
+	如果不确定应该使用哪一个键盘布局， 则可以使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=kbdmap&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">kbdmap</span>(1)</span></a>
+	来测试， 而无需反复重启。</p><p>通常， <code class="literal">keychange</code> 是设定功能键时，
+        匹配选定的终端类型来说是必需的， 因为功能键序列无法在键盘布局中定义。</p><p>此外您还应该检查并确认在
+        <code class="filename">/etc/ttys</code> 中已经为所有的 <code class="literal">ttyv*</code>
+	项配置了正确的终端类型。 目前， 相关的默认定义是：</p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /></colgroup><thead><tr><th>字符集设置</th><th>终端类型</th></tr></thead><tbody><tr><td>ISO8859-1 or ISO8859-15</td><td><code class="literal">cons25l1</code></td></tr><tr><td>ISO8859-2</td><td><code class="literal">cons25l2</code></td></tr><tr><td>ISO8859-7</td><td><code class="literal">cons25l7</code></td></tr><tr><td>KOI8-R</td><td><code class="literal">cons25r</code></td></tr><tr><td>KOI8-U</td><td><code class="literal">cons25u</code></td></tr><tr><td>CP437 (VGA default)</td><td><code class="literal">cons25</code></td></tr><tr><td>US-ASCII</td><td><code class="literal">cons25w</code></td></tr></tbody></table></div><p>对于多字节字符语言，可以您的在
+	<code class="filename">/usr/ports/language</code>
+	目录中使用正确的FreeBSD port。一些port以控制台出现，
+	而系统把它作为串行vtty终端，因此， 必须为 X11
+	和伪串行控制台准备足够的vtty终端。
+	下面是在控制台中使用其他语言的应用程序的部分列表：</p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /></colgroup><thead><tr><th>语言</th><th>特定区域</th></tr></thead><tbody><tr><td>Traditional Chinese (BIG-5)</td><td><a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/chinese/big5con/pkg-descr">chinese/big5con</a></td></tr><tr><td>Japanese</td><td><a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/japanese/kon2-16dot/pkg-descr">japanese/kon2-16dot</a> or
+	        <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/japanese/mule-freewnn/pkg-descr">japanese/mule-freewnn</a></td></tr><tr><td>Korean</td><td><a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/korean/han/pkg-descr">korean/han</a></td></tr></tbody></table></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65948280"></a>24.3.6. X11设置</h3></div></div></div><p>虽然X11不是FreeBSD计划的一部分，
+	但我们已经为FreeBSD用户包含了一些信息。
+	具体细节可以参考<a class="link" href="http://www.x.org/" target="_top">Xorg
+	Web 站点</a>
+	或是您使用的 X11 Server 的网站。</p><p>在<code class="filename">~/.Xresources</code>里面，您可以适当调整特定应用程序的I18N设置（如字体，菜单等）。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65950712"></a>24.3.6.1. 显示字体</h4></div></div></div><a id="idp65951352" class="indexterm"></a><p>安装 <span class="application">Xorg</span> 服务器
+	  (<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11-servers/xorg-server/pkg-descr">x11-servers/xorg-server</a>)，
+	  然后安装对应语言的 <span class="trademark">TrueType</span>® 字体。 请设置正确的地区信息，
+	  这将让您能够在菜单和其它地方看到所选择的语言。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65957752"></a>24.3.6.2. 输入非英语字符</h4></div></div></div><a id="idp65958392" class="indexterm"></a><p>
+	X11输入方法（XIM）协议是所有X11客户端的一个新标准。
+	所有将作为XIM客户端来写的X11应用程序从XIM输入服务器输入。
+	不同的语言有几种XIM服务器可用。
+	</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65959544"></a>24.3.7. 打印机设置</h3></div></div></div><p>一些简单的C字符集通常是用硬编码来编码进打印机的。更宽或多位的字符集需要特定的设置，
+	我们推荐使用<span class="application">apsfilter</span>。您也可以使用特定语言转换器把文档转换为
+	<span class="trademark">PostScript</span>®或PDF格式。
+        </p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65961592"></a>24.3.8. 内核和文件系统</h3></div></div></div><p>FreeBSD 的快速文件系统 (FFS) 是完全支持 8-位 字符的，
+	因此它可以被用于任何简单的 C 字符集 (参见 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=multibyte&amp;sektion=3&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">multibyte</span>(3)</span></a>)，
+	但在文件系统中不会保存字符集的名字；
+	也就是说， 它不加修改地保存 8-位信息， 而并不知道如何编码。
+	正式说来， FFS 目前还不支持任何形式的宽或多字节字符集。
+	不过， 某些宽或多字符集提供了独立的针对
+	FFS 的补丁来帮助启用关于它们的支持。 目前这些要么是无法移植的，
+	要么过于粗糙， 因此我们不打算把它们加入到源代码中。
+	请参考相关语言的 Web 站点， 以了解关于这些补丁的进一步情况。</p><a id="idp65963384" class="indexterm"></a><a id="idp65963896" class="indexterm"></a><p>FreeBSD <span class="trademark">MS-DOS</span>®已经能够配置成用在<span class="trademark">MS-DOS</span>®上，Unicode字符集和可选的FreeBSD文件系统字符集的更多信息，
+      请参考 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mount_msdosfs&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mount_msdosfs</span>(8)</span></a> 联机手册。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="l10n-basics.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="l10n.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="l10n-compiling.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">24.2. 基础知识 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 24.4. 编译I18N程序</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

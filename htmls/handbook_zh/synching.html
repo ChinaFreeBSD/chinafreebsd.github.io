@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>25.6. 同步您的源码</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="updating-upgrading.html" title="第 25 章 更新与升级 FreeBSD" /><link rel="prev" href="current-stable.html" title="25.5. 追踪开发分支" /><link rel="next" href="makeworld.html" title="25.7. 重新编译 “world”" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">25.6. 同步您的源码</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="current-stable.html">上一页</a> </td><th width="60%" align="center">第 25 章 更新与升级 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="makeworld.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="synching"></a>25.6. 同步您的源码</h2></div></div></div><p>有许多方式通过互联网(或电子邮件)与 FreeBSD
+      项目源码特定领域或所有领域保持更新，主要依赖于您的兴趣。
+      我们提供的主要服务是<a class="link" href="anoncvs.html" title="A.4. 匿名 CVS">匿名 CVS</a>、
+      <a class="link" href="cvsup.html" title="A.6. 使用 CVSup">CVSup</a>，和 <a class="link" href="ctm.html" title="A.5. 使用 CTM">CTM</a>。</p><div xmlns="" class="warning"><h3 class="admontitle">警告: </h3><p xmlns="http://www.w3.org/1999/xhtml">虽然只更新源码树中的部分是可能的，
+	唯一被支持的更新过程是更新整个树、并且重编译用户区
+	(如：在用户空间运行的所有程序，像 <code class="filename">/bin</code>
+	和 <code class="filename">/sbin</code>下边的)和内核源码。
+	只更新源码树中的部分，或只有内核，或只有用户区
+	(userland) 通常会出现错误。这些问题包括有编译错误、内核崩溃
+	(kernel panics)、数据出错。</p></div><a id="idp66634616" class="indexterm"></a><p><span class="application">匿名 CVS</span> 和
+      <span class="application">CVSup</span> 使用 <span class="emphasis"><em>下拉(pull)</em></span>
+      模式来更新源代码。 在
+      <span class="application">CVSup</span> 中， 用户 (或者
+      <code class="command">cron</code> 脚本)
+      会调用 <code class="command">cvsup</code> 程序， 后者会同某一个
+      <code class="command">cvsupd</code> 服务进行交互， 以更新您的文件。
+      您接到的更新是更新时刻最新的， 并且您只会收到那些需要的更新。
+      您可以很容易地限制更新的范围， 只更新那些您需要的文件。
+      服务器端会根据您手头已经有的文件即时地生成更新内容。
+      <span class="application">匿名 CVS</span>
+      相对于 <span class="application">CVSup</span> 而言要简单一些， 因为它只是对
+      <span class="application">CVS</span> 的一种扩展，
+      让您可以从远程的 CVS 代码库得到更新。
+      <span class="application">CVSup</span> 相对而言，
+      要比 <span class="application">匿名 CVS</span> 更有效率，
+      然而后者却更容易使用。</p><a id="idp66653048" class="indexterm"></a><p>另一种方法是 <span class="application">CTM</span>。
+      这种方法并不能将您手头的代码与中央代码库中的版本进行比较，
+      也不能下载它们。 在主 CTM 服务器上运行的脚本会每天执行多次，
+      每次运行都能够自动地识别所有文件自上次运行以来所发生的变化，
+      如果发现有文件发生了变动， 就会压缩、 标上一个序列号，
+      并进行便于使用电子邮件进行传送的编码操作 (其中只包括可打印的
+      ASCII 字符)。 一旦接收到，
+      这些<span class="quote">“<span class="quote">CTM deltas</span>”</span>就会被传送给 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ctm_rmail&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ctm_rmail</span>(1)</span></a>
+      工具---可以自动进行解码、校验和应用这些变化到用户的复制的源码里。
+      这个过程比 <span class="application">CVSup</span> 更为有效，
+      而且更少占用我们的服务器资源，因为它不仅仅采用
+      <span class="emphasis"><em>下拉(pull)</em></span> 模式，还采用
+      <span class="emphasis"><em>上推(push)</em></span> 模式。</p><p>当然， 这样做也会带来一些不便。
+      如果您不经意删除了您的压缩包的部分内容，
+      <span class="application">CVSup</span> 会检测到并为您重建破坏的部分。
+      <span class="application">CTM</span> 是不会这样做的，
+      如果您删除了您的源码树中的某部分(并已不能恢复)，
+      那么您就必须从破坏处 (从最新的CVS <span class="quote">“<span class="quote">base delta</span>”</span>)
+      开始，使用 <span class="application">CTM</span> 或
+      <span class="application">匿名 CVS</span>
+      进行重建，仅仅删除坏的数据并再同步。</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="current-stable.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="updating-upgrading.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="makeworld.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">25.5. 追踪开发分支 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 25.7. 重新编译 <span class="quote">“<span class="quote">world</span>”</span></td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

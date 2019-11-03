@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>25.3. Portsnap： 一个 Ports Collection 更新工具</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="updating-upgrading.html" title="第 25 章 更新与升级 FreeBSD" /><link rel="prev" href="updating-upgrading-freebsdupdate.html" title="25.2. FreeBSD 更新" /><link rel="next" href="updating-upgrading-documentation.html" title="25.4. 更新系统附带的文档" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">25.3. Portsnap： 一个 Ports Collection 更新工具</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="updating-upgrading-freebsdupdate.html">上一页</a> </td><th width="60%" align="center">第 25 章 更新与升级 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="updating-upgrading-documentation.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="updating-upgrading-portsnap"></a>25.3. Portsnap： 一个 Ports Collection 更新工具</h2></div><div><span class="authorgroup">Written by <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Tom</span> <span class="surname">Rhodes</span></span>. </span></div><div><span class="authorgroup">Based on notes provided by <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Colin</span> <span class="surname">Percival</span></span>. </span></div></div></div><a id="idp66305784" class="indexterm"></a><a id="idp66306296" class="indexterm"></a><p>FreeBSD 基本系统也包括了一个更新 Ports Collection 的工具：
+      <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=portsnap&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">portsnap</span>(8)</span></a>。在运行之后，它会连上一个远程网站，
+      校验安全密钥，然后下载一份 Ports Collection 的拷贝。
+      密钥是用来校验所有下载文件的完整性，确保它们在传输是未被修改。
+      使用以下的命令下载最新的 Ports Collection：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>portsnap fetch</code></strong>
+Looking up portsnap.FreeBSD.org mirrors... 3 mirrors found.
+Fetching snapshot tag from portsnap1.FreeBSD.org... done.
+Fetching snapshot metadata... done.
+Updating from Wed Aug  6 18:00:22 EDT 2008 to Sat Aug 30 20:24:11 EDT 2008.
+Fetching 3 metadata patches.. done.
+Applying metadata patches... done.
+Fetching 3 metadata files... done.
+Fetching 90 patches.....10....20....30....40....50....60....70....80....90. done.
+Applying patches... done.
+Fetching 133 new ports or files... done.</pre><p>这个例子展示的是 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=portsnap&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">portsnap</span>(8)</span></a>
+      发现并校验了几个用于当前 ports 的补丁。这还表明以前运行过，
+      如果是第一次运行的话，那么仅仅只会下载 Ports Collection。</p><p>在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=portsnap&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">portsnap</span>(8)</span></a> 成功地完成一次
+      <code class="command">fetch</code> 操作之后，
+      会将校验过的 Ports 套件和后续的补丁保存在本地。
+      首次执行 <code class="command">portsnap</code> 之后，
+      你必须使用 <code class="literal">extract</code> 安装下载的文件：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>portsnap extract</code></strong>
+/usr/ports/.cvsignore
+/usr/ports/CHANGES
+/usr/ports/COPYRIGHT
+/usr/ports/GIDs
+/usr/ports/KNOBS
+/usr/ports/LEGAL
+/usr/ports/MOVED
+/usr/ports/Makefile
+/usr/ports/Mk/bsd.apache.mk
+/usr/ports/Mk/bsd.autotools.mk
+/usr/ports/Mk/bsd.cmake.mk
+<em class="replaceable"><code>...</code></em></pre><p>使用 <code class="command">portsnap update</code>
+      命令更新已安装的 Ports：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>portsnap update</code></strong></pre><p>至此更新就完成了，然后便可以使用更新后的
+      Ports Collection 来安装或升级应用程序。</p><p><code class="literal">fetch</code> 和 <code class="literal">extract</code> 或
+      <code class="literal">update</code> 可以作为连续的动作执行，
+      如下例所示：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>portsnap fetch update</code></strong></pre><p>这个命令将会下载最新版本的 Ports 并更新本地位于
+      <code class="filename">/usr/ports</code>
+      的拷贝。</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="updating-upgrading-freebsdupdate.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="updating-upgrading.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="updating-upgrading-documentation.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">25.2. FreeBSD 更新 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 25.4. 更新系统附带的文档</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>7.2. 浏览器</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="desktop.html" title="第 7 章 桌面应用" /><link rel="prev" href="desktop.html" title="第 7 章 桌面应用" /><link rel="next" href="desktop-productivity.html" title="7.3. 办公、图象处理" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.2. 浏览器</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="desktop.html">上一页</a> </td><th width="60%" align="center">第 7 章 桌面应用</th><td width="20%" align="right"> <a accesskey="n" href="desktop-productivity.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="desktop-browsers"></a>7.2. 浏览器</h2></div></div></div><a id="idp53849720" class="indexterm"></a><p>FreeBSD并没有预先安装特定的浏览器。然而，在 ports 的目录 <a class="link" href="http://www.FreeBSD.org/ports/www.html" target="_top">www</a>
+      有许多浏览器可以安装。如果您没有时间一一编译它们
+      (有些时候这可能需要花费相当长的时间) 大部分都有 package 可用。</p><p><span class="application">KDE</span> 和
+      <span class="application">GNOME</span> 已经提供 HTML 浏览器。
+      请参考<a class="xref" href="x11-wm.html" title="6.7. 桌面环境">第 6.7 节 “桌面环境”</a>得到更多完整的有关设定这些桌面环境的信息。</p><p>如果您要找小型的浏览器， 可以试试看
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/dillo2/pkg-descr">www/dillo2</a>、
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/links/pkg-descr">www/links</a> 或
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/w3m/pkg-descr">www/w3m</a>。</p><p>这一节涉及如下程序：</p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /><col /><col /></colgroup><thead><tr><th>程序名称</th><th>资源需求</th><th>安装时间</th><th>主要依赖</th></tr></thead><tbody><tr><td><span class="application">Firefox</span></td><td>中等</td><td>长</td><td><span class="application">Gtk+</span></td></tr><tr><td><span class="application">Opera</span></td><td>少</td><td>轻松</td><td>同时有可用的 FreeBSD 和 Linux 版本。 Linux 版本需要使用
+	      Linux 二进制兼容模块和
+	      <span class="application">linux-openmotif</span>。</td></tr><tr><td><span class="application">Firefox</span></td><td>中等</td><td>长</td><td><span class="application">Gtk+</span></td></tr><tr><td><span class="application">Konqueror</span></td><td>中等</td><td>长</td><td>需要 <span class="application">KDE</span> 库</td></tr></tbody></table></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53868280"></a>7.2.1. Firefox</h3></div></div></div><a id="idp53868920" class="indexterm"></a><p><span class="application">Firefox</span> 是一个现代， 自由，
+        开放源代码稳定的浏览器， 并完全移植到了 FreeBSD 上：
+        它的特性包括有一个非常标准的 HTML 显示引擎，
+        标签式浏览， 弹出窗口阻止， 扩展插件， 改进的安全性， 等等。
+        <span class="application">Firefox</span> 是基于
+        <span class="application">Mozilla</span> 的代码。</p><p>您可以通过输入下面的命令来安装预编译的包：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg_add -r firefox</code></strong></pre><p>这将会安装 <span class="application">Firefox</span> 7.0，
+	如果希望运行 <span class="application">Firefox</span> 3.6，
+	则应使用下面的命令：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg_add -r firefox36</code></strong></pre><p>如果你希望从源代码编译的话，
+        可以通过 Ports Collection 安装：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/firefox</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>对于 <span class="application">Firefox</span> 3.6，
+	对应的命令中的 <code class="literal">firefox</code> 应改为
+	<code class="literal">firefox36</code>。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="moz-java-plugin"></a>7.2.2. Firefox 与 <span class="trademark">Java</span>™ 插件</h3></div></div></div><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">在这一节和接下来的两节中，
+	  我们均假定您已经安装了 <span class="application">Firefox</span>。</p></div><p>通过 Ports 套件来安装 <span class="application">OpenJDK 6</span>，
+        输入下面的命令：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/java/openjdk6</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>接下来安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/java/icedtea-web/pkg-descr">java/icedtea-web</a> port：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/java/icedtea-web</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>请确认在编译上述 port 时使用的是系统预设的配置。</p><p>启动浏览器并在地址栏中输入 <code class="literal">about:plugins</code>
+	然后按 <span class="keycap"><strong>Enter</strong></span>。
+	浏览器将会呈现一个列出所有已安装插件的页面；
+	<span class="application"><span class="trademark">Java</span>™</span> 插件应在其中出现。</p><p>如果浏览器找不到插件， 则用户可能必须运行下面的命令，
+	并重启浏览器：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>ln -s /usr/local/lib/IcedTeaPlugin.so \
+  $HOME/.mozilla/plugins/</code></strong></pre></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="moz-flash-plugin"></a>7.2.3. Firefox 与 <span class="trademark">Adobe</span>® <span class="trademark">Flash</span>® 插件</h3></div></div></div><a id="idp53522040" class="indexterm"></a><p><span class="trademark">Adobe</span>® <span class="trademark">Flash</span>® 插件并没有直接提供其 FreeBSD 版本。 不过，
+	我们有一个软件层 (wrapper) 可以用来运行 Linux 版本的插件。
+	这个 wrapper 也支持 <span class="trademark">Adobe</span>® <span class="trademark">Acrobat</span>®、
+	RealPlayer 和很多其他插件。</p><p>根据你 FreeBSD 版本的不同选择相应的安装步骤：</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p class="title"><strong>FreeBSD 7.X</strong></p><p>安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/nspluginwrapper/pkg-descr">www/nspluginwrapper</a> port。
+            这个 port 需要安装一个较大的<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/emulators/linux_base-fc4/pkg-descr">emulators/linux_base-fc4</a>
+            port。</p><p>下一步是安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/linux-flashplugin9/pkg-descr">www/linux-flashplugin9</a>
+	    port。 这将会安装 <span class="trademark">Flash</span>® 9.X， 此版本目前能在 FreeBSD 7.X
+            上正常运行。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">在比 FreeBSD 7.1-RELEASE 更旧版本的系统上，
+              你必须安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/linux-flashplugin7/pkg-descr">www/linux-flashplugin7</a>
+              并跳过以下 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=linprocfs&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">linprocfs</span>(5)</span></a> 的部份。</p></div></li><li class="step"><p class="title"><strong>FreeBSD 8.X</strong></p><p>安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/nspluginwrapper/pkg-descr">www/nspluginwrapper</a> port。
+            这个 port 需要安装一个较大的<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/emulators/linux_base-f10/pkg-descr">emulators/linux_base-f10</a>
+            port。</p><p>下一步是安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/linux-f10-flashplugin10/pkg-descr">www/linux-f10-flashplugin10</a> port。
+            这将会安装 <span class="trademark">Flash</span>® 10.X， 此版本目前能在 FreeBSD 8.X
+            上正常运行。</p><p>这个版本需要创建一个符号链接：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>ln -s /usr/local/lib/npapi/linux-f10-flashplugin/libflashplayer.so \
+  /usr/local/lib/browser_plugins/</code></strong></pre><p>如果系统中没有 <code class="filename">/usr/local/lib/browser_plugins</code>
+	    目录， 则应手工创建它。</p></li></ol></div><p>按照 FreeBSD 版本， 在安装了正确的 <span class="trademark">Flash</span>® port 之后，
+        插件必须由每个用户运行 <code class="command">nspluginwrapper</code>
+        安装：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>nspluginwrapper -v -a -i</code></strong></pre><p>如果希望播放 <span class="trademark">Flash</span>® 动画的话，<span class="trademark">Linux</span>® 的进程文件系统，
+        <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=linprocfs&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">linprocfs</span>(5)</span></a> 必须挂载于
+        <code class="filename">/usr/compat/linux/proc</code>。
+        可以通过以下的命令实现：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mount -t linprocfs linproc /usr/compat/linux/proc</code></strong></pre><p>这也可以在机器启动时自动挂载， 把以下这行加入
+	<code class="filename">/etc/fstab</code>：</p><pre class="programlisting">linproc	/usr/compat/linux/proc	linprocfs	rw	0	0</pre><p>然后就可以打开浏览器， 并在地址栏中输入
+	<code class="literal">about:plugins</code> 然后按下
+	<span class="keycap"><strong>Enter</strong></span>。  这将显示目前可用的插件列表。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="moz-swfdec-flash-plugin"></a>7.2.4. Firefox and Swfdec <span class="trademark">Flash</span>® Plugin</h3></div></div></div><p>Swfdec 是一个用以解码和渲染 <span class="trademark">Flash</span>® 动画的库。
+        Swfdec-Mozilla 是一个使用了 Swfdec 库让 <span class="application">Firefox</span>
+        能播放 SWF 文件的插件。它目前仍处于开发状态。</p><p>如果你不能或者不想编译安装，可以通过网络安装二进制包：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg_add -r swfdec-plugin</code></strong></pre><p>如果二进制包还不可用，你可以通过 Ports Collection 编译安装：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/swfdec-plugin</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>然后重启你的浏览器使得这个插件生效。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53932024"></a>7.2.5. Opera</h3></div></div></div><a id="idp53932664" class="indexterm"></a><p><span class="application">Opera</span> 是一个功能齐全，
+        并符合标准的浏览器。 它还提供了内建的邮件和新闻阅读器、 IRC 客户端，
+        RSS/Atom feed 阅读器以及更多功能。 除此之外，
+        <span class="application">Opera</span> 是一个比较轻量的浏览器，
+        其速度很快。 它提供了两种不同的版本： <span class="quote">“<span class="quote">native</span>”</span>
+        FreeBSD 版本， 以及通过 Linux
+        模拟运行的版本。</p><p>要使用 <span class="application">Opera</span> 的 FreeBSD
+	版本来浏览网页，安装以下的 package：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg_add -r opera</code></strong></pre><p>有些 FTP 站点没有所有版本的 package，
+        但仍然可以通过 Ports 套件来安装
+        <span class="application">Opera</span>：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/opera</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>要安装 Linux 版本的
+	<span class="application">Opera</span>， 将上面例子中的
+	<code class="literal">opera</code> 改为
+	<code class="literal">linux-opera</code> 即可。</p><p><span class="trademark">Adobe</span>® <span class="trademark">Flash</span>® 插件目前并没有提供 FreeBSD 专用的版本。
+	不过， 可以使用其 <span class="trademark">Linux</span>® 版本的插件。 要安装这个版本，
+	需要安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/linux-f10-flashplugin10/pkg-descr">www/linux-f10-flashplugin10</a> port，
+	以及 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/www/opera-linuxplugins/pkg-descr">www/opera-linuxplugins</a>：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/linux-f10-flashplugin10</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/www/opera-linuxplugins</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>然后可以检查插件是否可用了：
+	在地址栏中输入 <code class="literal">opera:plugins</code>
+	然后按 <span class="keycap"><strong>Enter</strong></span>。 浏览器将列出可用的插件列表。</p><p>添加 <span class="application"><span class="trademark">Java</span>™</span> 插件的方法，
+	与 <a class="link" href="desktop-browsers.html#moz-java-plugin" title="7.2.2. Firefox 与 Java™ 插件">为
+	Firefox 添加插件</a> 的方法相同。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53953272"></a>7.2.6. Konqueror</h3></div></div></div><a id="idp53953912" class="indexterm"></a><p><span class="application">Konqueror</span> 是
+	<span class="application">KDE</span> 的一部分，不过也可以通过安装
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11/kdebase3/pkg-descr">x11/kdebase3</a>
+	在非 <span class="application">KDE</span> 环境下使用。
+	<span class="application">Konqueror</span> 不止是一个浏览器，
+	也是一个文件管理器和多媒体播放器。</p><p>也有种类丰富的插件能够配合
+        <span class="application">Konqueror</span> 一起使用，
+	您可以通过 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/misc/konq-plugins/pkg-descr">misc/konq-plugins</a> 来安装它们。</p><p><span class="application">Konqueror</span> 也支持 <span class="application"><span class="trademark">Flash</span>®</span>；
+	关于如何获得用于
+	<span class="application">Konqueror</span>
+	的 <span class="application"><span class="trademark">Flash</span>®</span> 支持的 <span class="quote">“<span class="quote">How To</span>”</span> 文档
+	可以在 <code class="uri"><a class="uri" href="http://freebsd.kde.org/howtos/konqueror-flash.php" target="_top">http://freebsd.kde.org/howtos/konqueror-flash.php</a></code> 找到。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="desktop.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="desktop.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="desktop-productivity.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 7 章 桌面应用 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 7.3. 办公、图象处理</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

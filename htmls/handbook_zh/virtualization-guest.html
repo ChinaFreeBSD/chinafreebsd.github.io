@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>23.2. 作为客户 OS 的 FreeBSD</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="virtualization.html" title="第 23 章 虚拟化" /><link rel="prev" href="virtualization.html" title="第 23 章 虚拟化" /><link rel="next" href="virtualization-host.html" title="23.3. 作为宿主 OS 的 FreeBSD" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">23.2. 作为客户 OS 的 FreeBSD</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="virtualization.html">上一页</a> </td><th width="60%" align="center">第 23 章 虚拟化</th><td width="20%" align="right"> <a accesskey="n" href="virtualization-host.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="virtualization-guest"></a>23.2. 作为客户 OS 的 FreeBSD</h2></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-parallels"></a>23.2.1. MacOS 上的 Parallels</h3></div></div></div><p>为 <span class="trademark">Mac</span>® 设计的 <span class="application">Parallels Desktop</span>
+	是一种可用于采用 <span class="trademark">Intel</span>® 处理器， 并运行 <span class="trademark">Mac OS</span>®
+        10.4.6 或更高版本的 <span class="trademark">Apple</span>® <span class="trademark">Mac</span>® 计算机的商业软件。
+        它为 FreeBSD 系统提供了完整的支持。 在 <span class="trademark">Mac OS</span>®
+        X 上安装了这个软件之后， 用户需要配置虚拟机并安装所需的客户操作系统。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-parallels-install"></a>23.2.1.1. 在 Parallels/<span class="trademark">Mac OS</span>® X 上安装 FreeBSD</h4></div></div></div><p>在 <span class="trademark">Mac OS</span>®
+	    X/<span class="application">Parallels</span> 上安装 FreeBSD 的第一步是创建一个新的虚拟机。
+	    在系统提示选择客户 OS 类型 (<span class="guimenu">Guest OS Type</span>) 时选择 <span class="guimenuitem">FreeBSD</span>，
+	    并根据您使用 FreeBSD 虚拟实例的需要分配磁盘和内存：</p><div class="mediaobject"><img src="virtualization/parallels-freebsd1.png" /></div><p>对多数在 <span class="application">Parallels</span> 上使用
+	    FreeBSD 的情形而言， 4GB 磁盘空间和 512MB 的 RAM 就够用了：</p><div class="mediaobject"><img src="virtualization/parallels-freebsd2.png" /></div><div class="mediaobject"><img src="virtualization/parallels-freebsd3.png" /></div><div class="mediaobject"><img src="virtualization/parallels-freebsd4.png" /></div><div class="mediaobject"><img src="virtualization/parallels-freebsd5.png" /></div><p>选择使用的网络和网卡类型：</p><div class="mediaobject"><img src="virtualization/parallels-freebsd6.png" /></div><div class="mediaobject"><img src="virtualization/parallels-freebsd7.png" /></div><p>保存并完成配置：</p><div class="mediaobject"><img src="virtualization/parallels-freebsd8.png" /></div><div class="mediaobject"><img src="virtualization/parallels-freebsd9.png" /></div><p>在创建了 FreeBSD 虚拟机之后， 还需要在其中安装 FreeBSD。
+	    最好的做法是使用官方的 FreeBSD CDROM 或从官方 FTP 站点下载的 ISO 镜像来完成这个任务。
+	    如果您的本地 <span class="trademark">Mac</span>® 文件系统中有 ISO 映像文件， 或您的 <span class="trademark">Mac</span>® 的 CD 驱动器中有
+	    CDROM， 就可以在 FreeBSD
+	    <span class="application">Parallels</span> 窗口的右下角点击光盘图标。
+	    之后， 系统将给出一个窗口， 供您完成将虚拟机中的
+	    CDROM 驱动器连接到本地的 ISO 文件或真正的 CDROM 驱动器上。</p><div class="mediaobject"><img src="virtualization/parallels-freebsd11.png" /></div><p>在完成了将 CDROM 与您的安装源完成关联之后，
+	    就可以按重启 (reboot) 图标来重启 FreeBSD 虚拟机了。
+	    <span class="application">Parallels</span> 将配合一个特殊的
+	    BIOS 启动， 后者能够像普通的 BIOS 一样检查系统中是否有 CDROM 驱动器。</p><div class="mediaobject"><img src="virtualization/parallels-freebsd10.png" /></div><p>此时， 它就能够找到 FreeBSD 安装介质并开始 <a class="xref" href="install.html" title="第 2 章 安装 FreeBSD">第 2 章 <em>安装 FreeBSD</em></a>
+	    中所介绍的标准的基于  <span class="application">sysinstall</span> 安装的过程。</p><div class="mediaobject"><img src="virtualization/parallels-freebsd12.png" /></div><p>此时您可以安装 X11，
+	    但暂时不要对它进行配置。 在完成安装之后， 重启并进入新安装的 FreeBSD 虚拟机。</p><div class="mediaobject"><img src="virtualization/parallels-freebsd13.png" /></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-parallels-configure"></a>23.2.1.2. 在 <span class="trademark">Mac OS</span>® X/Parallels 上配置 FreeBSD</h4></div></div></div><p>在您将 FreeBSD 安装到 <span class="trademark">Mac OS</span>®
+	    X 的 <span class="application">Parallels</span> 上之后， 还需要进行一系列的配置，
+	    以便为系统的虚拟化操作进行优化。</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p class="title"><strong>配置引导加载器变量</strong></p><p>最重要的一步是通过调低
+	        <code class="option">kern.hz</code> 变量来降低 <span class="application">Parallels</span> 环境中的 FreeBSD
+		对 CPU 的使用。 这可以通过在
+		<code class="filename">/boot/loader.conf</code> 中增加下述配置来完成：</p><pre class="programlisting">kern.hz=100</pre><p>如果不使用这个配置， 闲置的 FreeBSD <span class="application">Parallels</span> 客户
+		OS 会在单处理器的 <span class="trademark">iMac</span>® 上使用大约 15% 的 CPU。 如此修改之后，
+		空闲时的使用量就减少到大约 5% 了。</p></li><li class="step"><p class="title"><strong>创建新的内核配置文件</strong></p><p>您可以删去全部 SCSI、 FireWire， 以及 USB
+	        设备驱动程序。 <span class="application">Parallels</span> 提供了一个由 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ed&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ed</span>(4)</span></a> 驱动的虚拟网卡，
+	        因此， 除了
+	        <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ed&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ed</span>(4)</span></a> 和 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=miibus&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">miibus</span>(4)</span></a>
+	        之外的其他网络接口驱动都可以从内核中删去。</p></li><li class="step"><p class="title"><strong>配置网络</strong></p><p>最基本的网络配置， 是通过使用 DHCP 来将您的虚拟机与宿主 <span class="trademark">Mac</span>®
+	        接入同一个局域网。 这可以通过在
+	        <code class="filename">/etc/rc.conf</code> 中加入
+	        <code class="literal">ifconfig_ed0="DHCP"</code> 来完成。
+		更高级一些的网络配置方法， 请参见 <a class="xref" href="advanced-networking.html" title="第 32 章 高级网络">第 32 章 <em>高级网络</em></a> 中的介绍。</p></li></ol></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-virtualpc"></a>23.2.2. <span class="trademark">Windows</span>® 上的 Virtual PC</h3></div></div></div><p><span class="application">Virtual PC</span> 是 <span class="trademark">Microsoft</span>®
+	上的 <span class="trademark">Windows</span>® 软件产品， 可以免费下载使用。 相关系统要求，请参阅
+	<a class="link" href="http://www.microsoft.com/windows/downloads/virtualpc/sysreq.mspx" target="_top">system requirements</a> 说明。
+	在 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 装完 <span class="application">Virtual PC</span>
+	之后， 必须针对所安装的虚拟机器来做相应设定。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-virtualpc-install"></a>23.2.2.1. 在 Virtual PC/<span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 上安装 FreeBSD</h4></div></div></div><p>在 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>®/<span class="application">Virtual PC</span>
+	    上安装 FreeBSD 的第一步是新增虚拟器。 如下所示，在提示向导中请选择
+	    <span class="guimenuitem">Create a virtual machine</span>：</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd1.png" /></div><div class="mediaobject"><img src="virtualization/virtualpc-freebsd2.png" /></div><p>然后在 <span class="guimenuitem">Operating system</span>
+	    处选 <span class="guimenuitem">Other</span>：</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd3.png" /></div><p>并依据自身需求来规划硬盘容量和内存的分配。对大多数在
+	    <span class="application">Virtual PC</span> 使用 FreeBSD
+	    的情况而言， 大约 4GB 的硬盘空间以及 512MB 的内存就够用了。</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd4.png" /></div><div class="mediaobject"><img src="virtualization/virtualpc-freebsd5.png" /></div><p>保存并完成配置：</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd6.png" /></div><p>接下来选择新建的 FreeBSD 虚拟机器，并单击
+	    <span class="guimenu">Settings</span>， 以设定网络种类以及网卡：</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd7.png" /></div><div class="mediaobject"><img src="virtualization/virtualpc-freebsd8.png" /></div><p>在新建 FreeBSD 虚拟机器以后， 就可以继续以其安装
+	    FreeBSD。 安装方面， 比较好的作法是使用官方的 FreeBSD
+	    光盘或从官方 FTP 站下载 ISO 镜像。 若您的 <span class="trademark">Windows</span>® 系统
+	    内已有该 ISO 镜像， 那么就可以在 FreeBSD 虚拟机器上双击，
+	    以开始启动。 接着在 <span class="application">Virtual PC</span>
+	    窗口内按 <span class="guimenu">CD</span> 再按
+	    <span class="guimenu">Capture ISO Image...</span>。 接着出现一个对话框，
+	    可以把虚拟机器内的光驱设定到该 ISO 镜像， 或者是真实的光驱。</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd9.png" /></div><div class="mediaobject"><img src="virtualization/virtualpc-freebsd10.png" /></div><p>设好光盘来源之后，就可以重新开机， 也就是先按
+	    <span class="guimenu">Action</span> 再按  <span class="guimenu">Reset</span> 即可。
+	    <span class="application">Virtual PC</span> 会以特殊 BIOS 开机，
+	    并与普通 BIOS 一样会先检查是否有光盘驱动器。</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd11.png" /></div><p>此时， 它会找到 FreeBSD 安装光盘， 并开始在
+	    <a class="xref" href="install.html" title="第 2 章 安装 FreeBSD">第 2 章 <em>安装 FreeBSD</em></a> 内所介绍的
+	      <span class="application">sysinstall</span> 安装过程。
+	      这时候也可以顺便安装 X11， 但不要进行相关设定。</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd12.png" /></div><p>完成安装之后， 记得把安装光盘或者 ISO 镜像退出。
+	    最后， 把装好的 FreeBSD 虚拟机器重新开机即可。</p><div class="mediaobject"><img src="virtualization/virtualpc-freebsd13.png" /></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-virtualpc-configure"></a>23.2.2.2. 调整 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>®/Virtual PC 上的 FreeBSD</h4></div></div></div><p>在 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 上以 <span class="application">Virtual PC</span>
+	    装好 FreeBSD 后， 还需要做一些设定步骤，
+	    以便将虚拟机内的 FreeBSD 最佳化。</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p class="title"><strong>设定 boot loader 参数</strong></p><p>最重要的步骤乃是藉由调降 <code class="option">kern.hz</code>
+		来降低 <span class="application">Virtual PC</span> 环境内
+		FreeBSD 的 CPU 占用率。 在
+		<code class="filename">/boot/loader.conf</code>
+		内加上下列设定即可：</p><pre class="programlisting">kern.hz=100</pre><p>若不作这设定， 那么光是 idle 状态的 FreeBSD
+		<span class="application">Virtual PC</span> guest OS
+		就会在单一处理器的电脑上大约有 40% 的 CPU 占用率。
+		作了上述修改之后, 占用率大约会降至 3%。</p></li><li class="step"><p class="title"><strong>建立一个新的内核配置文件</strong></p><p>可以放心把所有的 SCSI， FireWire 和 USB
+		设备驱动都移除。 <span class="application">Virtual PC</span>
+		有提供 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=de&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">de</span>(4)</span></a> 的虚拟网卡， 因此除了
+		<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=de&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">de</span>(4)</span></a> 以及 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=miibus&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">miibus</span>(4)</span></a>
+		以外其他的网卡也都可以从内核的配置文件中移除。</p></li><li class="step"><p class="title"><strong>设定网络</strong></p><p>可以给虚拟机器简单得使用 DHCP 来设定与
+		host (<span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>®) 相同的本地网络环境，
+		只要在 <code class="filename">/etc/rc.conf</code>
+		加上 <code class="literal">ifconfig_de0="DHCP"</code>
+		即可完成。 其他的高级网络设置， 可参阅
+		<a class="xref" href="advanced-networking.html" title="第 32 章 高级网络">第 32 章 <em>高级网络</em></a>.</p></li></ol></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-vmware"></a>23.2.3. 运行于 MacOS 的 VMware</h3></div></div></div><p><span class="trademark">Mac</span>® 版本的 <span class="application">VMware Fusion</span>
+	是一个商业软件，运行在基于 <span class="trademark">Intel</span>® 的 <span class="trademark">Apple</span>® <span class="trademark">Mac</span>® 计算机的
+	<span class="trademark">Mac OS</span>® 10.4.9 或更版本的操作系统上。 FreeBSD
+	是一个完全被支持的客户操作系统。 在 <span class="trademark">Mac OS</span>® X 上安装了
+	<span class="application">VMware Fusion</span> 之后，
+	用户就可以着手配置一个虚拟机器并安装客户操作系统。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-vmware-install"></a>23.2.3.1. 在 VMware/<span class="trademark">Mac OS</span>® X 上安装 FreeBSD</h4></div></div></div><p>第一步是运行 VMware Fusion， 虚拟机器库将被装载。
+	    单击 "New" 创建 VM：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd01.png" /></div><p>New Virtual Machine Assistant 将被运行来帮助你创建 VM，
+	    单击 Continue 继续：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd02.png" /></div><p>在 <span class="guimenuitem">Operatiing System</span> 项选择
+	    <span class="guimenuitem">Other</span>，<span class="guimenuitem">Version</span>
+	    项可选 <span class="guimenuitem">FreeBSD</span> 或
+	    <span class="guimenuitem">FreeBSD 64-bit</span>。</p><div class="mediaobject"><img src="virtualization/vmware-freebsd03.png" /></div><p>选一个你想要的 VM 镜像名字和存储的目录位置。</p><div class="mediaobject"><img src="virtualization/vmware-freebsd04.png" /></div><p>选择 VM 虚拟硬盘的大小：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd05.png" /></div><p>选择安装 VM 的方式， 从一个 ISO 镜像或一张 CD 安装：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd06.png" /></div><p>一旦你点击了 Finish， VM 就会启动了：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd07.png" /></div><p>以你通常的方式安装 FreeBSD 或者参照 <a class="xref" href="install.html" title="第 2 章 安装 FreeBSD">第 2 章 <em>安装 FreeBSD</em></a>
+	      中的步骤：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd08.png" /></div><p>安装完成之后，你就可以修改一些 VM 的设定，比如内存大小：</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">在 VM 运行的时候，VM 系统硬件的设置是无法修改的。</p></div><div class="mediaobject"><img src="virtualization/vmware-freebsd09.png" /></div><p>配置 VM 的 CPU 数量：</p><div class="mediaobject"><img src="virtualization/vmware-freebsd10.png" /></div><p>CD-ROM设备的状态。通常当你不在需要 CDROM/ISO 的时候可以切断他们跟
+	    VM 的连接。</p><div class="mediaobject"><img src="virtualization/vmware-freebsd11.png" /></div><p>最后一项需要修改的是 VM 与网络连接的方式。
+	    如果你希望除了宿主以外的机器也能连接到 VM，
+	    请选择 <span class="guimenuitem">Connect directly to the physical network
+	    (Bridged)</span>。选择 <span class="guimenuitem">Share the
+	    host's internet connection (NAT)</span> 的话，
+	    VM 可以连接上网络，但是不能从外面访问。</p><div class="mediaobject"><img src="virtualization/vmware-freebsd12.png" /></div><p>在你修改完设定之后，就可以从新安装的 FreeBSD
+	    虚拟机器启动了。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-guest-vmware-configure"></a>23.2.3.2. 配置运行于 <span class="trademark">Mac OS</span>® X/VMware 上的 FreeBSD</h4></div></div></div><p>在 <span class="trademark">Mac OS</span>® X 上的 <span class="application">VMware</span>
+	    上安装完 FreeBSD 之后，有些配置的步骤可用来优化虚拟系统。</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p class="title"><strong>设置 boot loader 变量</strong></p><p>最重要的步骤是降低 <code class="option">kern.hz</code>
+		来减少 <span class="application">VMware</span> 上 FreeBSD
+		的 CPU 使用率。这需要在 <code class="filename">/boot/loader.conf</code>
+		里加入以下这行设定：</p><pre class="programlisting">kern.hz=100</pre><p>如果没有这项设定，<span class="application">VMware</span>
+		上的 FreeBSD 客户 OS 空闲时将占用 <span class="trademark">iMac</span>® 上一个 CPU
+		大约 15% 的资源。在修改此项设定之后仅为 5%。</p></li><li class="step"><p class="title"><strong>创建一个新的内核配置文件</strong></p><p>你可以去掉所有的 FireWire, USB 设备的驱动程序。
+		<span class="application">VMware</span> 提供了一个
+		<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=em&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">em</span>(4)</span></a> 支持的虚拟网络适配器，所以除了 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=em&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">em</span>(4)</span></a>
+		之外的网卡驱动都可以被剔除。</p></li><li class="step"><p class="title"><strong>设置网络</strong></p><p>最基本的网络设定包括简单的使用 DHCP
+		把你的虚拟机器连接到宿主 <span class="trademark">Mac</span>® 相同的本地网络上。
+		在 <code class="filename">/etc/rc.conf</code> 中加入：
+		<code class="literal">ifconfig_em0="DHCP"</code>。
+		更多有关网络的设置可以参阅
+		<a class="xref" href="advanced-networking.html" title="第 32 章 高级网络">第 32 章 <em>高级网络</em></a>。</p></li></ol></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="virtualization.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="virtualization.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="virtualization-host.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 23 章 虚拟化 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 23.3. 作为宿主 OS 的 FreeBSD</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

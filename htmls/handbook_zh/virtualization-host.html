@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>23.3. 作为宿主 OS 的 FreeBSD</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="virtualization.html" title="第 23 章 虚拟化" /><link rel="prev" href="virtualization-guest.html" title="23.2. 作为客户 OS 的 FreeBSD" /><link rel="next" href="l10n.html" title="第 24 章 本地化－I18N/L10N使用和设置" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">23.3. 作为宿主 OS 的 FreeBSD</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="virtualization-guest.html">上一页</a> </td><th width="60%" align="center">第 23 章 虚拟化</th><td width="20%" align="right"> <a accesskey="n" href="l10n.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="virtualization-host"></a>23.3. 作为宿主 OS 的 FreeBSD</h2></div></div></div><p>在过去的几年中 FreeBSD 并没有任何可用的并被官方支持的虚拟化解决方案。
+      一些用户曾时使用过利用 <span class="trademark">Linux</span>® 二进制兼容层运行的
+      <span class="application">VMware</span> 陈旧并多半已过时的版本 (比如
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/emulators/vmware3/pkg-descr">emulators/vmware3</a>)。
+      在 FreeBSD 7.2 发布不久， Sun 开源版本 (Open Source Edition
+      <acronym class="acronym">OSE</acronym>) 的 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+      作为一个 FreeBSD 原生的程序出现在了 Ports Collection 中。</p><p><span class="application"><span class="trademark">VirtualBox</span>™</span> 是一个开发非常活跃，
+      完全虚拟化的软件， 并且可在大部份的操作系统上使用， 包括 <span class="trademark">Windows</span>®，
+      <span class="trademark">Mac OS</span>®， <span class="trademark">Linux</span>® 和 FreeBSD。同样也能把 <span class="trademark">Windows</span>® 或 <span class="trademark">UNIX</span>®
+      作为客户系统运行。 它有一个开源和一个私有两种版本。 从用户的角度来看，
+      <acronym class="acronym">OSE</acronym> 版本最主要的限制也许是缺乏 USB 的支持。
+      其他更多的差异可以通过链接
+      <code class="uri"><a class="uri" href="http://www.virtualbox.org/wiki/Editions" target="_top">http://www.virtualbox.org/wiki/Editions</a></code>
+      查看 <span class="quote">“<span class="quote">Editions</span>”</span> 页面。 目前， FreeBSD 上只有 OSE
+      版本可用。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="virtualization-virtualbox-install"></a>23.3.1. 安装 <span class="trademark">VirtualBox</span>™</h3></div></div></div><p><span class="application"><span class="trademark">VirtualBox</span>™</span> 已作为一个 FreeBSD port 提供，
+        位于 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/emulators/virtualbox-ose/pkg-descr">emulators/virtualbox-ose</a>，
+        可使用如下的命令安装：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/emulators/virtualbox-ose</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>在配置对话框中的一个有用的选项是
+        <code class="literal">GusetAdditions</code> 程序套件。
+        这些在客户操作系统中提供了一些有用的特性，
+        比如集成鼠标指针 (允许在宿主和客户系统间使用鼠标，
+        而不用事先按下某个特定的快捷键来切换) 和更快的视频渲染，
+        特别是在 <span class="trademark">Windows</span>® 客户系统中。 在安装了客户操作系统之后，
+        客户附加软件可在 <span class="guimenu">Devices</span> 菜单中找到。</p><p>在第一次运行 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+        之前还需要做一些配置上的修改。port 会安装一个内核模块至
+        <code class="filename">/boot/modules</code> 目录，
+        此模块需要事先加载：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>kldload vboxdrv</code></strong></pre><p>可以在 <code class="filename">/boot/loader.conf</code>
+        中加入以下的配置使此模块在机器重启之后能自动加载：</p><pre class="programlisting">vboxdrv_load="YES"</pre><p>在 3.1.2 之前版本的 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+	需要挂接 <code class="filename">proc</code> 文件系统。
+	在新版本中不再有此要求， 因为它们使用了由 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=sysctl&amp;sektion=3&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">sysctl</span>(3)</span></a> 库提供的功能。</p><p>当使用旧版本的 port 时， 需要使用下面的步骤来挂载
+	<code class="filename">proc</code>：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>mount -t procfs proc /proc</code></strong></pre><p>为了使配置能在重启后始终生效， 需要在
+        <code class="filename">/etc/fstab</code> 中加入以下这行：</p><pre class="programlisting">proc	/proc	procfs	rw	0	0</pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果在运行 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+          的终端中发现了类似如下的错误消息：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen">VirtualBox: supR3HardenedExecDir: couldn't read "", errno=2 cchLink=-1</pre><p xmlns="http://www.w3.org/1999/xhtml">此故障可能是由 <code class="filename">proc</code>
+          文件系统导致的。 请使用 <code class="command">mount</code>
+          命令检查文件系统是否正确挂载。</p></div><p>在安装 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+        时会自动创建 <code class="systemitem">vboxusers</code> 组。
+        所有需要使用 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+        的用户必须被添加为此组中的成员。 可以使用 <code class="command">pw</code>
+        命令添加新的成员：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pw groupmod vboxusers -m yourusername</code></strong></pre><p>运行 <span class="application"><span class="trademark">VirtualBox</span>™</span>，
+        可以通过选择你当前图形环境中的
+        <span class="guimenuitem">Sun VirtualBox</span>，
+        也可以在虚拟终端中键入以下的命令:</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>VirtualBox</code></strong></pre><p>获得更多有关配置和使用 <span class="application"><span class="trademark">VirtualBox</span>™</span>
+        的信息， 请访问官方网站 <code class="uri"><a class="uri" href="http://www.virtualbox.org" target="_top">http://www.virtualbox.org</a></code>。
+        鉴于 FreeBSD port 非常新， 并仍处于开发状态。请查看 FreeBSD wiki
+        上的相关页面 <code class="uri"><a class="uri" href="http://wiki.FreeBSD.org/VirtualBox" target="_top">http://wiki.FreeBSD.org/VirtualBox</a></code>
+        以获取最新的信息和故障排查细则。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="virtualization-guest.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="virtualization.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="l10n.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">23.2. 作为客户 OS 的 FreeBSD </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 第 24 章 本地化－I18N/L10N使用和设置</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

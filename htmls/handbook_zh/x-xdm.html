@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>6.6. X 显示管理器</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="x11.html" title="第 6 章 X Window 系统" /><link rel="prev" href="x-fonts.html" title="6.5. 在 X11 中使用字体" /><link rel="next" href="x11-wm.html" title="6.7. 桌面环境" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.6. X 显示管理器</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="x-fonts.html">上一页</a> </td><th width="60%" align="center">第 6 章 X Window 系统</th><td width="20%" align="right"> <a accesskey="n" href="x11-wm.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="x-xdm"></a>6.6. X 显示管理器</h2></div><div><span class="authorgroup">Contributed by <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Seth</span> <span class="surname">Kingsley</span></span>. </span></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53539832"></a>6.6.1. 概要</h3></div></div></div><a id="idp53540472" class="indexterm"></a><p>X 显示管理器(<span class="application">XDM</span>)
+        是一个X视窗系统用于进行登录会话管理的可选项。
+        这个可以应用于多种情况下，包括小
+         <span class="quote">“<span class="quote">X Terminals</span>”</span>，
+        桌面，大网络显示服务器。既然 X 视窗系统不受网络和协议的限制，
+        那对于通过网络连接起来的运行 X 客户端和服务器端的不同机器，
+        就会有很多的可配置项。
+        <span class="application">XDM</span>
+        提供了一个选择要连接到哪个显示服务器的图形接口，
+        只要键入如登录用户名和密码这样的验证信息。</p><p>您也可以把 <span class="application">XDM</span> 想象成与
+        <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=getty&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">getty</span>(8)</span></a> 工具一样(see <a class="xref" href="term.html#term-config" title="27.3.2. 配置">第 27.3.2 节 “配置”</a> for
+          details)。为用户提供了同样功能。它可以完成系统的登录任务，
+          然后为用户运行一个会话管理器
+          (通常是一个 X 视窗管理器)。接下来 <span class="application">XDM</span>
+	  就等待这个程序退出，发出信号用户已经登录完成，应当退出屏幕。
+          这时，
+          <span class="application">XDM</span>
+          就可以为下一个登录用户显示登录和可选择屏幕。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53545336"></a>6.6.2. 使用 XDM</h3></div></div></div><p>如果希望使用 <span class="application">XDM</span> 来启动， 首先需要安装
+	<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11/xdm/pkg-descr">x11/xdm</a> port (在较新版本的
+	<span class="application">Xorg</span> 中它并不是默认安装的)。
+	<span class="application">XDM</span>
+	服务程序位于 <code class="filename">/usr/local/bin/xdm</code>。
+	任何时候都可以 <code class="systemitem">root</code> 用户的身份来运行它，
+	以令其管理本地系统的 X 显示。 如果希望让
+        <span class="application">XDM</span> 在系统每次启动过程中自动运行，
+        比较方便的做法是把它写到 <code class="filename">/etc/ttys</code>
+        的配置中。 有关这个文件的具体格式和使用方法请参阅 <a class="xref" href="term.html#term-etcttys" title="27.3.2.1. 添加一个记录到/etc/ttys">第 27.3.2.1 节 “添加一个记录到<code class="filename">/etc/ttys</code>”</a>。 在默认的
+        <code class="filename">/etc/ttys</code> 文件中已经包含了在虚拟终端上运行
+        <span class="application">XDM</span> 服务的示范配置：</p><pre class="screen">ttyv8   "/usr/local/bin/xdm -nodaemon"  xterm   off secure</pre><p>默认情况下，这个记录是关闭的，要启用它，
+        您需要把第5部分的 <code class="literal">off</code> 改为
+        <code class="literal">on</code> 然后按照 <a class="xref" href="term.html#term-hup" title="27.3.2.2. 重新读取/etc/ttys来强制init">第 27.3.2.2 节 “重新读取<code class="filename">/etc/ttys</code>来强制<code class="command">init</code>
+	  ”</a> 的指导
+	重新启动 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=init&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">init</span>(8)</span></a>。第一部分，这个程序将管理的终端名称是
+        <code class="literal">ttyv8</code>。这意味着
+        <span class="application">XDM</span> 将运行在第9个虚拟终端上。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53570808"></a>6.6.3. 配置 XDM</h3></div></div></div><p><span class="application">XDM</span> 的配置目录是在
+         <code class="filename">/usr/local/lib/X11/xdm</code>中。在这个目录中，
+        您会看到几个用来改变
+        <span class="application">XDM</span> 行为和外观的文件。您会找到这些文件：</p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /></colgroup><thead><tr><th>文件</th><th>描述</th></tr></thead><tbody><tr><td><code class="filename">Xaccess</code></td><td>客户端授权规则。</td></tr><tr><td><code class="filename">Xresources</code></td><td>默认的X资源值。</td></tr><tr><td><code class="filename">Xservers</code></td><td>远程和本地显示管理列表。</td></tr><tr><td><code class="filename">Xsession</code></td><td>用于登录的默认的会话脚本。</td></tr><tr><td><code class="filename">Xsetup_</code>*</td><td>登录之前用于加载应用程序的脚本。</td></tr><tr><td><code class="filename">xdm-config</code></td><td>运行在这台机器上的所有显示的全局配置。</td></tr><tr><td><code class="filename">xdm-errors</code></td><td>服务器程序产生的错误。</td></tr><tr><td><code class="filename">xdm-pid</code></td><td>当前运行的 XDM 的进程 ID。</td></tr></tbody></table></div><p>当 <span class="application">XDM</span> 运行时，
+        在这个目录中有几个脚本和程序可以用来设置桌面。
+        这些文件中的每一个的用法都将被简要地描述。
+        这些文件的更详细的语法和用法在
+         <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=xdm&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">xdm</span>(1)</span></a> 中将有详细描述。</p><p>默认的配置是一个矩形的登录窗口，上面有机器的名称，
+        <span class="quote">“<span class="quote">Login:</span>”</span> 和
+        <span class="quote">“<span class="quote">Password:</span>”</span>。如果您想设计您自己个性化的
+        <span class="application">XDM</span> 屏幕，这是一个很好的起点。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53593592"></a>6.6.3.1. Xaccess</h4></div></div></div><p>用以连接由
+          <span class="application">XDM</span> 所控制的显示设备的协议，
+          叫做 X 显示管理器连接协议 (XDMCP)。
+          这个文件是一组用以控制来自远程计算机的 XDMCP 连接的规则。
+          除非您修改 <code class="filename">xdm-config</code>
+          使其接受远程连接， 否则其内容将被忽略。 默认情况下，
+          它不允许来自任何客户端的连接。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53595512"></a>6.6.3.2. Xresources</h4></div></div></div><p>这是一个默认的用来显示选项和登录屏幕的应用程序文件。
+          您可以在这个文件中对登录程序的外观进行定制。 其格式与
+	  X11 文档中描述的默认应用程序文件是一样的。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53596664"></a>6.6.3.3. Xservers</h4></div></div></div><p>这是一个选择者应当提供的作为可选的远程显示列表。
+          </p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53597816"></a>6.6.3.4. Xsession</h4></div></div></div><p>这是一个用户登录后针对
+          <span class="application">XDM</span> 的默认会话脚本。通常，在
+           <code class="filename">~/.xsession</code>
+          中每个用户将有一个可定制的会话脚本。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53599736"></a>6.6.3.5. Xsetup_*</h4></div></div></div><p>在显示选择者或登录接口之前，这些将被自动运行。
+	  这是一个每个显示都要用到的脚本，叫做
+           <code class="filename">Xsetup_</code>，
+          后面会跟一个本地显示的数字(比如
+          <code class="filename">Xsetup_0</code>)。典型的，这些脚本将在后台
+          (如 <code class="command">xconsole</code>)运行一个或两个程序。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53602168"></a>6.6.3.6. xdm-config</h4></div></div></div><p>此文件以应用程序默认值的形式，
+          提供了在安装时所使用的普适的显示设置。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53603448"></a>6.6.3.7. xdm-errors</h4></div></div></div><p>这个文件包含了
+          <span class="application">XDM</span> 正设法运行的的 X 服务器 的输出。
+          如果 <span class="application">XDM</span> 正设法运行的显示由于某种原因被挂起，
+          那这是一个寻找错误信息的好地方。
+	  这些信息会在每一个会话的基础上被写到用户的
+	  <code class="filename">~/.xsession-errors</code>
+          文件中。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53605880"></a>6.6.4. 运行一个网络显示服务器</h3></div></div></div><p>对于其他客户端来说， 如果希望它们能连接到显示服务器，您就必须编辑访问控制规则，
+        并启用连接侦听。 默认情况下， 这些都预设为比较保守的值。
+        要让 <span class="application">XDM</span> 能侦听连接， 首先要在
+        <code class="filename">xdm-config</code>
+        文件中注释掉一行：</p><pre class="screen">! SECURITY: do not listen for XDMCP or Chooser requests ! Comment out this line if you want to manage X terminals with xdm
+DisplayManager.requestPort:     0</pre><p>然后重新启动<span class="application">XDM</span>。
+        记住默认应用程序文件的注释以<span class="quote">“<span class="quote">!</span>”</span>
+        字母开始，不是<span class="quote">“<span class="quote">#</span>”</span>。
+        您需要设置严格的访问控制 ── 看看在
+        <code class="filename">Xaccess</code> 文件中的实例， 并参考
+        <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=xdm&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">xdm</span>(1)</span></a> 的联机手册， 以了解进一步的细节。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53615096"></a>6.6.5. 替换 XDM</h3></div></div></div><p>有几个替换默认
+          <span class="application">XDM</span>程序的方案。 其中之一是
+          上一节已经描述过的<span class="application">kdm</span> (与
+          <span class="application">KDE</span>捆绑在一起)。
+          <span class="application">kdm</span> 提供了许多视觉上的改进和局部的修饰，
+          同样能让用户在启动时能选择他们喜欢的窗口管理器。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="x-fonts.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="x11.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="x11-wm.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">6.5. 在 X11 中使用字体 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 6.7. 桌面环境</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

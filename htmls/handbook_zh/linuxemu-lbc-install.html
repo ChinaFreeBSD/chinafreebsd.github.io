@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>11.2. 配置 Linux® 二进制兼容模式</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="linuxemu.html" title="第 11 章 Linux® 二进制兼容模式" /><link rel="prev" href="linuxemu.html" title="第 11 章 Linux® 二进制兼容模式" /><link rel="next" href="linuxemu-advanced.html" title="11.3. 高级主题" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.2. 配置 <span class="trademark">Linux</span>® 二进制兼容模式</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="linuxemu.html">上一页</a> </td><th width="60%" align="center">第 11 章 <span class="trademark">Linux</span>® 二进制兼容模式</th><td width="20%" align="right"> <a accesskey="n" href="linuxemu-advanced.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="linuxemu-lbc-install"></a>11.2. 配置 <span class="trademark">Linux</span>® 二进制兼容模式</h2></div></div></div><a id="idp57420408" class="indexterm"></a><p>默认情况下， <span class="trademark">Linux</span>® 库并没有被安装而且 <span class="trademark">Linux</span>®
+      二进制兼容模式也没有被启动。  <span class="trademark">Linux</span>® 
+      库可以通过手动安装或者使用 FreeBSD 的 Ports Collection。</p><p>安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/emulators/linux-base-f10/pkg-descr">emulators/linux-base-f10</a> 包或者
+      port 是最容易在 FreeBSD 系统上获得一套基本的 <span class="trademark">Linux</span>® 库的方法。
+      使用如下方法安装 port：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/emulators/linux_base-f10</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install distclean</code></strong></pre><p>安装完成以后， 加载 <code class="literal">linux</code>
+      模块启用 <span class="trademark">Linux</span>® 二进制兼容模式：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>kldload linux</code></strong>userinput&gt;</pre><p>查看模块是否已经被加载：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>kldstat</code></strong>
+Id Refs Address    Size     Name
+ 1    2 0xc0100000 16bdb8   kernel
+ 7    1 0xc24db000 d000     linux.ko</pre><p>在 <code class="filename">/etc/rc.conf</code> 中加入以下这行后
+      <span class="trademark">Linux</span>® 兼容模式便会在系统启动时自动开启：</p><pre class="programlisting">linux_enable="YES"</pre><a id="idp57435256" class="indexterm"></a><p>想要在自制内核中静态链接 <span class="trademark">Linux</span>® 
+      二进制兼容支持的用户可以在自定义的内核配置文件中加入
+      <code class="literal">options COMPAT_LINUX</code>literal&gt;。
+      然后按照 <a class="xref" href="kernelconfig.html" title="第 9 章 配置FreeBSD的内核">第 9 章 <em>配置FreeBSD的内核</em></a>
+      中所描述的方法编译并安装新内核。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="linuxemu-libs-manually"></a>11.2.1. 手动安装额外的库</h3></div></div></div><a id="idp57438840" class="indexterm"></a><p>在配置了 <span class="trademark">Linux</span>® 兼容模式之后，
+        如果某个 <span class="trademark">Linux</span>® 应用程序依然提示找不到共享库，
+        需先找出此 <span class="trademark">Linux</span>® 二进制程序需要的共享库再手动安装。</p><p>在 <span class="trademark">Linux</span>® 系统上使用 <code class="command">ldd</code>
+        找出应用程序所需的共享库文件。 比如，
+        在安装有 <span class="application">Doom</span> 的  <span class="trademark">Linux</span>®
+        系统上运行如下的命令列出 <code class="command">linuxdoom</code>
+        所需用到的共享库文件：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>ldd linuxdoom</code></strong>
+libXt.so.3 (DLL Jump 3.1) =&gt; /usr/X11/lib/libXt.so.3.1.0
+libX11.so.3 (DLL Jump 3.1) =&gt; /usr/X11/lib/libX11.so.3.1.0
+libc.so.4 (DLL Jump 4.5pl26) =&gt; /lib/libc.so.4.6.29</pre><a id="idp57461496" class="indexterm"></a><p>然后把上面输出中最后一列中的所有文件从 <span class="trademark">Linux</span>® 
+        系统复制到 FreeBSD 上的 <code class="filename">/compat/linux</code>。
+        复制完成之后， 建立指向第一栏中文件名的符号链接。
+        这样在 FreeBSD 系统上将会有如下的文件：</p><pre class="screen">/compat/linux/usr/X11/lib/libXt.so.3.1.0
+/compat/linux/usr/X11/lib/libXt.so.3 -&gt; libXt.so.3.1.0
+/compat/linux/usr/X11/lib/libX11.so.3.1.0
+/compat/linux/usr/X11/lib/libX11.so.3 -&gt; libX11.so.3.1.0
+/compat/linux/lib/libc.so.4.6.29
+/compat/linux/lib/libc.so.4 -&gt; libc.so.4.6.29</pre><p>如果已经有了一个与 <code class="command">ldd</code> 
+        输出中第一列的主修订号相同的 <span class="trademark">Linux</span>® 共享库文件，
+	    则不再需要复制最后那列文件， 现有的共享库应该可以正常使用。
+        如果是更新版本的共享库通常建议复制。 
+        只要有符号链接指向新的版本， 那么就可以删除旧版的了。</p><p>比如， FreeBSD 系统中现有这些共享库文件：</p><pre class="screen">/compat/linux/lib/libc.so.4.6.27
+/compat/linux/lib/libc.so.4 -&gt; libc.so.4.6.27</pre><p>并且 <code class="command">ldd</code> 指出某个二进制程序需要之后版本：</p><pre class="screen">libc.so.4 (DLL Jump 4.5pl26) -&gt; libc.so.4.6.29</pre><p>既然现有文件最后的版本号只相差一到两个版本，
+        程序应该可以正常使用稍旧些的版本。 不管怎样，
+        使用新版本替换现有 <code class="filename">libc.so</code> 都是安全的。</p><pre class="screen">/compat/linux/lib/libc.so.4.6.29
+/compat/linux/lib/libc.so.4 -&gt; libc.so.4.6.29</pre><p>通常最初几次在 FreeBSD 上安装 <span class="trademark">Linux</span>® 程序时需要寻找 <span class="trademark">Linux</span>®
+        二进制程序所依赖的共享库文件。 在此之后， 系统里便会有足够多的 <span class="trademark">Linux</span>®
+        共享库文件来运行新安装的 <span class="trademark">Linux</span>® 二进制程序而无需额外操作。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp57471096"></a>11.2.2. 安装 <span class="trademark">Linux</span>® <acronym class="acronym">ELF</acronym>
+        二进制程序</h3></div></div></div><a id="idp57472632" class="indexterm"></a><p><acronym class="acronym">ELF</acronym> 二进制程序有时需要额外的步骤。
+        当未被标记的 <acronym class="acronym">ELF</acronym> 二进制程序被执行的时候，
+        会生成如下的错误信息：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>./my-linux-elf-binary</code></strong>
+ELF binary type not known
+Abort</pre><p>为了帮助 FreeBSD 内核分辨 FreeBSD <acronym class="acronym">ELF</acronym>
+	    二进制程序和 <span class="trademark">Linux</span>® 二进制程序， 请使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=brandelf&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">brandelf</span>(1)</span></a>：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>brandelf -t Linux my-linux-elf-binary</code></strong></pre><a id="idp57478776" class="indexterm"></a><p>由于现在的 GNU 工具链能自动把适当的标记信息写入 <acronym class="acronym">ELF</acronym>
+        二进制程序中，这个步骤通常不是必须做的。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp57480440"></a>11.2.3. 安装基于 <span class="trademark">Linux</span>® <acronym class="acronym">RPM</acronym> 的应用程序</h3></div></div></div><p>安装基于 <span class="trademark">Linux</span>® <acronym class="acronym">RPM</acronym> 的应用程序，
+        首先需要安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/archivers/rpm/pkg-descr">archivers/rpm</a> 包或者 port。
+        安装好之后 <code class="systemitem">root</code>
+        用户就能使用此命令安装 <code class="filename">.rpm</code> 了：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /compat/linux</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>rpm2cpio &lt; /path/to/linux.archive.rpm | cpio -id</code></strong></pre><p>如有必要的话使用 <code class="command">brandelf</code> 标记安装好的
+        <acronym class="acronym">ELF</acronym> 二进制程序。 注意此项安装将无法干净卸载。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp57500024"></a>11.2.4. 配置主机名解析器</h3></div></div></div><p>如果 <acronym class="acronym">DNS</acronym> 不能正常工作或是出现以下的错误信息：</p><pre class="screen">resolv+: "bind" is an invalid keyword resolv+:
+"hosts" is an invalid keyword</pre><p>请参照此方法配置 <code class="filename">/compat/linux/etc/host.conf</code>：</p><pre class="programlisting">order hosts, bind
+multi on</pre><p>这里指定了先查询 <code class="filename">/etc/hosts</code>
+        再查询 <acronym class="acronym">DNS</acronym>。 如果
+        <code class="filename">/compat/linux/etc/host.conf</code> 不存在的话，
+        <span class="trademark">Linux</span>® 程序便会读取 	<code class="filename">/etc/host.conf</code>
+        并提示与 FreeBSD 的语法不兼容。 如果没有在
+        <code class="filename">/etc/resolv.conf</code> 文件中配置域名服务器，
+        可以删除 <code class="literal">bind</code>。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="linuxemu.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="linuxemu.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="linuxemu-advanced.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 11 章 <span class="trademark">Linux</span>® 二进制兼容模式 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 11.3. 高级主题</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

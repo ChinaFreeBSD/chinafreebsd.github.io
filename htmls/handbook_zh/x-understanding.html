@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>6.2. 理解 X</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="x11.html" title="第 6 章 X Window 系统" /><link rel="prev" href="x11.html" title="第 6 章 X Window 系统" /><link rel="next" href="x-install.html" title="6.3. 安装 X11" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.2. 理解 X</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="x11.html">上一页</a> </td><th width="60%" align="center">第 6 章 X Window 系统</th><td width="20%" align="right"> <a accesskey="n" href="x-install.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="x-understanding"></a>6.2. 理解 X</h2></div></div></div><p>对于那些熟悉其他图形环境，比如
+       <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 或者
+      <span class="trademark">Mac OS</span>® 的用户来说，第一次使用 X 可能会感觉很惊讶。</p><p>通常您并不需要深入了解各种 X 组件的作用以及它们之间的相互影响，
+      不过， 了解一些关于它们的基础知识， 有助于更好地利用 X 的强大功能。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53157624"></a>6.2.1. 为什么要使用 X?</h3></div></div></div><p>X 不是第一个为 <span class="trademark">UNIX</span>® 而开发的视窗系统， 但它是最流行的。
+        X 的原始开发团队在开发 X 之前就已经在另外一个视窗系统上工作了。
+        那个系统的名字叫做
+        <span class="quote">“<span class="quote">W</span>”</span> (就是 <span class="quote">“<span class="quote">Window</span>”</span>)。X 只是罗马字母中 W 后面
+        的一个。</p><p>X 可以被叫做 <span class="quote">“<span class="quote">X</span>”</span>, <span class="quote">“<span class="quote">X Window 系统</span>”</span>,
+        <span class="quote">“<span class="quote">X11</span>”</span>, 等等。把 X11 称做
+        <span class="quote">“<span class="quote">X Windows</span>”</span> 可能会冒犯某些人；
+        查看 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=X&amp;sektion=7&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">X</span>(7)</span></a> 可以了解更多的信息。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53163000"></a>6.2.2. X 客户机/服务器模型</h3></div></div></div><p>X 一开始就是针对网络而设计的，所以
+	采用了 <span class="quote">“<span class="quote">client-server</span>”</span> 模型。在 X 模型中，
+	<span class="quote">“<span class="quote">X server</span>”</span> 运行在有键盘，显示器，鼠标的计算机上。
+	服务器用来管理显示信息，处理来自键盘和鼠标的输入信息，
+	并与其他输入输出设备交互 (比如作为输入设备的 <span class="quote">“<span class="quote">tablet</span>”</span>，
+	或者作为输出设备的投影仪)。
+	每一个 X 应用程序 (比如 <span class="application">XTerm</span>, 或者
+	<span class="application"><span class="trademark">Netscape</span>®</span>) 就是一个 <span class="quote">“<span class="quote">客户程序 (client)</span>”</span>。
+	客户程序给服务器发送信息，如 <span class="quote">“<span class="quote">请在这些坐标上画一个窗口</span>”</span>，
+	而服务器则返回处理信息， 如
+	<span class="quote">“<span class="quote">用户刚刚点击了 OK 按钮</span>”</span>。</p><p>如果您家或办公环境中只有一台使用 FreeBSD 的计算机，
+	就只能在同一台计算机上运行 X server 和 X client 了。 然而， 如果您有很多运行
+	FreeBSD 的机器， 您可以在您的桌面计算机上运行 X server，
+	而在比较高档的服务器上运行 X 应用程序。 在这样的环境中， X server 和 X client
+	之间的通信就可以通过网络来进行。</p><p>这可能会让一些人感到困惑， 因为 X 的术语和他们料想的有些不同。
+	他们以为 <span class="quote">“<span class="quote">X server</span>”</span> 是运行在功能强大的大型机上的，而
+	<span class="quote">“<span class="quote">X client</span>”</span> 是运行在他们桌面上的计算机上的。</p><p>记住，X server 是有键盘和显示器的那台计算机，而
+	 X client 是那些显示窗口的程序。</p><p>Client 和 server 不一定都要运行在同一种操作系统上，
+	它们甚至无需在同一种类型的计算机上运行。 在 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 或
+	Apple 公司的 <span class="trademark">Mac OS</span>® 上运行 X server 也是可以的，
+	在它们上面也有很多免费的和商业化的应用程序。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53175544"></a>6.2.3. 窗口管理器</h3></div></div></div><p>X 的设计哲学很像 <span class="trademark">UNIX</span>® 的设计哲学，
+        <span class="quote">“<span class="quote">tools, not policy</span>”</span>。这就意味着 X 不会试图去规定任务应该如何
+        去完成，而是，只给用户提供一些工具，至于决定如何使用这些工具是用户自己的
+        事情。</p><p>这套哲学扩展了 X，它不会规定窗口在屏幕上应该是什么样子，要如何移动鼠标，
+      应该用什么键来切换窗体 (比如，
+        <span class="keycap"><strong>Alt</strong></span>+<span class="keycap"><strong>Tab</strong></span>按键，在 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 环境中的作用), 每个窗口的工具条应该
+        看起来像什么，他们是否应该有关闭按钮等等。</p><p>实际上，X 行使了一种叫做
+        <span class="quote">“<span class="quote">窗口管理器</span>”</span>的应用程序的职责。有很多这样的程序可用：
+          <span class="application">AfterStep</span>,
+        <span class="application">Blackbox</span>, <span class="application">ctwm</span>,
+        <span class="application">Enlightenment</span>,
+        <span class="application">fvwm</span>, <span class="application">Sawfish</span>,
+        <span class="application">twm</span>,
+        <span class="application">Window Maker</span>，等等。每一个窗口管理器
+        都提供了不同的界面和观感；其中一些还支持
+        <span class="quote">“<span class="quote">虚拟桌面</span>”</span>；有一些允许您可以定制一些键来管理您的桌面；
+        一些有<span class="quote">“<span class="quote">开始</span>”</span>
+        按钮，或者其他类似的设计；一些是 <span class="quote">“<span class="quote">可定制主题的(themeable)</span>”</span>，
+        通过安装新的主题， 可以完全改变外观。 这些以及很多其他的窗口管理器，
+        都可以在 Ports Collection 的
+        <code class="filename">x11-wm</code> 分类目录里找到。</p><p>另外，<span class="application">KDE</span> 和
+	<span class="application">GNOME</span> 桌面环境都有他们自己的窗口管理器
+	与桌面集成。</p><p>每个窗口管理器也有不同的配置机制；有些需要手工来写配置文件，
+       而另外一些则可以使用 GUI 工具来完成大部分的配置任务， 举例而言，
+        (<span class="application">Sawfish</span>) 就使用 Lisp 语言书写配置文件。</p><div xmlns="" class="note"><h3 class="admontitle">焦点策略: </h3><p xmlns="http://www.w3.org/1999/xhtml">窗口管理器的另一个特性是鼠标的 <span class="quote">“<span class="quote">focus policy</span>”</span>。
+        每个窗口系统都需要有一个选择窗口的方法来接受键盘的输入信息，以及当前
+        哪个窗口处于可用状态。</p><p xmlns="http://www.w3.org/1999/xhtml">您通常比较熟悉的是一个叫做 <span class="quote">“<span class="quote">click-to-focus</span>”</span> 的焦点策略。
+          这是 <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 使用的典型焦点策略，也就是您在一个窗口上点击
+          一下鼠标，这个窗口就处于当前可用的状态。</p><p xmlns="http://www.w3.org/1999/xhtml">X 不支持一些特殊的焦点策略。确切地说，窗口管理器控制着在什么时候哪个窗口
+        拥有焦点。不同的窗口管理器支持不同的焦点方案。它们都支持点击即获得焦点，
+        而且它们中的大多数都支持好几种方案。</p><p xmlns="http://www.w3.org/1999/xhtml">最流行的焦点策略：</p><div xmlns="http://www.w3.org/1999/xhtml" class="variablelist"><dl class="variablelist"><dt><span class="term">focus-follows-mouse</span></dt><dd><p>鼠标指示器下面的窗口就是获得焦点的窗口。
+              这个窗口不一定位于其他所有窗口之上。
+              通过将鼠标移到另一个窗口就可以改变焦点，
+              而不需要在它上面点击。
+              </p></dd><dt><span class="term">sloppy-focus</span></dt><dd><p>这种方式是对 focus-follows-mouse 策略的一个小小扩展。对于
+              focus-follows-mouse， 如果您把鼠标移到了根窗口（或桌面背景）上，
+              则所有的其它窗口都会失去焦点， 而相关的全部键盘输入也会丢失。
+              如果选择了 sloppy-focus， 则只有当指针进入新窗口时，
+              窗口焦点才会发生变化， 而当退出当前窗口时是不会变化的。
+              </p></dd><dt><span class="term">click-to-focus</span></dt><dd><p>当前窗口由鼠标点击来选择。窗口被<span class="quote">“<span class="quote">突出显示</span>”</span> ，
+              出现在所有其他窗口的前面。即使指针被移向了另一个窗口，所有的键盘输入
+              仍会被这个窗口接收。
+              </p></dd></dl></div><p xmlns="http://www.w3.org/1999/xhtml">许多窗口管理器支持其他的策略，与这些相比又有些变化。您可以看具体
+        窗口管理器的文档。
+        </p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp53230456"></a>6.2.4. 窗口部件</h3></div></div></div><p>提供工具而非策略的 X 方法使得在每个应用程序屏幕上看到的窗口部件得到了
+      大大的扩展。</p><p><span class="quote">“<span class="quote">Widget</span>”</span> 只是针对用户接口中所有列举项目的一个术语，它
+      可以用某种方法来点击或操作；如按钮，复选框，单选按钮，图标，列表框等等。
+       <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 把这些叫做<span class="quote">“<span class="quote">控件</span>”</span>。</p><p><span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 和苹果公司的 <span class="trademark">Mac OS</span>® 都有一个严格的窗口部件策略。
+      应用程序开发者被建议确保他们的应用程序共享一个普通的所见即所得的用户界面。
+      对于 X，它并不要求一个特殊的图形风格或一套相结合的窗口部件集。</p><p>这样的结果是您不能期望 X 应用程序只拥有一个普通的所见即所得的界面。
+      有很多的流行的窗口部件集设置，包括来自于 MIT 的 Athena，
+        <span class="application"><span class="trademark">Motif</span>®</span> (模仿
+        <span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 的窗口风格， 所有部件都具有斜边和3种灰色度)，
+        <span class="application">OpenLook</span>，
+        等等。</p><p>如今， 绝大多数比较新的 X 应用程序采用一组新式的窗口设计，
+        这包括 <span class="application">KDE</span> 所使用的 Qt，
+        以及 <span class="application">GNOME</span> 所使用的 GTK+。
+        在这样一种窗口系统下，<span class="trademark">UNIX</span>® 桌面的一些所见即所得特性作了一些收敛，
+        以使初学者感到更容易一些。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="x11.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="x11.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="x-install.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 6 章 X Window 系统 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 6.3. 安装 X11</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

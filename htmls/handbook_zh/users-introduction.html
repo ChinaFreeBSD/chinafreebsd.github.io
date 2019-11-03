@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>14.2. 介绍</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="users.html" title="第 14 章 用户和基本的帐户管理" /><link rel="prev" href="users.html" title="第 14 章 用户和基本的帐户管理" /><link rel="next" href="users-superuser.html" title="14.3. 超级用户帐户" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">14.2. 介绍</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="users.html">上一页</a> </td><th width="60%" align="center">第 14 章 用户和基本的帐户管理</th><td width="20%" align="right"> <a accesskey="n" href="users-superuser.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="users-introduction"></a>14.2. 介绍</h2></div></div></div><p>所有访问系统的用户都是通过帐户完成的，所以用户和帐户管理是FreeBSD系统不可或缺的重要部分.</p><p>每个FreeBSD系统的帐户都有一些和它相对应的信息去验证它.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">用户名</span></dt><dd><p>用户名在<code class="prompt">login:</code> 提示符的后面键入。
+	    用户名对于一台计算机来讲是唯一的；
+	    您不可以使用两个相同的用户名来登录。
+	    有很多用来创建正确用户名的规则， 具体请参考 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=passwd&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">passwd</span>(5)</span></a>；
+	    您使用的用户名通常需要8个或更少的小写字母。</p></dd><dt><span class="term">口令</span></dt><dd><p>每个帐户都有一个口令与它对应。
+	    口令可以是空的， 这样不需要口令就可以访问系统。
+	    这通常不是一个好主意； 每个帐户都应该有口令。</p></dd><dt><span class="term">用户 ID (UID)</span></dt><dd><p>UID是系统用来识别用户的数字，传统上它的范围是0到65536之间<a href="users-introduction.html#ftn.users-largeuidgid" class="footnote" id="users-largeuidgid"><sup class="footnote">[7]</sup></a>，用以唯一地标识用户。
+		FreeBSD在内部使用UID来识别用户 ── 在工作以前。
+		任何允许您指定一个用户名的 FreeBSD 命令都会把它转换成UID。
+		这意味着您可以用不同的用户名使用多个帐户， 但它们的UID是一样的。
+		FreeBSD 会把这些帐户认定是同一个用户。</p></dd><dt><span class="term">组ID (GID)</span></dt><dd><p>GID是用来识别用户所在的组的， 传统上范围在0到65536之间<a href="users-introduction.html#ftn.users-largeuidgid" class="footnoteref"><sup class="footnoteref">[7]</sup></a>的数字。
+	    组是一种基于用户GID而不是它们的UID的用来控制用户访问资源的机制。 这可以减少一些配置文件的大小。
+	    一个用户也可以属于多个组。</p></dd><dt><span class="term">登录类</span></dt><dd><p>登录类是对组机制的扩展,当把系统分配给不同用户时,它提供了额外的灵活性.</p></dd><dt><span class="term">口令的定期更改</span></dt><dd><p>默认情况下， FreeBSD 并不强制用户去改变他们的口令。
+	    您可以以用户为单位强制要求一些或所有的用户定期改变他们的口令。</p></dd><dt><span class="term">帐户的到期时间</span></dt><dd><p>默认情况下 FreeBSD 不会自动完成帐户过期操作。
+	    如果您正在创建帐户， 您应该知道一个帐户的有效使用期限。
+	    例如， 在学校里您会为每个学生建立一个帐户，
+	    您可以指定它们何时过期。
+	    帐户过期后， 虽然帐户的目录和文件仍然存在，
+	    但帐户已经不能继续使用了。</p></dd><dt><span class="term">用户的全名</span></dt><dd><p>用户名可以唯一地识别FreeBSD的帐户，
+	    但它不会反映用户的全名。 这些信息可能与帐户是相关的。</p></dd><dt><span class="term">主目录</span></dt><dd><p>主目录是用户用来启动的目录的完全路径。
+	    一个通常的规则是把所有用户的主目录都放在
+	    <code class="filename">/home/username</code>
+	    下，或者
+	    <code class="filename">/usr/home/username</code>
+	    下。 用户将把他们的个人文件放在自己的主目录下，
+	    他们可以在那里创建任何目录.</p></dd><dt><span class="term">用户 shell</span></dt><dd><p>Shell提供了用户用来操作系统的默认环境。 有很多不同的shell，
+	    有经验的用户会根据他们的经验来选择自己喜好的shell。</p></dd></dl></div><p>有三种类型的帐户: <a class="link" href="users-superuser.html" title="14.3. 超级用户帐户">超级用户</a>， <a class="link" href="users-system.html" title="14.4. 系统帐户">系统用户</a>， 以及 <a class="link" href="users-user.html" title="14.5. 用户帐户">普通用户</a>。
+	超级用户帐户通常叫做 <code class="systemitem">root</code>，
+	可以没有限制地管理系统。 系统用户运行服务。
+	最后， 普通用户给那些登录系统以及阅读邮件的人使用。</p><div class="footnotes"><br /><hr class="footnote-hr" /><div id="ftn.users-largeuidgid" class="footnote"><p><a href="users-introduction.html#users-largeuidgid" class="para"><sup class="para">[7] </sup></a>可以使用的 UID/GID 的最大值是
+		4294967295， 但这可能会给采用上述假定的软件造成严重的问题。</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="users.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="users.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="users-superuser.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 14 章 用户和基本的帐户管理 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 14.3. 超级用户帐户</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

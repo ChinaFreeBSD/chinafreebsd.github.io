@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>1.2. 欢迎来到 FreeBSD 的世界!</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="introduction.html" title="第 1 章 介绍" /><link rel="prev" href="introduction.html" title="第 1 章 介绍" /><link rel="next" href="history.html" title="1.3. 关于 FreeBSD 项目" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">1.2. 欢迎来到 FreeBSD 的世界!</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="introduction.html">上一页</a> </td><th width="60%" align="center">第 1 章 介绍</th><td width="20%" align="right"> <a accesskey="n" href="history.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="nutshell"></a>1.2. 欢迎来到 FreeBSD 的世界!</h2></div></div></div><a id="idp45603832" class="indexterm"></a><p>FreeBSD 是一个支持
+      Intel (x86 和 <span class="trademark">Itanium</span>®)，AMD64， Sun
+      <span class="trademark">UltraSPARC</span>® 计算机的基于 4.4BSD-Lite 的操作系统。
+      到其他体系结构的移植也在进行中。
+      您也可以阅读 <a class="link" href="history.html" title="1.3. 关于 FreeBSD 项目">FreeBSD 的历史</a>，
+      或者<a class="link" href="history.html#relnotes" title="1.3.4. 最新的 FreeBSD 发行版本">最新的发行版本</a>。
+      如果您有意捐助(代码，
+      硬件，基金)，请看<a class="link" href="https://www.freebsd.org/doc/en_US.ISO8859-1/articles/contributing/index.html" target="_top">为 FreeBSD 提供帮助</a>这篇文章。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="os-overview"></a>1.2.1. FreeBSD 能做些什么？</h3></div></div></div><p>FreeBSD 有许多非凡的特性。其中一些是：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a id="idp45615352" class="indexterm"></a><p><span class="emphasis"><em>抢占式多任务</em></span>与动态优先级调整确保在应用程序和用户之间平滑公正的分享计算机资源，
+	    即使工作在最大的负载之下。</p></li><li class="listitem"><a id="idp45618808" class="indexterm"></a><p><span class="emphasis"><em>多用户设备</em></span>
+            使得许多用户能够同时使用同一
+	    FreeBSD 系统做各种事情。
+	    比如， 像打印机和磁带驱动器这样的系统外设，
+	    可以完全地在系统或者网络上的所有用户之间共享，
+	    可以对用户或者用户组进行个别的资源限制，
+	    以保护临界系统资源不被滥用。</p></li><li class="listitem"><a id="idp45622776" class="indexterm"></a><p>符合业界标准的强大 <span class="emphasis"><em>TCP/IP 网络</em></span> 支持，
+	    例如 SCTP、 DHCP、 NFS、
+	    NIS、 PPP， SLIP， IPsec 以及 IPv6。
+	    这意味着您的 FreeBSD 主机可以很容易地和其他系统互联，
+	    也可以作为企业的服务器，提供重要的功能，
+	    比如 NFS(远程文件访问)以及 email 服务， 或将您的组织接入
+	    Internet 并提供 WWW，FTP，路由和防火墙(安全)服务。</p></li><li class="listitem"><a id="idp45639288" class="indexterm"></a><p><span class="emphasis"><em>内存保护</em></span>确保应用程序(或者用户)不会相互干扰。
+	    一个应用程序崩溃不会以任何方式影响其他程序。</p></li><li class="listitem"><p>FreeBSD 是一个 <span class="emphasis"><em>32 位</em></span>操作系统
+	    (在 <span class="trademark">Itanium</span>®，AMD64，和 <span class="trademark">UltraSPARC</span>® 上是<span class="emphasis"><em>64 位</em></span>)，
+	    并且从开始就是如此设计的。</p></li><li class="listitem"><a id="idp45654136" class="indexterm"></a><p>业界标准的 <span class="emphasis"><em>X Window 系统</em></span>
+	    (X11R7)为便宜的常见 VGA 显示卡和监视器提供了一个图形化的用户界面(GUI)，
+	    并且完全开放代码。</p></li><li class="listitem"><a id="idp45661816" class="indexterm"></a><a id="idp45665400" class="indexterm"></a><a id="idp45668344" class="indexterm"></a><a id="idp45671160" class="indexterm"></a><a id="idp45673976" class="indexterm"></a><p>和许多 Linux，SCO，SVR4，BSDI 和 NetBSD 程序的<span class="emphasis"><em>二进制代码兼容性</em></span></p></li><li class="listitem"><p>数以千计的 <span class="emphasis"><em>ready-to-run</em></span>
+	    应用程序可以从 FreeBSD
+	    <span class="emphasis"><em>ports</em></span> 和 <span class="emphasis"><em>packages</em></span>
+	    套件中找到。 您可以顺利地从这里找到，
+	    何须搜索网络？</p></li><li class="listitem"><p>可以在 Internet 上找到成千上万其它
+	    <span class="emphasis"><em>easy-to-port</em></span> 的应用程序。
+	    FreeBSD 和大多数流行的商业 <span class="trademark">UNIX</span>® 代码级兼容，
+	    因此大多数应用程序不需要或者只要很少的改动就可以编译。</p></li><li class="listitem"><a id="idp45687672" class="indexterm"></a><p>页式请求<span class="emphasis"><em>虚拟内存</em></span>和<span class="quote">“<span class="quote">集成的
+	    VM/buffer 缓存</span>”</span>设计有效地满足了应用程序巨大的内存需求并依然保持其他用户的交互式响应。</p></li><li class="listitem"><a id="idp45692280" class="indexterm"></a><p><span class="emphasis"><em>SMP</em></span> 提供对多处理器的支持。</p></li><li class="listitem"><a id="idp45696376" class="indexterm"></a><a id="idp45703544" class="indexterm"></a><a id="idp45706360" class="indexterm"></a><p>内建了完整的 <span class="emphasis"><em>C</em></span>、
+	    <span class="emphasis"><em>C++</em></span>、 <span class="emphasis"><em>Fortran</em></span>
+	    开发工具。 许多附加的用于高级研究和开发的程序语言，
+	    也可以在通过 ports 和 packages
+	    套件获得。</p></li><li class="listitem"><a id="idp45714168" class="indexterm"></a><p>完整的系统<span class="emphasis"><em>源代码</em></span>意味着您对您环境的最大程度的控制。
+	    当您拥有了一个真正的开放系统时，
+	    为什么还要受困于私有的解决方案，
+	    任商业公司摆布呢？</p></li><li class="listitem"><p>丰富的<span class="emphasis"><em>在线文档</em></span>。</p></li><li class="listitem"><p><span class="emphasis"><em>不仅如此！</em></span></p></li></ul></div><a id="idp45743480" class="indexterm"></a><a id="idp45744504" class="indexterm"></a><a id="idp45746552" class="indexterm"></a><p>FreeBSD 基于加州大学伯克利分校计算机系统研究组
+        (CSRG) 发布的 4.4BSD-Lite，
+	继承了 BSD 系统开发的优良传统。
+	除了 CSRG 优秀的工作之外，
+	FreeBSD 项目花费了非常多的时间来优化调整系统，
+	使其在真实负载情况下拥有最好的性能和可靠性。
+	在现今， 许多商业巨人正为给 PC 操作系统增加新功能、
+	提升和改善其可靠性， 以便在其上展开激烈竞争的同时，
+	FreeBSD <span class="emphasis"><em>现在</em></span>
+        已经能够提供所有这一切了！</p><p>FreeBSD 可以提供的应用事实上仅局限于您的想象力。
+        从软件开发到工厂自动化，从存货控制到遥远的人造卫星天线方位控制，
+	如果商业的 <span class="trademark">UNIX</span>® 产品可以做到，
+        那么就非常有可能您也可以用 FreeBSD 来做！
+	FreeBSD 也极大地受益于全世界的研究中心和大学开发的数以千计的高质量的应用程序，
+	这些程序通常只需要很少的花费甚至免费。
+	可用的商业应用程序， 每天也都在大量地增加。</p><p>因为 FreeBSD 自身的源代码是完全公开的，
+        所以对于特定的应用程序或项目，可以对系统进行最大限度的定制。
+	这对于大多数主流的商业生产商的操作系统来说几乎是不可能的。
+	以下是当前人们应用 FreeBSD 的某些程序的例子：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>Internet 服务：</em></span>
+          FreeBSD 内建的强大的 TCP/IP
+	  网络使它得以成为各种 Internet 服务的理想平台，
+          比如：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><a id="idp45756792" class="indexterm"></a><p>FTP 服务器</p></li><li class="listitem"><a id="idp45758840" class="indexterm"></a><p>World Wide Web 服务器(标准的或者安全的
+	        [SSL])</p></li><li class="listitem"><p>IPv4 and IPv6 路由</p></li><li class="listitem"><a id="idp45764344" class="indexterm"></a><a id="idp45765496" class="indexterm"></a><p>防火墙和 NAT(<span class="quote">“<span class="quote">IP 伪装</span>”</span>)
+	        网关</p></li><li class="listitem"><a id="idp45781624" class="indexterm"></a><a id="idp45784056" class="indexterm"></a><p>电子邮件服务器</p></li><li class="listitem"><a id="idp45788152" class="indexterm"></a><p>USENET 新闻组和电子布告栏系统</p></li><li class="listitem"><p>还有许多...</p></li></ul></div><p>使用 FreeBSD， 您可以容易地从便宜的
+	    386 类 PC 起步，并随着您的企业成长，一路升级到带有
+	    RAID 存储的四路 Xeon 服务器。</p></li><li class="listitem"><p><span class="emphasis"><em>教育：</em></span>
+            您是一名计算机科学或者相关工程领域的学生吗？
+	    学习操作系统，计算机体系结构和网络没有比在 FreeBSD
+	    可提供的体验下动手实践更好的办法了。许多可自由使用的
+	    CAD、数学和图形设计包也使它对于那些主要兴趣是在计算机上完成
+            <span class="emphasis"><em>其他</em></span>工作的人非常有帮助。</p></li><li class="listitem"><p><span class="emphasis"><em>研究：</em></span>
+            有完整的系统源代码，FreeBSD
+	    对于操作系统研究以及其他计算机科学分支都是一个极好的平台。
+	    FreeBSD 可自由获得的本性，
+	    同样可以使处在不同地方的开发团队在开放的论坛上讨论问题、
+	    交流想法与合作开发成为可能，
+	    且不必担心特别的版权协定或者限制。</p></li><li class="listitem"><a id="idp45800696" class="indexterm"></a><a id="idp45802360" class="indexterm"></a><p><span class="emphasis"><em>网络：</em></span>需要一个新的路由器？
+	    一台域名服务器 (DNS)？ 一个隔离您的内部网络的防火墙？
+	    FreeBSD 可以容易的把丢弃在角落不用的 386 或者
+	    486 PC 变成一台完善的带包过滤能力的高级路由器。</p></li><li class="listitem"><a id="idp45808504" class="indexterm"></a><a id="idp45811576" class="indexterm"></a><p><span class="emphasis"><em>X Window 工作站：</em></span> FreeBSD
+	    是廉价 X 终端的一种绝佳解决方案，
+            您可以选择使用免费的 X11 服务器。
+            与 X 终端不同，如果需要的话 FreeBSD
+	    能够在本地直接运行程序，
+            因而减少了中央服务器的负担。 FreeBSD
+	    甚至能够在 <span class="quote">“<span class="quote">无盘</span>”</span> 环境下启动，
+	    这使得终端更为便宜和易于管理。</p></li><li class="listitem"><a id="idp45830648" class="indexterm"></a><p><span class="emphasis"><em>软件开发：</em></span>
+	    基本的 FreeBSD 系统带有包括著名的 GNU C/C++
+	    编译器和调试工具在内的一整套开发工具。</p></li></ul></div><p>FreeBSD 可以通过 CD-ROM、DVD，
+        以及匿名 FTP 以源代码和二进制方式获得。请查看<a class="xref" href="mirrors.html" title="附录 A. 获取 FreeBSD">附录 A, <em>获取 FreeBSD</em></a>
+        了解获取 FreeBSD 的更多细节。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="introduction-nutshell-users"></a>1.2.2. 谁在使用 FreeBSD?</h3></div></div></div><a id="idp45837944" class="indexterm"></a><p>FreeBSD 被世界上最大的 IT 公司用作设备和产品的平台， 包括：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a id="idp45841784" class="indexterm"></a><p><a class="link" href="http://www.apple.com/" target="_top">Apple</a></p></li><li class="listitem"><a id="idp45845752" class="indexterm"></a><p><a class="link" href="http://www.cisco.com/" target="_top">Cisco</a></p></li><li class="listitem"><p><a class="link" href="http://www.juniper.net/" target="_top">Juniper</a></p></li><li class="listitem"><a id="idp45855864" class="indexterm"></a><p><a class="link" href="http://www.netapp.com/" target="_top">NetApp</a></p></li></ul></div><p>FreeBSD 也被用来支持 Internet 上一些最大的站点，
+        包括：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a id="idp45861496" class="indexterm"></a><p><a class="link" href="http://www.yahoo.com/" target="_top">Yahoo!</a></p></li><li class="listitem"><a id="idp45865208" class="indexterm"></a><p><a class="link" href="http://www.yandex.ru/" target="_top">Yandex</a></p></li><li class="listitem"><a id="idp45869176" class="indexterm"></a><p><a class="link" href="http://www.apache.org/" target="_top">Apache</a></p></li><li class="listitem"><a id="idp45885048" class="indexterm"></a><p><a class="link" href="http://www.rambler.ru/" target="_top">Rambler</a></p></li><li class="listitem"><a id="idp45889784" class="indexterm"></a><p><a class="link" href="http://www.sina.com/" target="_top">新浪网</a></p></li><li class="listitem"><a id="idp45895928" class="indexterm"></a><p><a class="link" href="http://www.pair.com/" target="_top">Pair
+	    Networks</a></p></li><li class="listitem"><a id="idp45900536" class="indexterm"></a><p><a class="link" href="http://www.sony.co.jp/" target="_top">Sony
+	    Japan</a></p></li><li class="listitem"><a id="idp45904760" class="indexterm"></a><p><a class="link" href="http://www.netcraft.com/" target="_top">Netcraft</a>
+	    </p></li><li class="listitem"><a id="idp45908600" class="indexterm"></a><p><a class="link" href="http://www.163.com/" target="_top">NetEase</a></p></li><li class="listitem"><a id="idp45932920" class="indexterm"></a><p><a class="link" href="http://www.wni.com/" target="_top">Weathernews</a>
+	</p></li><li class="listitem"><a id="idp45935608" class="indexterm"></a><p><a class="link" href="http://www.telehouse.com/" target="_top">TELEHOUSE
+	    America</a></p></li><li class="listitem"><a id="idp45943672" class="indexterm"></a><p><a class="link" href="http://www.experts-exchange.com/" target="_top">Experts
+	    Exchange</a></p></li></ul></div><p>等等许多。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="introduction.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="introduction.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="history.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 1 章 介绍 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 1.3. 关于 FreeBSD 项目</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

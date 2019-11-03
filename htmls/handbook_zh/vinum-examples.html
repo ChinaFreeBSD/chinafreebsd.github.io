@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>22.6. 一些例子</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="vinum-vinum.html" title="第 22 章 Vinum 卷管理程序" /><link rel="prev" href="vinum-objects.html" title="22.5. Vinum 目标" /><link rel="next" href="vinum-object-naming.html" title="22.7. 对象命名" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">22.6. 一些例子</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vinum-objects.html">上一页</a> </td><th width="60%" align="center">第 22 章 Vinum 卷管理程序</th><td width="20%" align="right"> <a accesskey="n" href="vinum-object-naming.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="vinum-examples"></a>22.6. 一些例子</h2></div></div></div><p>Vinum 维护着一个描述本系统中对象的 <span class="emphasis"><em>配置数据库</em></span>。
+      开始时， 用户可以在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=gvinum&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">gvinum</span>(8)</span></a> 工具来从若干配置文件生成配置数据库。
+      Vinum 在其控制的每个磁盘分区 (在
+      Vinum 中称为 <span class="emphasis"><em>device</em></span>) 上都保存配置数据库的副本。
+      这一数据库在每次状态变化时均会更新， 因而重启每个 Vinum 对象时，
+      都能够恢复其状态。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65222648"></a>22.6.1. 配置文件</h3></div></div></div><p>配置文件描述了独立的 Vinum.一个简单卷的定义可能是这样的:</p><pre class="programlisting">
+    drive a device /dev/da3h
+    volume myvol
+      plex org concat
+        sd length 512m drive a</pre><p>这个文件描述了四个Vinum 目标:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>drive</em></span> 行描述了一个磁盘分区（驱动器）
+	    和与下面的硬件相关的它的位置。它给出了一个符号名
+	     <span class="emphasis"><em>a</em></span>.  这个与设备名称分开的符号名允许
+	     磁盘从一个位置移动到另一个位置而不会搞混。
+	    </p></li><li class="listitem"><p> <span class="emphasis"><em>volume</em></span> 行描述了一个卷。
+	    唯一的必须属性是名称，在这个例子中是
+	    <span class="emphasis"><em>myvol</em></span>.</p></li><li class="listitem"><p><span class="emphasis"><em>plex</em></span> 行定义了一个plex。
+	    唯一需要的参数是组织,在这个例子中是
+	    <span class="emphasis"><em>concat</em></span>. 没有名称是必然的:
+	    系统自动通过添加suffix
+	    <span class="emphasis"><em>.p</em></span><span class="emphasis"><em>x</em></span>
+	    来从卷名称产生一个名字,这里的<span class="emphasis"><em>x</em></span>
+	    是在卷中的plex 的编号。而这个plex 将被
+	    叫做<span class="emphasis"><em>myvol.p0</em></span>。</p></li><li class="listitem"><p> <span class="emphasis"><em>sd</em></span> 行描述了一个subdisk。
+	    最小的说明是存储subdisk 的驱动器名称，和subdisk 的长度。
+	    对于plex，没有名称也是必然的：系统自动通过添加
+	    suffix <span class="emphasis"><em>.s</em></span><span class="emphasis"><em>x</em></span>
+	    来分配源自plex 的名称，这里 <span class="emphasis"><em>x</em></span>是plex 中subdisk 的编号。
+	    Vinum 给这个subdisk 命名为<span class="emphasis"><em>myvol.p0.s0</em></span>。</p></li></ul></div><p>处理完这个文件后， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=gvinum&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">gvinum</span>(8)</span></a> 会产生下面的输出：</p><pre class="programlisting" width="97">
+      <code class="prompt">#</code> gvinum -&gt; <strong class="userinput"><code>create config1</code></strong>
+      Configuration summary
+      Drives:         1 (4 configured)
+      Volumes:        1 (4 configured)
+      Plexes:         1 (8 configured)
+      Subdisks:       1 (16 configured)
+
+	D a                     State: up       Device /dev/da3h        Avail: 2061/2573 MB (80%)
+
+	V myvol                 State: up       Plexes:       1 Size:        512 MB
+
+	P myvol.p0            C State: up       Subdisks:     1 Size:        512 MB
+
+	S myvol.p0.s0           State: up       PO:        0  B Size:        512 MB</pre><p>这些输出内容展示了 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=gvinum&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">gvinum</span>(8)</span></a> 的简要列表格式。
+	在 <a class="xref" href="vinum-examples.html#vinum-simple-vol" title="图 22.4. 一个简单的Vinum 卷">图 22.4 “一个简单的Vinum 卷”</a> 中用图形展示了这个配置。</p><p>
+	</p><div class="figure"><a id="vinum-simple-vol"></a><div class="figure-title">图 22.4. 一个简单的Vinum 卷</div><div class="figure-contents"><div class="mediaobject"><img src="vinum/vinum-simple-vol.png" alt="一个简单的Vinum 卷" /></div></div></div><p><br class="figure-break" />
+      </p><p>下面这个图显示了一个由按顺序排列的subdisk 组成的plex。
+      在这个小小的例子中，卷包含一个plex，plex 包含一个subdisk。
+      </p><p>这个卷本身和普通的磁盘分区相比并没有什么特别的优越性，
+	它包含了一个 plex， 因此不是冗余的。 这个 plex
+	中包括了一个子磁盘， 因此这和从磁盘分区分配存储没什么两样。
+	接下来的几节， 将介绍一些更有用的配置方法。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65260408"></a>22.6.2. 提高容错性： 镜像</h3></div></div></div><p>卷的容错性可以通过镜像来提高。 在配置镜像卷时，
+	确保 plex 分布在不同的驱动器上十分重要， 这样一个驱动器坏掉时，
+	就不会同时影响两个 plex。 下面的配置将映射卷：</p><pre class="programlisting">
+	drive b device /dev/da4h
+	volume mirror
+      plex org concat
+        sd length 512m drive a
+	  plex org concat
+	    sd length 512m drive b</pre><p>上面的例子中，
+	并不需要再次指定驱动器 <span class="emphasis"><em>a</em></span>， 因为 Vinum
+	监控所有其配置数据库的对象。 完成定义之后，
+	配置如下所示：</p><pre class="programlisting" width="97">
+	Drives:         2 (4 configured)
+	Volumes:        2 (4 configured)
+	Plexes:         3 (8 configured)
+	Subdisks:       3 (16 configured)
+
+	D a                     State: up       Device /dev/da3h        Avail: 1549/2573 MB (60%)
+	D b                     State: up       Device /dev/da4h        Avail: 2061/2573 MB (80%)
+
+    V myvol                 State: up       Plexes:       1 Size:        512 MB
+    V mirror                State: up       Plexes:       2 Size:        512 MB
+
+    P myvol.p0            C State: up       Subdisks:     1 Size:        512 MB
+    P mirror.p0           C State: up       Subdisks:     1 Size:        512 MB
+    P mirror.p1           C State: initializing     Subdisks:     1 Size:        512 MB
+
+    S myvol.p0.s0           State: up       PO:        0  B Size:        512 MB
+	S mirror.p0.s0          State: up       PO:        0  B Size:        512 MB
+	S mirror.p1.s0          State: empty    PO:        0  B Size:        512 MB</pre><p><a class="xref" href="vinum-examples.html#vinum-mirrored-vol" title="图 22.5. 镜像 Vinum 卷">图 22.5 “镜像 Vinum 卷”</a> 以图形方式展示了其结构。</p><p>
+	</p><div class="figure"><a id="vinum-mirrored-vol"></a><div class="figure-title">图 22.5. 镜像 Vinum 卷</div><div class="figure-contents"><div class="mediaobject"><img src="vinum/vinum-mirrored-vol.png" alt="镜像 Vinum 卷" /></div></div></div><p><br class="figure-break" />
+      </p><p>这个例子中， 每一个 plex 包含了完整的 512 MB
+	地址空间。 在前面的例子中， plex 则只包括一个子盘。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65266168"></a>22.6.3. 优化性能</h3></div></div></div><p>前面例子中的镜像卷要比没有镜像的卷具有更好的容灾能力，
+	但它的性能要差一些： 每一次写入卷时， 需要同时写到两个驱动器上，
+	因而也就需要更大的磁盘访问带宽。 如果希望非常好的性能，
+	则需要另外一种方式： 不做镜像，
+	而将数据分成条带放到尽可能多的、不同的磁盘上。
+	下面给出了一个跨越四个磁盘驱动器的 plex 卷：</p><pre class="programlisting">
+	drive c device /dev/da5h
+	drive d device /dev/da6h
+	volume stripe
+	plex org striped 512k
+	  sd length 128m drive a
+	  sd length 128m drive b
+	  sd length 128m drive c
+	  sd length 128m drive d</pre><p>和之前类似， 并不需要定义 Vinum 已经知道的驱动器。
+	在完成定义之后， 将得到如下配置：</p><pre class="programlisting" width="92">
+	Drives:         4 (4 configured)
+	Volumes:        3 (4 configured)
+	Plexes:         4 (8 configured)
+	Subdisks:       7 (16 configured)
+
+    D a                     State: up       Device /dev/da3h        Avail: 1421/2573 MB (55%)
+    D b                     State: up       Device /dev/da4h        Avail: 1933/2573 MB (75%)
+    D c                     State: up       Device /dev/da5h        Avail: 2445/2573 MB (95%)
+    D d                     State: up       Device /dev/da6h        Avail: 2445/2573 MB (95%)
+
+    V myvol                 State: up       Plexes:       1 Size:        512 MB
+    V mirror                State: up       Plexes:       2 Size:        512 MB
+    V striped               State: up       Plexes:       1 Size:        512 MB
+
+    P myvol.p0            C State: up       Subdisks:     1 Size:        512 MB
+    P mirror.p0           C State: up       Subdisks:     1 Size:        512 MB
+    P mirror.p1           C State: initializing     Subdisks:     1 Size:        512 MB
+    P striped.p1            State: up       Subdisks:     1 Size:        512 MB
+
+    S myvol.p0.s0           State: up       PO:        0  B Size:        512 MB
+    S mirror.p0.s0          State: up       PO:        0  B Size:        512 MB
+    S mirror.p1.s0          State: empty    PO:        0  B Size:        512 MB
+    S striped.p0.s0         State: up       PO:        0  B Size:        128 MB
+    S striped.p0.s1         State: up       PO:      512 kB Size:        128 MB
+    S striped.p0.s2         State: up       PO:     1024 kB Size:        128 MB
+    S striped.p0.s3         State: up       PO:     1536 kB Size:        128 MB</pre><p>
+	</p><div class="figure"><a id="vinum-striped-vol"></a><div class="figure-title">图 22.6. 条带化的 Vinum 卷</div><div class="figure-contents"><div class="mediaobject"><img src="vinum/vinum-striped-vol.png" alt="条带化的 Vinum 卷" /></div></div></div><p><br class="figure-break" />
+      </p><p>这个卷在
+	<a class="xref" href="vinum-examples.html#vinum-striped-vol" title="图 22.6. 条带化的 Vinum 卷">图 22.6 “条带化的 Vinum 卷”</a> 中给出。 条带的阴影部分，
+	表示在 plex 地址空间中的位置： 颜色最浅的在最前面，
+	而最深的在最后。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65271416"></a>22.6.4. 高性能容在</h3></div></div></div><p><a id="vinum-resilience"></a>如果硬件足够多，
+	也能够构建比标准
+	<span class="trademark">UNIX</span>® 分区同时提高了容灾性和性能的卷。
+	典型的配置文件类似：</p><pre class="programlisting">
+	volume raid10
+      plex org striped 512k
+        sd length 102480k drive a
+        sd length 102480k drive b
+        sd length 102480k drive c
+        sd length 102480k drive d
+        sd length 102480k drive e
+      plex org striped 512k
+        sd length 102480k drive c
+        sd length 102480k drive d
+        sd length 102480k drive e
+        sd length 102480k drive a
+        sd length 102480k drive b</pre><p>第二个 plex 中的子盘和第一个 plex 中的错开了两个驱动器：
+	这能够帮助确保即使同时访问两个驱动器，
+	写操作也不会同时发生在同一个盘上。</p><p><a class="xref" href="vinum-examples.html#vinum-raid10-vol" title="图 22.7. 镜像并条带化的 Vinum 卷">图 22.7 “镜像并条带化的 Vinum 卷”</a> 给出了该卷的结构。</p><p>
+	</p><div class="figure"><a id="vinum-raid10-vol"></a><div class="figure-title">图 22.7. 镜像并条带化的 Vinum 卷</div><div class="figure-contents"><div class="mediaobject"><img src="vinum/vinum-raid10-vol.png" alt="镜像并条带化的 Vinum 卷" /></div></div></div><p><br class="figure-break" />
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vinum-objects.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="vinum-vinum.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="vinum-object-naming.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">22.5. Vinum 目标 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 22.7. 对象命名</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>14.7. 限制用户使用系统资源</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="users.html" title="第 14 章 用户和基本的帐户管理" /><link rel="prev" href="users-modifying.html" title="14.6. 修改帐户" /><link rel="next" href="users-groups.html" title="14.8. 组" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">14.7. 限制用户使用系统资源</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="users-modifying.html">上一页</a> </td><th width="60%" align="center">第 14 章 用户和基本的帐户管理</th><td width="20%" align="right"> <a accesskey="n" href="users-groups.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="users-limiting"></a>14.7. 限制用户使用系统资源</h2></div></div></div><a id="idp59461240" class="indexterm"></a><a id="idp59461752" class="indexterm"></a><p>如果您有一些用户， 并想要对他们所使用的系统资源加以限制，
+      FreeBSD 提供了一些系统管理员限制用户访问系统资源的方法。
+      这些限制通常被分为两种:  磁盘配额， 以及其它资源限制。</p><a id="idp59463288" class="indexterm"></a><a id="idp59463800" class="indexterm"></a><a id="idp59464952" class="indexterm"></a><p>磁盘配额限制用户对磁盘的使用，
+      而且它还提供一种快速检查用户使用磁盘数量而不需要时刻计算的方法。
+      配额将在 <a class="xref" href="quotas.html" title="19.15. 文件系统配额">第 19.15 节 “文件系统配额”</a>讨论.</p><p>其它资源限制包括CPU、 内存以及用户可能会使用的其它资源。
+        这些是通过对登录进行分类完成的， 下面将做讨论。</p><a id="idp59466616" class="indexterm"></a><p>登录的类由 <code class="filename">/etc/login.conf</code> 文件定义。
+      比较精确的描述超出了本章的范围， 但 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=login.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">login.conf</span>(5)</span></a>
+      联机手册会有比较详细的描述。 可以说每个用户都分配到一个登录类
+      (默认是 <code class="literal">defalut</code>)，
+      每个登录类都有一套和它相对应的功能。 登录功能是
+      <code class="literal">名字=值</code>
+      这样的一对值， 其中<em class="replaceable"><code>名字</code></em>
+      是一个众所周知的标识符， <em class="replaceable"><code>值</code></em>
+      是一个根据名字经过处理得到的任意字符串。 设置登录类和功能相当简单，
+      在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=login.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">login.conf</span>(5)</span></a> 联机手册会有比较详细的描述。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">系统并不直接读取
+	<code class="filename">/etc/login.conf</code> 中的配置，
+	而是采用数据库文件 <code class="filename">/etc/login.conf.db</code>
+	以提供更快的查找能力。 要从
+	<code class="filename">/etc/login.conf</code> 文件生成
+	<code class="filename">/etc/login.conf.db</code>， 应使用下面的命令：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cap_mkdb /etc/login.conf</code></strong></pre></div><p>资源限制与普通登录限制是有区别的。
+      首先， 对于每种限制， 有软限制 (比较常见) 和硬限制之分。
+      一个软限制可能被用户调整过， 但不会超过硬限制。
+      越往后可能越低， 但不会升高。 其次，
+      绝大多数资源限制会分配特定用户的每个进程， 而不是该用户的全部进程。
+      注意， 这些区别是资源限制的特殊操作所规定的，
+      不是登录功能框架的完成 (也就是说, 他们<span class="emphasis"><em>实际上</em></span>
+      不是一个登录功能的特例)。</p><p>不再罗嗦了， 下面是绝大多数资源限制的例子
+      (您可以在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=login.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">login.conf</span>(5)</span></a> 找到其它与登录功能相关的内容)。</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">coredumpsize</code></span></dt><dd><a id="idp59494136" class="indexterm"></a><a id="idp59494648" class="indexterm"></a><p>很明显， 由程序产生的核心文件大小的限制在磁盘使用上是属于其它限制的
+	  (例如， <code class="literal">文件大小</code>， 磁盘配额)。
+	  不过， 由于用户自己无法产生核心文件， 而且通常并不删除它们，
+	  设置这个可以尽量避免由于一个大型应用程序的崩溃所造成的大量磁盘空间的浪费。
+	  (例如, <span class="application">emacs</span>) 崩溃。</p></dd><dt><span class="term"><code class="literal">cputime</code></span></dt><dd><a id="idp59498360" class="indexterm"></a><a id="idp59498872" class="indexterm"></a><p>这是一个用户进程所能消耗的最长 CPU 时间。 违反限制的进程，
+	    将被内核杀掉。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">这是一个有关CPU消耗的<span class="emphasis"><em>时钟</em></span>
+		限制, 不是<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=top&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">top</span>(1)</span></a> 和 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ps&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ps</span>(1)</span></a>
+		命令时屏幕上显示的CPU消耗的百分比。 在写此说明时，
+		后者的限制是不太可能和没有价值的： 编译器 ──
+		编译一个可能是合法的工作 ── 可以在某一时刻轻易的用掉
+		100% 的 CPU。</p></div></dd><dt><span class="term"><code class="literal">filesize</code></span></dt><dd><a id="idp59504376" class="indexterm"></a><a id="idp59504888" class="indexterm"></a><p>这是用户可以处理一个文件的最大值。
+	    不象 <a class="link" href="quotas.html" title="19.15. 文件系统配额">磁盘配额</a>，
+	    这个限制是对单个文件强制执行的，
+	    不是用户自己的所有文件。</p></dd><dt><span class="term"><code class="literal">maxproc</code></span></dt><dd><a id="idp59508216" class="indexterm"></a><a id="idp59508728" class="indexterm"></a><p>这是一个用户可以运行的最大进程数。
+	    这包括前台和后台进程。 很明显， 这不可能比系统指定
+	    <code class="varname">kern.maxproc</code> <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=sysctl&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">sysctl</span>(8)</span></a>
+	    的限制要大。 同时也要注意， 设置的过小会妨碍用户的处理能力：
+	    可能需要多次登录或执行多个管道。 一些任务，
+	    例如编译一些大的程序， 也可能会产生很多进程
+	    (例如， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a>， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cc&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cc</span>(1)</span></a> 以及其它一些预处理程序)。</p></dd><dt><span class="term"><code class="literal">memorylocked</code></span></dt><dd><a id="idp59514232" class="indexterm"></a><a id="idp59514744" class="indexterm"></a><p>这是一个进程允许锁到主存中的最大内存容量 (参见
+	    <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=mlock&amp;sektion=2&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">mlock</span>(2)</span></a>)。 大型程序，
+	    例如像 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=amd&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">amd</span>(8)</span></a> 在遇到问题时，
+	    它们得到的巨大交换量无法传递给系统进行处理。</p></dd><dt><span class="term"><code class="literal">memoryuse</code></span></dt><dd><a id="idp59535480" class="indexterm"></a><a id="idp59535992" class="indexterm"></a><p>这是在给定时间内一个进程可能消耗的最大内存数量。
+	    它包括核心内存和交换内存。
+	    在限制内存消耗方面， 这不是一个完全的限制，但它是一个好的开始。</p></dd><dt><span class="term"><code class="literal">openfiles</code></span></dt><dd><a id="idp59538808" class="indexterm"></a><a id="idp59539320" class="indexterm"></a><p>这是一个进程可以打开的最大文件数。 在FreeBSD中，
+	    文件可以被表现为套接字和IPC通道； 注意不要把这个数设置的太小。
+	    系统级的限制是由 <code class="varname">kern.maxfiles</code>
+	    定义的， 详情参见 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=sysctl&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">sysctl</span>(8)</span></a>。</p></dd><dt><span class="term"><code class="literal">sbsize</code></span></dt><dd><a id="idp59543288" class="indexterm"></a><a id="idp59543800" class="indexterm"></a><p>这是网络内存数量的限制，
+	    这主要是针对通过创建许多套接字的老式 DoS 攻击的，
+	    但也可以用来限制网络通信。</p></dd><dt><span class="term"><code class="literal">stacksize</code></span></dt><dd><a id="idp59546616" class="indexterm"></a><a id="idp59547128" class="indexterm"></a><p>这是一个进程堆栈可能达到的最大值。
+	    它不能单独的限制一个程序可能使用的内存数量；
+	    所以， 需要与其它的限制手段配合使用。</p></dd></dl></div><p>在设置资源限制时， 有一些其他的事需要注意。
+      下面是一些通常的技巧、 建议和注意事项。</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>系统启动的进程<code class="filename">/etc/rc</code>会被指派给
+	  <code class="literal">守护程序</code> 的登录类.</p></li><li class="listitem"><p>虽然 <code class="filename">/etc/login.conf</code>
+          文件是一个对绝大多数限制做合理配置的资源文件，
+          但只有您也就是系统管理员，才知道什么最适合您的系统。
+          设置的太高可能会因为过于开放而导致系统被滥用，
+          而设置过低， 则可能降低效率。</p></li><li class="listitem"><p>使用 X Window 的用户可能要比其他用户使用更多的资源。
+          因为X11本身就使用很多资源， 而且它鼓励用户同时运行更多的程序。</p></li><li class="listitem"><p>务必注意， 许多限制措施是针对单个进程来实施的，
+          它们并不限制某一用户所能用到的总量。
+          例如， 将 <code class="varname">openfiles</code> 设置为 50
+          表示以该用户身份运行的进程最多只能打开 50 个文件。
+          因而， 用户实际可以打开的文件总数就应该是
+	  <code class="varname">maxproc</code> 和
+	  <code class="varname">openfiles</code> 值的乘积。
+	  对内存用量的限额与此类似。</p></li></ul></div><p>有关资源限制,登录类的更深入信息可以查看相关联机手册:
+      <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cap_mkdb&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cap_mkdb</span>(1)</span></a>, <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=getrlimit&amp;sektion=2&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">getrlimit</span>(2)</span></a>, <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=login.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">login.conf</span>(5)</span></a>.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="users-modifying.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="users.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="users-groups.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">14.6. 修改帐户 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 14.8. 组</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>25.4. 更新系统附带的文档</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="updating-upgrading.html" title="第 25 章 更新与升级 FreeBSD" /><link rel="prev" href="updating-upgrading-portsnap.html" title="25.3. Portsnap： 一个 Ports Collection 更新工具" /><link rel="next" href="current-stable.html" title="25.5. 追踪开发分支" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">25.4. 更新系统附带的文档</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="updating-upgrading-portsnap.html">上一页</a> </td><th width="60%" align="center">第 25 章 更新与升级 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="current-stable.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="updating-upgrading-documentation"></a>25.4. 更新系统附带的文档</h2></div></div></div><a id="idp66332920" class="indexterm"></a><a id="idp66333432" class="indexterm"></a><p>除了基本系统和 Ports 套件之外， 文档也是 FreeBSD 操作系统的一个组成部分。
+      尽管您总是可以通过 <a class="link" href="http://www.freebsd.org/doc/" target="_top">FreeBSD 网站</a> 来访问最新的 FreeBSD
+      文档， 一些用户的网络连接可能很慢， 甚至完全没有网络连接。
+      幸运的是， 有很多方法可以用来更新随发行版本附带的 FreeBSD 文档的本地副本。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="csup-doc"></a>25.4.1. 使用 CVSup 来更新文档</h3></div></div></div><p>FreeBSD 文档的源代码和安装版本都可以通过 <span class="application">CVSup</span>
+	来以与基本系统 (参考 <a class="xref" href="makeworld.html" title="25.7. 重新编译 “world”">第 25.7 节 “重新编译 <span class="quote">“<span class="quote">world</span>”</span>”</a>) 类似的方法来升级。
+	这一节中将会介绍：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>如何安装联编文档所需的工具集， 用于从源代码来联编 FreeBSD
+	    文档所需的那些工具。</p></li><li class="listitem"><p>如何使用 <span class="application">CVSup</span>
+	    将文档下载到 <code class="filename">/usr/doc</code>。</p></li><li class="listitem"><p>如何从源代码联编 FreeBSD 文档，
+	    并将其安装到 <code class="filename">/usr/share/doc</code>。</p></li><li class="listitem"><p>联编文档的过程中支持的一些编译选项，
+	    例如只联编某些语言的版本， 或只联编特定的输出格式。</p></li></ul></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="installing-documentation-toolchain"></a>25.4.2. 安装 CVSup 和文档工具集</h3></div></div></div><p>从源代码联编 FreeBSD 文档需要大量的工具。
+	这些工具并不是 FreeBSD 基本系统的一部分，
+	因为这些工具需要占用大量的磁盘空间，
+	而且并不是对所有 FreeBSD 用户都有用；
+	只有活跃地撰写 FreeBSD 新文档，
+	或经常从源代码更新文档的用户才需要这些工具。</p><p>全部所需的工具， 均可通过 Ports
+	套件来安装。 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/textproc/docproj/pkg-descr">textproc/docproj</a> port 是由
+	FreeBSD 文档计划开发的方便安装和更新这些工具的主
+	port。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果不需要 <span class="trademark">PostScript</span>® 或 PDF 文档的话，
+	  也可以考虑安装 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/textproc/docproj-nojadetex/pkg-descr">textproc/docproj-nojadetex</a> port。
+	  这套文档工具集包含除了 <span class="application">teTeX</span>
+	  typesetting 引擎之外的其他全部工具。 <span class="application">teTeX</span>
+	  是一个很大的工具集， 因此如果不需要 PDF 输出的话，
+	  排除它会节省很多时间和磁盘空间。</p></div><p>如欲了解关于安装和使用
+	<span class="application">CVSup</span> 的进一步信息， 请参阅 <a class="link" href="cvsup.html" title="A.6. 使用 CVSup">使用 CVSup</a>。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-documentation-sources"></a>25.4.3. 更新文档源代码</h3></div></div></div><p><span class="application">CVSup</span> 工具能够下载文档源代码的原始副本，
+	您可使用 <code class="filename">/usr/share/examples/cvsup/doc-supfile</code>
+	文件作为配置模板来修改。 在 <code class="filename">doc-supfile</code>
+	中的默认主机名是一个无效的占位主机名，
+	但 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cvsup&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cvsup</span>(1)</span></a> 能够通过命令行来指定主机名，
+	因此文档源代码可以使用下面的命令从
+	<span class="application">CVSup</span> 服务器获得：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cvsup -h cvsup.FreeBSD.org -g -L 2 /usr/share/examples/cvsup/doc-supfile</code></strong></pre><p>您应将 <em class="replaceable"><code>cvsup.FreeBSD.org</code></em>
+	改为最近的 <span class="application">CVSup</span> 服务器。 参见 <a class="xref" href="cvsup.html#cvsup-mirrors" title="A.6.7. CVSup 站点">第 A.6.7 节 “CVSup 站点”</a> 关于镜像站点的完整列表。</p><p>初始的文档源代码下载需要一些时间，
+	您需要耐心等待它完成。</p><p>后续的更新可以用同样的命令来进行。
+	由于 <span class="application">CVSup</span> 工具只下载上次运行之后所发生过的更新，
+	因此在首次运行之后再运行 <span class="application">CVSup</span> 应该是很快的。</p><p>在签出源代码之后， 还可以使用另一种由 <code class="filename">/usr/doc</code> 目录中的
+	<code class="filename">Makefile</code> 支持的方法来更新它。 通过在
+	<code class="filename">/etc/make.conf</code> 中配置
+	<code class="varname">SUP_UPDATE</code>、 <code class="varname">SUPHOST</code> 和
+	<code class="varname">DOCSUPFILE</code>， 可以通过运行：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/doc</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make update</code></strong></pre><p>来完成更新。 典型的 <code class="filename">/etc/make.conf</code>
+	中的 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 选项是：</p><pre class="programlisting">SUP_UPDATE= yes
+SUPHOST?= cvsup.freebsd.org
+DOCSUPFILE?= /usr/share/examples/cvsup/doc-supfile</pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">将 <code class="varname">SUPHOST</code>
+	  和 <code class="varname">DOCSUPFILE</code> 的值使用 <code class="literal">?=</code>
+	  来指定的好处是使 make 命令行能够覆盖这些选项。
+	  在向 <code class="filename">make.conf</code> 中增加选项时推荐这样做，
+	  以避免在测试时反复修改这个文件。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-documentation-options"></a>25.4.4. 文档源代码中可调的选项</h3></div></div></div><p>FreeBSD 文档的更新和联编系统支持一些方便只更新一部分文档，
+	或只联编特定格式及译文的选项。
+	这些选项可以在 <code class="filename">/etc/make.conf</code> 文件中配置，
+	也可以通过 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a> 工具来指定。</p><p>这些选项包括：</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="varname">DOC_LANG</code></span></dt><dd><p>准备联编和安装的语言列表。
+	      例如， 指定为 <code class="literal">en_US.ISO8859-1</code> 表示只联编英文版的文档。</p></dd><dt><span class="term"><code class="varname">FORMATS</code></span></dt><dd><p>准备输出的格式列表。 目前，
+	      系统支持 <code class="literal">html</code>、
+	      <code class="literal">html-split</code>、 <code class="literal">txt</code>、
+	      <code class="literal">ps</code>、 <code class="literal">pdf</code>、
+	      和 <code class="literal">rtf</code>。</p></dd><dt><span class="term"><code class="varname">SUPHOST</code></span></dt><dd><p>用于用来更新的 <span class="application">CVSup</span>
+	      服务器的主机名。</p></dd><dt><span class="term"><code class="varname">DOCDIR</code></span></dt><dd><p>用于安装文档的目录。 默认为
+	      <code class="filename">/usr/share/doc</code>。</p></dd></dl></div><p>如欲了解 FreeBSD 中其他可供配置的全局 make 变量， 请参阅 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make.conf</span>(5)</span></a>。</p><p>关于 FreeBSD 文档联编系统的其他详情， 请参阅 <a class="link" href="https://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer" target="_top">FreeBSD
+	  文档计划入门之新手必读部分</a>。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="updating-installed-documentation"></a>25.4.5. 从源代码安装 FreeBSD 文档</h3></div></div></div><p>在 <code class="filename">/usr/doc</code>
+	中下载了最新的文档源代码快照之后，
+	就可以开始动手联编文档了。</p><p>要更新全部 <code class="varname">DOC_LANG</code> 中定义的语言的文档，
+	需要执行下面的命令：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/doc</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>如果在 <code class="filename">make.conf</code> 中配置了正确的
+	<code class="varname">DOCSUPFILE</code>、 <code class="varname">SUPHOST</code>
+	和 <code class="varname">SUP_UPDATE</code> 选项，
+	则可以将更新源代码和安装一步完成：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/doc</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make update install clean</code></strong></pre><p>如果只需要更新某个特定语言的文档， 可以在
+	<code class="filename">/usr/doc</code> 中与之对应的目录中运行
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a>：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/doc/en_US.ISO8859-1</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make update install clean</code></strong></pre><p>此外， 还可以透过 make 变量 <code class="varname">FORMATS</code> 来控制输出格式，
+	例如：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/doc</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make FORMATS='html html-split' install clean</code></strong></pre></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="doc-ports"></a>25.4.6. 使用文档 Ports</h3></div><div><span class="authorgroup">原作： <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Marc</span> <span class="surname">Fonvieille</span></span>. </span></div></div></div><a id="idp66436856" class="indexterm"></a><a id="idp66437368" class="indexterm"></a><p>在之前的章节中， 我们已展示了从源代码更新 FreeBSD 文档的方法。
+        基于源代码的更新的方法可能并不是对于所有的 FreeBSD 系统都可行有效。
+        编译文档源代码需要一大堆的工具， <span class="emphasis"><em>文档工具链</em></span>，
+        对于 <span class="application">CVS</span> 的一定了解和从仓库中检出源代码，
+        还有一些编译已检出代码的手工步骤。 这一章节我们将介绍一种使用 Ports
+        来更新已安装的 FreeBSD 文档：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>下载并安装预编译好的文档快照， 而不用在本地编译任何部份
+            (这样便不再需要安装整个文档工具链了)。</p></li><li class="listitem"><p>下载文档的源代码并使用 ports 框架编译
+            (使得检出和编译的步骤更容易些)。</p></li></ul></div><p>这两种更新 FreeBSD 文档的方法都由一组 文档工程组 <code class="email">&lt;<a xmlns="" class="email" href="mailto:doceng@FreeBSD.org">doceng@FreeBSD.org</a>&gt;</code> 每月更新的
+        <span class="emphasis"><em>文档 ports</em></span> 提供支持。 这些都列在了 FreeBSD
+        Ports <a class="link" href="http://www.freshports.org/docs/" target="_top">docs</a>
+        虚拟分类下面。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="doc-ports-install-make"></a>25.4.6.1. 编译和安装文档 Ports</h4></div></div></div><p>文档 ports 使用 ports 的构建框架使得文档的编译变得更加容易。
+          自动化了检出文档源代码， 配以适合的环境设置和命令行参数运行
+          <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=make&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">make</span>(1)</span></a>， 它们使得安装或卸载文档变得就像安装 FreeBSD 其他
+          port 或二进制包那样容易。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">另一个特性便是当在本地编译文档 ports 时，
+            <span class="emphasis"><em>文档工具链</em></span> ports 会被列入依赖关系，
+            并自动安装。</p></div><p>文档 ports 按以下的方式组织：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>一个 <span class="quote">“<span class="quote">主 port</span>”</span>， 在
+              <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/misc/freebsd-doc-en/pkg-descr">misc/freebsd-doc-en</a>
+              下可以找到这个文档 port。 它是所有文档 ports 的基础。
+              在默认的情况下， 它只安装英文版文档。</p></li><li class="listitem"><p>一个 <span class="quote">“<span class="quote">合集 port</span>”</span>，
+              <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/misc/freebsd-doc-all/pkg-descr">misc/freebsd-doc-all</a>，
+              它将构建并安装所有语言版本的所有文档。</p></li><li class="listitem"><p>最后是各种翻译的 <span class="quote">“<span class="quote">从属 port</span>”</span>， 比如：
+              <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/misc/freebsd-doc-hu/pkg-descr">misc/freebsd-doc-hu</a>
+              是匈牙利文版的文档。 所有这些都基于主 port
+              并会安装上对应语言的翻译文档。</p></li></ul></div><p>以 <code class="systemitem">root</code>
+          用户身份运行如下的命令安装文档：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/misc/freebsd-doc-en</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>这将会安装分章节的英文版本 <acronym class="acronym">HTML</acronym> 格式文档
+          (与<code class="uri"><a class="uri" href="http://www.FreeBSD.org" target="_top">http://www.FreeBSD.org</a></code> 上的相同) 到
+          <code class="filename">/usr/local/share/doc/freebsd</code>
+          目录。</p><div class="sect4"><div xmlns="" class="titlepage"><div><div><h5 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="doc-ports-options"></a>25.4.6.1.1. 常见的调节选项</h5></div></div></div><p>文档 ports 有许多用来修改默认行为的选项。
+            以下是一段简要列表：</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="varname">WITH_HTML</code></span></dt><dd><p>允许构建 HTML 格式： 每份文档为一个单一的 HTML 文件。
+                  此种文档的文件名视情况而定通常是
+                  <code class="filename">article.html</code>，
+                  或 <code class="filename">book.html</code>，
+                  另外附加一些图片。</p></dd><dt><span class="term"><code class="varname">WITH_PDF</code></span></dt><dd><p>允许构建 <span class="trademark">Adobe</span>® Portable Document Format，
+                  可使用 <span class="trademark">Adobe</span>® <span class="trademark">Acrobat Reader</span>®，
+                  <span class="application">Ghostscript</span> 或者其他的
+                  PDF 阅读器查阅。 此种文档的文件名视情况而定通常是
+                  <code class="filename">article.pdf</code> 或
+                  <code class="filename">book.pdf</code>。</p></dd><dt><span class="term"><code class="varname">DOCBASE</code></span></dt><dd><p>文档将被安装到的目录。默认值 <code class="filename">/usr/local/share/doc/freebsd</code>。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">请注意默认的目录与 <span class="application">CVSup</span>
+                    方法种所使用的目录不同。 这是因为我们正在安装的是一个 port，
+                    而 ports 通常会被安装到
+                    <code class="filename">/usr/local</code> 目录。
+                    这可以指定 <code class="varname">PREFIX</code> 变量覆盖默认值。</p></div></dd></dl></div><p>这是一份简短的关于如何使用以上提到变量来安装
+            PDF 格式的匈牙利文档：</p><pre class="screen"><code class="prompt">#</code> cd /usr/ports/misc/freebsd-doc-hu
+<code class="prompt">#</code> make -DWITH_PDF DOCBASE=share/doc/freebsd/hu install clean</pre></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="doc-ports-install-package"></a>25.4.6.2. 使用文档 Packages</h4></div></div></div><p>正如上文所述， 从 ports
+          构建文档需要在本地安装一份文档工具链和一些编译所需的磁盘空间。
+          当不够资源安装文档工具链， 或者从源代码编译需要太多的磁盘空间时，
+          我们仍然可以安装预编译好的文档快照的 ports。</p><p>文档工程组 <code class="email">&lt;<a xmlns="" class="email" href="mailto:doceng@FreeBSD.org">doceng@FreeBSD.org</a>&gt;</code> 每个月都会制作 FreeBSD 文档快照的包。
+          这些二进制包可以通过包工具来操作， 比如 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pkg_add&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pkg_add</span>(1)</span></a>，
+          <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pkg_delete&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pkg_delete</span>(1)</span></a>， 等等。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">当使用二进制包时， 将安装所指定语言相关的 FreeBSD 文档的
+            <span class="emphasis"><em>所有</em></span> 可用格式。</p></div><p>举例来说， 以下的命令将安装最新预编译的匈牙利语文档：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg_add -r hu-freebsd-doc</code></strong></pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">二进制包使用了以下与对应 ports 名称不同的命名格式:
+            <code class="literal">lang-freebsd-doc</code>。
+            这里的 <em class="replaceable"><code>lang</code></em> 是语言代码的简短形式，
+            比如 <code class="literal">hu</code> 表示匈牙利语， 或者
+            <code class="literal">zh_cn</code> 表示简体中文。</p></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="doc-ports-update"></a>25.4.6.3. 更新文档 Ports</h4></div></div></div><p>任何用于更新 ports 的工具都可以被用来更新已安装的文档 port。
+          举例来说， 下面的命令通过 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/ports-mgmt/portupgrade/pkg-descr">ports-mgmt/portupgrade</a>
+          工具来更新已安装的匈牙利语文档二进制包。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>portupgrade -PP hu-freebsd-doc</code></strong></pre></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="updating-upgrading-portsnap.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="updating-upgrading.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="current-stable.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">25.3. Portsnap： 一个 Ports Collection 更新工具 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 25.5. 追踪开发分支</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>25.8. 删除过时的文件、 目录和函数库</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="updating-upgrading.html" title="第 25 章 更新与升级 FreeBSD" /><link rel="prev" href="makeworld.html" title="25.7. 重新编译 “world”" /><link rel="next" href="small-lan.html" title="25.9. 跟踪多台机器" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">25.8. 删除过时的文件、 目录和函数库</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="makeworld.html">上一页</a> </td><th width="60%" align="center">第 25 章 更新与升级 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="small-lan.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="make-delete-old"></a>25.8. 删除过时的文件、 目录和函数库</h2></div><div><span class="authorgroup">Based on notes provided by <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Anton</span> <span class="surname">Shterenlikht</span></span>. </span></div></div></div><a id="idp67183480" class="indexterm"></a><p>在 FreeBSD 的开发过程中， 随时可能会出现一些文件或其内容过时的情况。
+      这种情况有可能是由于其功能在其它地方实现了，
+      函数库的版本号增加， 或完全从基本系统中删去， 等等。
+      一般的联编和更新过程并不会删去这些旧的文件、 函数库或目录，
+      在更新系统之后， 应及时予以清理。 清理的好处是这些文件不会再继续占用存储
+      (以及备份) 空间， 另外， 如果旧的函数库或文件中存在安全或可靠性问题，
+      您也应更新到新的函数库， 以避免安全隐患或崩溃情形的发生。
+      过时的文件、 目录和函数库会列在
+      <code class="filename">/usr/src/ObsoleteFiles.inc</code> 中。
+      接下来将介绍在系统更新过程中如何删去这些过时的文件。</p><p>我们假定您已经按照 <a class="xref" href="makeworld.html#canonical-build" title="25.7.1. 更新系统的规范方法">第 25.7.1 节 “更新系统的规范方法”</a> 介绍的步骤完成了更新操作。 在 <code class="command">make
+      installworld</code> 和
+      <code class="command">mergemaster</code> 命令完成之后，
+      您应使用下面的命令检查系统中是否存在过时的文件或库：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/src</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make check-old</code></strong></pre><p>如果有过时的文件， 则可以用下面的命令来删除：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make delete-old</code></strong></pre><div xmlns="" class="tip"><h3 class="admontitle">提示: </h3><p xmlns="http://www.w3.org/1999/xhtml">参阅 <code class="filename">/usr/src/Makefile</code>
+        可以了解其他 target 的功用。</p></div><p>在删除文件时， 系统会针对每个文件都给出提示。
+      您可以跳过这些提示， 并让系统自动完成删除操作，
+      方法是使用 make 变量 <code class="varname">BATCH_DELETE_OLD_FILES</code>，
+      具体做法如下：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make -DBATCH_DELETE_OLD_FILES delete-old</code></strong></pre><p>您也可以用
+      <code class="command">yes</code> 命令和管道来达到类似的目的：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>yes|make delete-old</code></strong></pre><div xmlns="" class="warning"><h3 class="admontitle">警告: </h3><p xmlns="http://www.w3.org/1999/xhtml">删去过时的文件， 有可能会破坏现有的依赖这些文件的应用程序。
+          对于旧的函数库来说， 这种问题出现的可能性更大。
+          绝大多数情况下， 您应重新联编使用旧库的所有的程序、
+          port 或函数库之后再执行 <code class="command">make
+      delete-old-libs</code>。</p></div><p>在 Ports Collection 中提供了一些检测动态连接库依赖关系的工具，
+      例如 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/sysutils/libchk/pkg-descr">sysutils/libchk</a> 和 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/sysutils/bsdadminscripts/pkg-descr">sysutils/bsdadminscripts</a>。</p><p>过时的动态连接库可能会与新库冲突，
+      导致类似这样的警告消息：</p><pre class="screen">/usr/bin/ld: warning: libz.so.4, needed by /usr/local/lib/libtiff.so, may conflict with libz.so.5
+/usr/bin/ld: warning: librpcsvc.so.4, needed by /usr/local/lib/libXext.so, may conflict with librpcsvc.so.5</pre><p>要解决这样的问题， 需要确认安装这个库的 port：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>pkg_info -W  /usr/local/lib/libtiff.so</code></strong>
+/usr/local/lib/libtiff.so was installed by package tiff-3.9.4
+<code class="prompt">#</code> <strong class="userinput"><code>pkg_info -W /usr/local/lib/libXext.so</code></strong>
+/usr/local/lib/libXext.so was installed by package libXext-1.1.1,1</pre><p>接着卸载、 重新联编并安装 port。 您可以使用 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/ports-mgmt/portmaster/pkg-descr">ports-mgmt/portmaster</a> 或 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/ports-mgmt/portupgrade/pkg-descr">ports-mgmt/portupgrade</a> 工具来自动完成这些操作。
+      在确认所有的 port 都重新联编， 并且不再使用旧库以后，
+      您就可以用下面的命令来删除它们了：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>make delete-old-libs</code></strong></pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="makeworld.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="updating-upgrading.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="small-lan.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">25.7. 重新编译 <span class="quote">“<span class="quote">world</span>”</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 25.9. 跟踪多台机器</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

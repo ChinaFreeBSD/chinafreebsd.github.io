@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>22.3. 访问瓶颈</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="vinum-vinum.html" title="第 22 章 Vinum 卷管理程序" /><link rel="prev" href="vinum-intro.html" title="22.2. 磁盘容量太小" /><link rel="next" href="vinum-data-integrity.html" title="22.4. 数据的完整性" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">22.3. 访问瓶颈</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vinum-intro.html">上一页</a> </td><th width="60%" align="center">第 22 章 Vinum 卷管理程序</th><td width="20%" align="right"> <a accesskey="n" href="vinum-data-integrity.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="vinum-access-bottlenecks"></a>22.3. 访问瓶颈</h2></div></div></div><p>现代系统经常需要用一个高度并发的方式来访问数据。
+      例如，巨大的FTP 或HTTP 服务器可以支持数以千计的并发会话，
+      可以有多个连到外部世界的100 Mbit/s ,
+      这远远地超过了绝大多数磁盘的数据传输速率。</p><p>当前的磁盘驱动器最高可以以70 MB/s的速度传输数据,
+     但这个值在一个有许多不受约束的进程访问一个驱动器的环境中变得并不重要，
+     它们可能只完成了这些值的一小部分。这样一种情况下，从磁盘子
+     系统的角度来看问题就更加有趣：重要的参数是在子系统上的负
+     荷，换句话说是传输占用了驱动器多少时间。</p><p>在任何磁盘传输中, 驱动器必须先寻道, 等待磁头访问第一个扇区,
+      然后执行传输.  这些动作看起来可能很细小:
+       我们不会感有任何中断。
+      </p><p><a id="vinum-latency"></a> 假设传输10 kB数据，
+      : 现在的高性能磁盘平均寻道时间是3.5ms。
+        最快的驱动器可以旋转在15,000 rpm，, 所以平均寻址时间为2ms.
+       在70 MB/s的速度传输时, 数据的传输时间大约150 μs,
+      几乎无法和寻址时间相比.  在这样一种情况下, 高效的传输也会降低到
+      1 MB/s 显然传输的快慢依赖与所传输数据的大小。
+      </p><p>对于这个瓶颈的一般和明显的解决方法是采用
+      <span class="quote">“<span class="quote">多个磁盘</span>”</span>:而不是只使用一个大磁盘,
+      它使用几个比较小的磁盘联合起来形成一个大的磁盘.
+      每个磁盘都可以独立地进行传输数据，所以通过使用多个磁盘
+      大大提高了数据吞吐量。
+    </p><p>当然，所要求的吞吐量的提高要比磁盘的数量小得多。
+      尽管每个驱动器并行传输数据，但没有办法确保请求能够平均
+      分配到每个驱动器上。不可避免一个驱动器的负载可能比另一个要高得多。
+     </p><a id="idp65120120" class="indexterm"></a><a id="idp65120888" class="indexterm"></a><p>磁盘的负载平衡很大程度依赖于驱动器上数据的共享方式.
+      在下面的讨论中, 将磁盘存储想象成一个巨大的数据扇区，像一本书的页
+      那样用编号来设定地址. 最明显的方法是把虚拟磁盘分成许多连续的扇区组，
+      每个扇区大小就是独立的磁盘大小，用这种方法来存储数据，
+      就像把一本厚厚的书分成很多小的章节。 这个方法叫做
+      <span class="emphasis"><em>串联</em></span>
+      它有一个优点就是磁盘不需要有任何特定的大小关系。
+      当访问到的虚拟磁盘根据它的地址空间来分布的时候， 它能工作得很好。
+      当访问集中在一个比较小的区域的时候，性能的提高没有显著的改进。
+      <a class="xref" href="vinum-access-bottlenecks.html#vinum-concat" title="图 22.1. 串联组织">图 22.1 “串联组织”</a>
+      举例说明了用串联组织的方式来分配存储单元的顺序。</p><p>
+      </p><div class="figure"><a id="vinum-concat"></a><div class="figure-title">图 22.1. 串联组织</div><div class="figure-contents"><div class="mediaobject"><img src="vinum/vinum-concat.png" alt="串联组织" /></div></div></div><p><br class="figure-break" />
+    </p><a id="idp65133304" class="indexterm"></a><a id="idp65138168" class="indexterm"></a><a id="idp65139320" class="indexterm"></a><p>另外一种影射方法是把地址空间分布在比较小的容量相同的磁盘上，
+     从而能够在不同的设备上存储它们。例如，前256 个扇区可能存储在第一
+     个磁盘上，接着的256 个扇区存储在另一个磁盘上等等。 写满最后一个磁
+     盘后，进程会重复以前的工作，直到所有的磁盘被写满。这个影射叫做
+      <span class="emphasis"><em>分段(striping)</em></span> 或者 <acronym class="acronym">RAID-0</acronym>
+
+    <a href="vinum-access-bottlenecks.html#ftn.idp65141112" class="footnote" id="idp65141112"><sup class="footnote">[11]</sup></a>.
+
+    分段要求很精确地寻址，通过多个磁盘进行数据传输的时候，它
+    可能会引起额外的I/O 负载，但它也可能提供更多的连续负载。
+    <a class="xref" href="vinum-access-bottlenecks.html#vinum-striped" title="图 22.2. 分段组织">图 22.2 “分段组织”</a>
+    显示了用分段形式分配的存储单元的顺序。</p><p>
+      </p><div class="figure"><a id="vinum-striped"></a><div class="figure-title">图 22.2. 分段组织</div><div class="figure-contents"><div class="mediaobject"><img src="vinum/vinum-striped.png" alt="分段组织" /></div></div></div><p><br class="figure-break" />
+    </p><div class="footnotes"><br /><hr class="footnote-hr" /><div id="ftn.idp65141112" class="footnote"><p><a href="vinum-access-bottlenecks.html#idp65141112" class="para"><sup class="para">[11] </sup></a><acronym class="acronym">RAID</acronym> 代表<span class="emphasis"><em>廉价冗余磁盘阵列 (Redundant
+      Array of Inexpensive Disks)</em></span> 提供各种容错机制，
+      但后面这个术语可能会有些让人误解：它不提供冗余功能。</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vinum-intro.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="vinum-vinum.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="vinum-data-integrity.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">22.2. 磁盘容量太小 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 22.4. 数据的完整性</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>4.2. 虚拟控制台和终端</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="basics.html" title="第 4 章 UNIX 基础" /><link rel="prev" href="basics.html" title="第 4 章 UNIX 基础" /><link rel="next" href="permissions.html" title="4.3. 权限" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.2. 虚拟控制台和终端</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="basics.html">上一页</a> </td><th width="60%" align="center">第 4 章 UNIX 基础</th><td width="20%" align="right"> <a accesskey="n" href="permissions.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="consoles"></a>4.2. 虚拟控制台和终端</h2></div></div></div><a id="idp51365240" class="indexterm"></a><a id="idp51365752" class="indexterm"></a><p>可以用多种不同的方式使用 FreeBSD， 在文本终端输入命令是其中之一。
+      通过使用这种方式， 您可以容易地使用 FreeBSD 来获得 <span class="trademark">UNIX</span>®
+      操作系统的灵活而强大的功能。 这一节将介绍 <span class="quote">“<span class="quote">终端</span>”</span> 和
+      <span class="quote">“<span class="quote">控制台</span>”</span>， 以及如何在 FreeBSD 中使用它们。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="consoles-intro"></a>4.2.1. 控制台</h3></div></div></div><a id="idp51368696" class="indexterm"></a><p>假如您没有设置 FreeBSD 在启动期间开启图形登录界面，
+	那么系统将在引导和启动脚本正确运行完成后，给您一个登录的提示。
+	您会看到类似这样的界面:</p><pre class="screen">Additional ABI support:.
+Local package initialization:.
+Additional TCP options:.
+
+Fri Sep 20 13:01:06 EEST 2002
+
+FreeBSD/i386 (pc3.example.org) (ttyv0)
+
+login:</pre><p>这些信息可能和您的系统稍微有点不同，但不会有很大差别。
+	最后两行是我们感兴趣的，
+        理解这一行:</p><pre class="programlisting">FreeBSD/i386 (pc3.example.org) (ttyv0)</pre><p>这一行是您刚才启动的系统信息其中一块，
+	您所看到的是一个<span class="quote">“<span class="quote">FreeBSD</span>”</span>控制台，
+	运行在一个Intel或兼容的x86体系架构上面<a href="consoles.html#ftn.idp51371384" class="footnote" id="idp51371384"><sup class="footnote">[1]</sup></a>。 这台计算机的名字 (每台 <span class="trademark">UNIX</span>® 计算机都有自己的名字) 叫
+	<code class="systemitem">pc3.example.org</code>， 就是现在这个系统控制台──这个 <code class="filename">ttyv0</code>
+	终端的样子。</p><p>在最后，最后一行一直保持这样:</p><pre class="programlisting">login:</pre><p>这里， 您将可以输入用户名
+	<span class="quote">“<span class="quote">username</span>”</span> 并登录到 FreeBSD 系统中。
+	接下来的一节， 将介绍如何登录系统。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="consoles-login"></a>4.2.2. 进入FreeBSD</h3></div></div></div><p>FreeBSD是一个多用户多任务的系统，
+	换句话来说就是一个系统中可以容纳许多不同的用户，
+	而这些用户都可以同时在这台机器中运行大量的程序。</p><p>每一个多用户系统都必须在某方面去区分 <span class="quote">“<span class="quote">user</span>”</span>，
+	在 FreeBSD 里 (以及 类-<span class="trademark">UNIX</span>® 操作系统)， 完成这方面工作是有必要的，
+	因而， 每位使用者在运行程序之前都必须首先 <span class="quote">“<span class="quote">登录</span>”</span>，
+	而每位用户都有与之对应的用户名 (<span class="quote">“<span class="quote">username</span>”</span>) 和密码
+	(<span class="quote">“<span class="quote">password</span>”</span>)。 FreeBSD
+	会在用户进入之前作出询问这两项信息。</p><a id="idp51392248" class="indexterm"></a><p>当 FreeBSD 引导并运行完启动脚本之后，
+	<a href="consoles.html#ftn.idp51393016" class="footnote" id="idp51393016"><sup class="footnote">[2]</sup></a>， 它会给出一个提示， 并要求输入有效的用户名：
+	</p><pre class="screen">login:</pre><p>举个例子更容易理解，我们假设您的用户名叫 <code class="systemitem">john</code>。
+	在提示符下输入 <code class="literal">john</code> 并按 <span class="keycap"><strong>Enter</strong></span>，
+	此时您应该看到这个提示 <span class="quote">“<span class="quote">password</span>”</span>：
+     </p><pre class="screen">login: <strong class="userinput"><code>john</code></strong>
+Password:</pre><p>现在输入 <code class="systemitem">john</code>的密码并按下
+	<span class="keycap"><strong>Enter</strong></span>。 输入密码时是 <span class="emphasis"><em>不回显的!</em></span>
+	不必为此担心， 这样做是出于安全考虑。</p><p>假如您输入的密码是正确的， 这时你应该已进入 FreeBSD，
+	并可以开始尝试可用的命令了。</p><p>您应该看见 <acronym class="acronym">MOTD</acronym> 或者出现一个命令提示符
+	(<code class="literal">#</code>、<code class="literal">$</code> 或 <code class="literal">%</code> 字符).
+	这表明您已成功登录进入FreeBSD。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="consoles-virtual"></a>4.2.3. 多个控制台</h3></div></div></div><p>在一个控制台运行 <span class="trademark">UNIX</span>® 命令虽说很好， 但 FreeBSD 具有一次运行
+	多个程序的能力。 仅使用一个控制台只会浪费 FreeBSD 同时运行多任务的能力。
+	而 <span class="quote">“<span class="quote">虚拟控制台</span>”</span> 在这方面发挥强大的功能。</p><p>FreeBSD 能配置出满足您不同需求的虚拟控制台，
+	在键盘上您用一组键就能从各个虚拟控制台之间切换。
+	各个控制台有自己的传输通道，
+	当您在各个控制台切换时 FreeBSD
+	会切换到合适的键盘传输通道和显示器传输通道。</p><p>FreeBSD 各个控制台之间可利用特殊组键切换并保留原有控制台
+	<a href="consoles.html#ftn.idp51412344" class="footnote" id="idp51412344"><sup class="footnote">[3]</sup></a>，您可这样做:
+	<span class="keycap"><strong>Alt</strong></span>+<span class="keycap"><strong>F1</strong></span>，
+	<span class="keycap"><strong>Alt</strong></span>+<span class="keycap"><strong>F2</strong></span>， 一直到
+	<span class="keycap"><strong>Alt</strong></span>+<span class="keycap"><strong>F8</strong></span>
+	在FreeBSD里切换到其中一个虚拟控制台。</p><p>同样地, 您正在从其中某个控制台切换到另一个控制台的时候,
+	FreeBSD 会保存正在使用和恢复将要使用屏幕传输通道。
+	这种结果形成一种 <span class="quote">“<span class="quote">错觉</span>”</span>，
+	您拥有许多<span class="quote">“<span class="quote">虚拟</span>”</span>屏幕和键盘可以输入很多的命令。
+	这些程序需要在一个虚拟控制台不能停止运行而又不需要观察它，
+	它继续运行而您可以切换到其他的虚拟控制台。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="consoles-ttys"></a>4.2.4. <code class="filename">/etc/ttys</code>文件</h3></div></div></div><p>FreeBSD 虚拟控制台的默认配置为8个，但并不是硬性设置，
+        您可以很容易设置虚拟控制台的个数增多或减少。
+        虚拟控制台的的编号和设置在 <code class="filename">/etc/ttys</code> 文件里。</p><p>您可以使用 <code class="filename">/etc/ttys</code> 文件在 FreeBSD 下配置虚拟控制台。
+        文件里每一未加注释的行都能设置一个终端或虚拟控制台
+        (当行里含有 <code class="literal">#</code> 这个字符时不能使用) 。
+        FreeBSD 默认配置是配置出9个虚拟控制台而只能启动8个，
+	以下这些行是 <code class="literal">ttyv</code> 一起启动:</p><pre class="programlisting"># name  getty                           type    status          comments
+#
+ttyv0   "/usr/libexec/getty Pc"         cons25  on  secure
+# Virtual terminals
+ttyv1   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv2   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv3   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv4   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv5   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv6   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv7   "/usr/libexec/getty Pc"         cons25  on  secure
+ttyv8   "/usr/X11R6/bin/xdm -nodaemon"  xterm   off secure</pre><p>如果要了解这个文件中每一列的详细介绍，
+	以及虚拟控制台上所能使用的配置，
+	请参考联机手册 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ttys&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ttys</span>(5)</span></a>。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="consoles-singleuser"></a>4.2.5. 单用户模式的控制台</h3></div></div></div><p>关于 <span class="quote">“<span class="quote">单用户模式</span>”</span> 详细介绍在 <a class="xref" href="boot-init.html#boot-singleuser" title="13.6.2. 单用户模式">第 13.6.2 节 “单用户模式”</a>
+	这里可以找到。 当您运行单用户模式时只能使用一个控制台，
+	没有多个虚拟控制台可使用。 单用户模式的控制台同也可以在
+	<code class="filename">/etc/ttys</code> 文件设置，
+	可在这行找到要启动的<code class="literal">控制台</code>：</p><pre class="programlisting"># name  getty                           type    status          comments
+#
+# If console is marked "insecure", then init will ask for the root password
+# when going to single-user mode.
+console none                            unknown off secure</pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">这个 <code class="literal">console</code> 已经注释掉,
+        您可编辑这行把 <code class="literal">secure</code> 改为
+	  <code class="literal">insecure</code>。 这样，
+	  当用单用户进入 FreeBSD 时， 它仍然要求提供
+	  <code class="systemitem">root</code> 用户的密码。</p><p xmlns="http://www.w3.org/1999/xhtml"><span class="emphasis"><em>在把这个选项改为
+	  <code class="literal">insecure</code></em></span> 的时候一定要小心，
+	  如果您忘记了
+	  <code class="systemitem">root</code>用户的密码， 进入单用户会有点麻烦。
+	  尽管仍然能进入单用户模式， 但如果您不熟悉它就会非常令人头疼。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="consoles-vidcontrol"></a>4.2.6. 改变控制台的显示模式</h3></div></div></div><p>FreeBSD 控制台默认的显示模式可以被调整为 1024x768， 1280x1024，
+	或者任何你的显卡芯片和显示器所支持的其他尺寸。
+	要使用一个不同的显示模式，
+	你必须首先重新编译内核并包含以下2个选项：</p><pre class="programlisting">options VESA
+options SC_PIXEL_MODE</pre><p>在内核用这2个选项编译完成后，你就可以使用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=vidcontrol&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">vidcontrol</span>(1)</span></a>
+	工具来测定你的硬件支持何种显示模式了。 以 root
+	身份在控制台键入以下命令来获得一份所支持的显示模式列表。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>vidcontrol -i mode</code></strong></pre><p>这个命令的输出是一份你的硬件所支持的显示模式列表。
+	你可以在以 root	身份在控制台上键入 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=vidcontrol&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">vidcontrol</span>(1)</span></a>
+	命令来改变显示模式：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>vidcontrol MODE_279</code></strong></pre><p>如果你对于新的显示模式满意，那么可以把它加入到
+	<code class="filename">/etc/rc.conf</code> 使机器在每次启动的时候都能生效，
+	我们使用了上一个例子中的模式：</p><pre class="programlisting">allscreens_flags="MODE_279"</pre></div><div class="footnotes"><br /><hr class="footnote-hr" /><div id="ftn.idp51371384" class="footnote"><p><a href="consoles.html#idp51371384" class="para"><sup class="para">[1] </sup></a>现在理解一下<code class="literal">i386</code>的含义。
+	    请注意尽管您的 FreeBSD 并非在 Intel 386 CPU
+	    上运行， 但也会显示为 <code class="literal">i386</code>。
+	    这不是指您的处理器， 而是指处理器的
+	    <span class="quote">“<span class="quote">体系结构</span>”</span>。</p></div><div id="ftn.idp51393016" class="footnote"><p><a href="consoles.html#idp51393016" class="para"><sup class="para">[2] </sup></a>启动脚本这些程序在FreeBSD在启动过程中运行。
+	   它们的主要功能为其他每方面的运行作好准备，
+	   和运行您的配置所用到的相关环境。</p></div><div id="ftn.idp51412344" class="footnote"><p><a href="consoles.html#idp51412344" class="para"><sup class="para">[3] </sup></a>关于 FreeBSD
+	    的控制台和键盘设备这些详细资料或使用技巧可在手册里找到:
+	    <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=syscons&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">syscons</span>(4)</span></a>、<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=atkbd&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">atkbd</span>(4)</span></a>、<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=vidcontrol&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">vidcontrol</span>(1)</span></a>
+	    和 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=kbdcontrol&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">kbdcontrol</span>(1)</span></a>。 我们不在这里详细介绍，
+	    但是爱好者总会在手册里找到详细的答案。</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="basics.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="basics.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">第 4 章 UNIX 基础 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 4.3. 权限</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

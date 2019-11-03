@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>A.4. 匿名 CVS</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="mirrors.html" title="附录 A. 获取 FreeBSD" /><link rel="prev" href="mirrors-bittorrent.html" title="A.3. BitTorrent" /><link rel="next" href="ctm.html" title="A.5. 使用 CTM" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">A.4. 匿名 CVS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="mirrors-bittorrent.html">上一页</a> </td><th width="60%" align="center">附录 A. 获取 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="ctm.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="anoncvs"></a>A.4. 匿名 CVS</h2></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="anoncvs-intro"></a>A.4.1. 概述</h3></div></div></div><a id="idp76106616" class="indexterm"></a><p>匿名 CVS(或人们常说的
+	  <span class="emphasis"><em>anoncvs</em></span>)是由和 FreeBSD 附带的 CVS 实用工具提供的用于和远程的
+	  CVS 代码库同步的一种特性。
+	  尤其是， 它允许 FreeBSD 用户不需要特殊的权限对任何一台 FreeBSD 项目的官方
+	  anoncvs 服务器执行只读的 CVS 操作。
+	  要使用它，简单的设置 <code class="envar">CVSROOT</code>
+	  环境变量指向适当的 anoncvs 服务器，
+	  输入 <code class="command">cvs login</code> 命令
+	  并提供广为人知的密码<span class="quote">“<span class="quote">anoncvs</span>”</span>，然后使用
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cvs&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cvs</span>(1)</span></a> 命令像访问任何本地仓库一样来访问它。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml"><code class="command">cvs login</code> 命令把用来登录 CVS
+	    服务器的密码储存在您的 <code class="envar">HOME</code> 目录中一个叫
+	    <code class="filename">.cvspass</code> 的文件里。
+	    如果这个文件不存在，
+	    第一次使用 <code class="command">cvs
+	    login</code> 的时候可能会出错。 请创建一个空的
+	    <code class="filename">.cvspass</code> 文件，然后试试重新登录。</p></div><p>也可以这么说 <a class="link" href="cvsup.html" title="A.6. 使用 CVSup">CVSup</a> 和 <span class="emphasis"><em>anoncvs</em></span>
+	  服务本质上提供了同样的功能，但是有各种各样
+	  不同的场合可以影响用户对同步方式的选择。简单来说，
+	  <span class="application">CVSup</span> 在网络资源利用方面
+	  更加有效，而且是到目前为止在两者之中技术上更成熟的
+	  除了成本方面。要使用
+	  <span class="application">CVSup</span>，在下载任何东西之前
+	  必须首先安装配置特定的客户端，
+	  而且只能用于下载相当大块的
+	  <span class="application">CVSup</span> 称作
+	  <span class="emphasis"><em>collections</em></span>。</p><p>相比之下，<span class="application">anoncvs</span> 可以通过 CVS
+	  模块名来从单个文件里检出任何东西并赋给特定的程序
+	  (比如 <code class="command">ls</code> 或者 <code class="command">grep</code>)。
+	  当然，<span class="application">anoncvs</span> 也只适用于对
+	  CVS 仓库的只读操作，所以如果您是想用和 FreeBSD 项目共享的仓库提供本地开发的话，
+	  <span class="application">CVSup</span> 几乎是您唯一的选择。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="anoncvs-usage"></a>A.4.2. 使用匿名 CVS</h3></div></div></div><p>配置 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cvs&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cvs</span>(1)</span></a> 使用匿名 CVS 仓库可以简单的设定
+	  <code class="envar">CVSROOT</code> 环境变量指向 FreeBSD 项目的
+	  <span class="emphasis"><em>anoncvs</em></span> 服务器之一。 到此书写作为止，
+	  下面的服务器都是可用的：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>法国</em></span>:
+	      :pserver:anoncvs@anoncvs.fr.FreeBSD.org:/home/ncvs
+	      (使用 pserver 模式时， 用 <code class="command">cvs login</code>
+	      配合口令 <span class="quote">“<span class="quote">anoncvs</span>”</span> 来登录。
+	      如果使用的是 ssh， 则不需要口令。)</p></li><li class="listitem"><p><span class="emphasis"><em>台湾</em></span>地区:
+	      :pserver:anoncvs@anoncvs.tw.FreeBSD.org:/home/ncvs
+	      (使用 pserver 模式时， 用 <code class="command">cvs login</code>
+	      配合口令 <span class="quote">“<span class="quote">anoncvs</span>”</span> 来登录。
+	      如果使用的是 ssh， 则不需要口令。)</p><pre class="programlisting">SSH2 HostKey: 1024 02:ed:1b:17:d6:97:2b:58:5e:5c:e2:da:3b:89:88:26 /etc/ssh/ssh_host_rsa_key.pub
+SSH2 HostKey: 1024 e8:3b:29:7b:ca:9f:ac:e9:45:cb:c8:17:ae:9b:eb:55 /etc/ssh/ssh_host_dsa_key.pub</pre></li><li class="listitem"><p><span class="emphasis"><em>美国</em></span>:
+	      anoncvs@anoncvs1.FreeBSD.org:/home/ncvs (使用 ssh 时，
+	      请使用协议版本 2， 不需要口令。)</p><pre class="programlisting">SSH2 HostKey: 2048 53:1f:15:a3:72:5c:43:f6:44:0e:6a:e9:bb:f8:01:62 /etc/ssh/ssh_host_dsa_key.pub</pre></li></ul></div><p>因为 CVS 实际上允许 <span class="quote">“<span class="quote">检出</span>”</span>
+	  曾经存在的 (或者，某种情况下将会存在)
+	  FreeBSD 源代码的任意版本， 您需要熟悉
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cvs&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cvs</span>(1)</span></a> 的版本 (<code class="option">-r</code>) 参数，
+	  以及在 FreeBSD 代码库中可用的值。</p><p>有两种标签，修订标签和分支标签。
+	  修订标签特指一个特定的修订版本。含义始终是不变的。
+	  分支标签，另一方面，
+	  指代给定时间给定开发分支的最新修订，
+	  因为分支标签不涉及特定的修订版本，
+	  它明天所代表的含义就可能和今天的不同。</p><p><a class="xref" href="cvs-tags.html" title="A.7. CVS 标签">第 A.7 节 “CVS 标签”</a> 包括了用户可能感兴趣的
+ 	  修订标签。 请注意， 这些标签并不适用于 Ports Collection，
+	  因为它并不包含多个开发分支。</p><p>当您指定一个分支标签，您通常会得到那个开发分支的文件的最新版本。
+	  如果您希望得到一些旧的版本，您可以用
+	  <code class="option">-D date</code> 标记制定一个日期。
+	  察看 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cvs&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cvs</span>(1)</span></a> 手册页了解更多细节。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp76148472"></a>A.4.3. 示例</h3></div></div></div><p>在这之前强烈建议您通读 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=cvs&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">cvs</span>(1)</span></a> 的手册页，
+	  这里有一些简单的例子来展示如何使用匿名
+	  CVS：</p><div class="example"><a id="idp76150264"></a><div class="example-title">例 A.1. 从 -CURRENT 检出些东西 (<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ls&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ls</span>(1)</span></a>)：</div><div class="example-contents"><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>setenv CVSROOT :pserver:anoncvs@anoncvs.tw.FreeBSD.org:/home/ncvs</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>cvs login</code></strong>
+<span class="emphasis"><em>&gt;在提示符处，输入任意密码</em></span> <span class="quote">“<span class="quote">password</span>”</span>.
+<code class="prompt">%</code> <strong class="userinput"><code>cvs co ls</code></strong>
+	  </pre></div></div><br class="example-break" /><div class="example"><a id="idp76155128"></a><div class="example-title">例 A.2. 通过 SSH 检出整个 <code class="filename">src/</code>
+	    代码树：</div><div class="example-contents"><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>cvs -d anoncvs@anoncvs1.FreeBSD.org:/home/ncvs co src</code></strong>
+The authenticity of host 'anoncvs1.freebsd.org (216.87.78.137)' can't be established.
+DSA key fingerprint is 53:1f:15:a3:72:5c:43:f6:44:0e:6a:e9:bb:f8:01:62.
+Are you sure you want to continue connecting (yes/no)? <strong class="userinput"><code>yes</code></strong>
+Warning: Permanently added 'anoncvs1.freebsd.org' (DSA) to the list of known hosts.</pre></div></div><br class="example-break" /><div class="example"><a id="idp76161784"></a><div class="example-title">例 A.3. 检出 8-STABLE 分支中的 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ls&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ls</span>(1)</span></a> 版本：</div><div class="example-contents"><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>setenv CVSROOT :pserver:anoncvs@anoncvs.tw.FreeBSD.org:/home/ncvs</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>cvs login</code></strong>
+<span class="emphasis"><em>在提示符处，输入任意密码</em></span> <span class="quote">“<span class="quote">password</span>”</span>。
+<code class="prompt">%</code> <strong class="userinput"><code>cvs co -rRELENG_8 ls</code></strong>
+	  </pre></div></div><br class="example-break" /><div class="example"><a id="idp76170744"></a><div class="example-title">例 A.4. 创建 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ls&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ls</span>(1)</span></a> 的变化列表(用标准的 diff)</div><div class="example-contents"><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>setenv CVSROOT :pserver:anoncvs@anoncvs.tw.FreeBSD.org:/home/ncvs</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>cvs login</code></strong>
+<span class="emphasis"><em>在提示符处，输入任意密码</em></span> <span class="quote">“<span class="quote">password</span>”</span>。
+<code class="prompt">%</code> <strong class="userinput"><code>cvs rdiff -u -rRELENG_8_0_0_RELEASE -rRELENG_8_1_0_RELEASE ls</code></strong>
+	  </pre></div></div><br class="example-break" /><div class="example"><a id="idp76175608"></a><div class="example-title">例 A.5. 找出可以使用的其它的模块名：</div><div class="example-contents"><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>setenv CVSROOT :pserver:anoncvs@anoncvs.tw.FreeBSD.org:/home/ncvs</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>cvs login</code></strong>
+<span class="emphasis"><em>在提示符处，输入任意密码</em></span> <span class="quote">“<span class="quote">password</span>”</span>。
+<code class="prompt">%</code> <strong class="userinput"><code>cvs co modules</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>more modules/modules</code></strong>
+	  </pre></div></div><br class="example-break" /></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp76196984"></a>A.4.4. 其他资源</h3></div></div></div><p>下面附加的资源可能对学习
+	  CVS 有帮助：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://users.csc.calpoly.edu/~gfisher/classes/308/handouts/cvs-basics.html" target="_top">CVS 教程</a>，
+		来自加州州立理工大学。</p></li><li class="listitem"><p><a class="link" href="http://ximbiot.com/cvs/wiki/" target="_top">CVS 主页</a>，
+	      CVS 开发和支持社区。</p></li><li class="listitem"><p><a class="link" href="http://www.FreeBSD.org/cgi/cvsweb.cgi" target="_top">CVSweb</a> 是
+	      FreeBSD 项目的 CVS web 界面。</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mirrors-bittorrent.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="mirrors.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="ctm.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">A.3. BitTorrent </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> A.5. 使用 CTM</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

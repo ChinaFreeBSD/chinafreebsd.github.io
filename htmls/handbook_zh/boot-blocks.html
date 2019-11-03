@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>13.3. 引导管理器和各引导阶段</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="boot.html" title="第 13 章 FreeBSD 引导过程" /><link rel="prev" href="boot-introduction.html" title="13.2. 引导问题" /><link rel="next" href="boot-kernel.html" title="13.4. 内核在引导时的交互" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">13.3. 引导管理器和各引导阶段</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="boot-introduction.html">上一页</a> </td><th width="60%" align="center">第 13 章 FreeBSD 引导过程</th><td width="20%" align="right"> <a accesskey="n" href="boot-kernel.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="boot-blocks"></a>13.3. 引导管理器和各引导阶段</h2></div></div></div><a id="idp58897784" class="indexterm"></a><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-boot0"></a>13.3.1. The Boot Manager</h3></div></div></div><a id="idp58899064" class="indexterm"></a><p>在MBR或引导管理器中的代码有时被提为引导过程的
+        <span class="emphasis"><em>阶段0</em></span>。这一小节便是前面提到引导器中的两种：
+        <span class="application">boot0</span>和<span class="application">LILO</span>。</p><p><span class="formalpara-title"><span class="application">boot0</span>引导管理器：. </span>由 FreeBSD 的安装程序以及 boot0cfg(8) 所安装的 MBR，
+          默认基于 <code class="filename">/boot/boot0</code>。
+          (程序<span class="application">boot0</span>非常简单，
+          由于在<abbr class="abbrev">MBR</abbr>中的程序只能有446字节长，
+          分区表和MBR末端的<code class="literal">0x55AA</code>标识也要挤占一些空间。)
+          如果你已经安装<span class="application">boot0</span>
+          并且有多个操作系统在你的硬盘上，
+          那么你如果您安装了 FreeBSD MBR 而且安装了多个操作系统，
+          则会在系统启动时看到类似下面的提示：</p><div class="example"><a id="boot-boot0-example"></a><div class="example-title">例 13.1. <code class="filename">boot0</code> 截屏</div><div class="example-contents"><pre class="screen">F1 DOS
+F2 FreeBSD
+F3 Linux
+F4 ??
+F5 Drive 1
+
+Default: F2</pre></div></div><br class="example-break" /><p>目前已经知道一些其它操作系统，特别是 <span class="trademark">Windows</span>® ， 会以自己的
+	MBR 覆盖现有 MBR。 如果发生了这种事情， 或者您想用
+	FreeBSD 的 MBR 覆盖现有的 MBR，您可以使用以下的命令：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>fdisk -B -b /boot/boot0 device</code></strong></pre><p><em class="replaceable"><code>device</code></em> 是要写入 MBR
+	的设备名，比如 <code class="filename">ad0</code>
+	代表第一个 IDE 磁盘，<code class="filename">ad2</code>
+	代表第二个 IDE 控制器上的第一个 IDE 磁盘，
+	<code class="filename">da0</code> 代表第一个 SCSI 磁盘，等等。
+	抑或，如果你需要一个自行配置的MBR，请使用<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=boot0cfg&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">boot0cfg</span>(8)</span></a>。</p><p><span class="formalpara-title">The LILO Boot Manager: </span>要想安装这个引导管理器并也用来引导FreeBSD，
+	首先启动Linux，并将以下选项加入到已有的配置文件
+	<code class="filename">/etc/lilo.conf</code>：</p><pre class="programlisting">other=/dev/hdXY
+table=/dev/hdX
+loader=/boot/chain.b
+label=FreeBSD</pre><p>在上面的内容里，使用Linux的标示符指定了FreeBSD的主分区和驱动器，
+	将<em class="replaceable"><code>X</code></em>替换为Linux驱动器字母，
+	将<em class="replaceable"><code>Y</code></em>替换为Linux主分区号。
+	如果您使用的是 <acronym class="acronym">SCSI</acronym> 驱动器，您需要将
+	<em class="replaceable"><code>/dev/hd</code></em> 改成 <em class="replaceable"><code>/dev/sd</code></em>，
+	这里再次使用了 <em class="replaceable"><code>XY</code></em> 的语法。
+	如果您安装的两个系统在同一驱动器上，<code class="option">loader=/boot/chain.b</code>
+	选项可以去掉。现在您可以执行 <code class="command">/sbin/lilo -v</code>
+	使修改生效；应检查屏幕上的消息确认修改。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-boot1"></a>13.3.2. 第一阶段，<code class="filename">/boot/boot1</code>，和第二阶段，
+	<code class="filename">/boot/boot2</code></h3></div></div></div><p>概念上，第一，第二阶段同属于一个程序，处于磁盘的相同区域。但由于空间限制，
+	它们被分为两部分。可是您总是会一起安装它们。它们由安装器或
+	<span class="application">bsdlabel</span>(见下文)复制自被组合而成的
+	<code class="filename">/boot/boot</code>。</p><p>它们位于文件系统外，引导分区的第一轨道，从第一扇区开始。在这里<a class="link" href="boot-blocks.html#boot-boot0" title="13.3.1. The Boot Manager">boot0</a>，或者任何其它引导管理器，
+	期望找到一个程序运行，继续引导进程。
+	所使用的扇区数可由<code class="filename">/boot/boot</code>的大小确定。</p><p><code class="filename">boot1</code> 非常简单，因为它再多也只能有 512 字节，
+	只能识别储存着分区信息的 <em class="firstterm">bsdlabel</em>，
+	及寻找执行 <code class="filename">boot2</code>。</p><p><code class="filename">boot2</code> 稍微有点加强，能够理解 FreeBSD
+	的文件系统以便于寻找里面的文件，
+	能提供选择内核和加载器的简单界面。</p><p>因为 <a class="link" href="boot-blocks.html#boot-loader" title="13.3.3. 第三阶段，/boot/loader">loader</a> 有着更强的功能，
+	提供了一套易于使用的引导配置，<code class="filename">boot2</code> 一般都执行 loader，
+	但以前它的任务是直接运行内核。</p><div class="example"><a id="boot-boot2-example"></a><div class="example-title">例 13.2. <code class="filename">boot2</code> 的屏幕输出</div><div class="example-contents"><pre class="screen">&gt;&gt; FreeBSD/i386 BOOT
+Default: 0:ad(0,a)/boot/loader
+boot:</pre></div></div><br class="example-break" /><p>如果您要更改已安装的 <code class="filename">boot1</code> 和
+	<code class="filename">boot2</code>，请使用命令
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=bsdlabel&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">bsdlabel</span>(8)</span></a>。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>bsdlabel -B diskslice</code></strong></pre><p><em class="replaceable"><code>diskslice</code></em> 是用于引导的磁盘和分区，
+	比如 <code class="filename">ad0s1</code>
+	代表第一个 IDE 磁盘上的第一个分区。</p><div xmlns="" class="warning"><h3 class="admontitle">dangerously dedicated: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果您在 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=bsdlabel&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">bsdlabel</span>(8)</span></a> 命令中只使用了磁盘名，比如
+	  <code class="filename">ad0</code>，就会破坏磁盘上的所有分区。
+	  这当然不是您所希望的，所以在按下 <span class="keycap"><strong>回车</strong></span> 之前
+	  一定要对命令进行多次确认。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-loader"></a>13.3.3. 第三阶段，<code class="filename">/boot/loader</code></h3></div></div></div><a id="idp58989560" class="indexterm"></a><p>加载器 (loader) 是三个阶段中的最后阶段，
+      且是放置在文件系统之中的，一般是文件
+      <code class="filename">/boot/loader</code>。</p><p>loader 被作为一种友好的配置方式，使用了一组内建且易用的命令集。
+      这些命令由一个强大的多的解释器支持构建，其本身带有复杂得多的命令集。</p><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-loader-flow"></a>13.3.3.1. Loader 程序流程</h4></div></div></div><p>初始时，loader 会探测控制台和磁盘，识别是从哪块盘引导的。
+	它会根据这些信息设置变量，
+	启动解释器以接受通过脚本或交互方式传来的用户命令。</p><a id="idp58992504" class="indexterm"></a><a id="idp58993016" class="indexterm"></a><p>loader 然后会读取并运行 <code class="filename">/boot/loader.rc</code>，
+	默认地读取 <code class="filename">/boot/defaults/loader.conf</code>
+	以设置可靠的默认变量，读取 <code class="filename">/boot/loader.conf</code>
+	对这些变量作本地修改。<code class="filename">loader.rc</code>
+	依据这些变量进行动作，加载任何被选择的模块和内核。</p><p>最后，默认地，loader 会停留 10 秒等待按键，
+	若没有发生中断，就开始引导内核。如果被中断，用户会得到一个命令行提示符，
+	在这里用户得更改变量、卸载所有模块、加载模块、最后引导
+	或重新引导。</p></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-loader-commands"></a>13.3.3.2. Loader 内建的命令</h4></div></div></div><p>这些是最常用的 loader 命令.对所有可用命令的解释请参见
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=loader&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">loader</span>(8)</span></a>。</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">autoboot<em class="replaceable"><code>seconds</code></em></span></dt><dd><p>在给定的时间内如果没有中断发生就引导内核。它显示一个倒数计时，
+	      默认的时间范围是 10 秒。</p></dd><dt><span class="term">boot
+	    [<span class="optional">-options</span>]
+	    [<span class="optional">kernelname</span>]</span></dt><dd><p>立即按指定的选项启动指定名字的内核 (如果有指定的话)。
+	      只有首先执行过 <span class="emphasis"><em>unload</em></span>
+	      命令之后指定的内核名字才会生效，
+	      否则， 启动的将是先前已经加载的内核。</p></dd><dt><span class="term">boot-conf</span></dt><dd><p>基于变量对各种模块进行自动配置 (和引导内核时发生的一样)。
+	      您只须记住要先使用 <code class="command">unload</code> 命令，
+	      然后修改一些变量，比如 <code class="envar">kernel</code>。</p></dd><dt><span class="term">help
+	    [<span class="optional">topic</span>]</span></dt><dd><p>显示从文件 <code class="filename">/boot/loader.help</code>
+	      读取的帮助信息。如果给定的主题是 <code class="literal">index</code>，
+	      那么列出来的是所有可用的主题。</p></dd><dt><span class="term">include <em class="replaceable"><code>filename</code></em>
+	    …</span></dt><dd><p>通过给定的文件名处理文件。文件被读入，然后被一行一行地解释。
+	      任何错误都会立即中止 include 命令。</p></dd><dt><span class="term">load [<span class="optional">-t
+	    type</span>]
+	    <em class="replaceable"><code>filename</code></em></span></dt><dd><p>加载内核、内核模块，或者是给定类型的文件 (通过给定的文件名)。
+	      任何在文件名后面的参数都会被传给文件。</p></dd><dt><span class="term">ls [<span class="optional">-l</span>]
+	    [<span class="optional">path</span>]</span></dt><dd><p>显示给定路径或者是根目录 (如果路径没有指定) 下面的文件列表。
+	      如果指定了 <code class="option">-l</code> 选项，文件大小也会显示。</p></dd><dt><span class="term">lsdev [<span class="optional">-v</span>]</span></dt><dd><p>列出所有可以加载模块的设备。
+	      如果指定了<code class="option">-v</code> 选项，会显示出更多的细节。</p></dd><dt><span class="term">lsmod [<span class="optional">-v</span>]</span></dt><dd><p>显示已被加载的模块。如果指明了 <code class="option">-v</code> 选项，
+	      会显示更多的细节。</p></dd><dt><span class="term">more <em class="replaceable"><code>filename</code></em></span></dt><dd><p>显示指定的文件，每隔 <code class="varname">LINES</code> 停顿一次。</p></dd><dt><span class="term">reboot</span></dt><dd><p>立即重启系统。</p></dd><dt><span class="term">set <em class="replaceable"><code>variable</code></em>, </span><span class="term">set
+	    <em class="replaceable"><code>variable</code></em>=<em class="replaceable"><code>value</code></em></span></dt><dd><p>设置 loader 的环境变量。</p></dd><dt><span class="term">unload</span></dt><dd><p>移除所有已被加载的模块。</p></dd></dl></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-loader-examples"></a>13.3.3.3. Loader 示例</h4></div></div></div><p>这里有一些实际中 loader 用法的示例</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>只是简单的引导默认内核，不同的是进入单用户模式：<a id="idp59069944" class="indexterm"></a></p><pre class="screen"><strong class="userinput"><code>boot -s</code></strong></pre></li><li class="listitem"><p>卸载默认内核和模块，然后加载旧的 (或者其它) 的内核：</p><pre class="screen"><strong class="userinput"><code>unload</code></strong>
+<strong class="userinput"><code>load kernel.old</code></strong></pre><p>您可以使用被称为通用内核的 <code class="filename">kernel.GENERIC</code>，
+	    或者您以前安装的内核 <code class="filename">kernel.old</code><a id="idp59073528" class="indexterm"></a>
+	    (当您升级或配置了您自己的内核等时候)。</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">使用以下命令加载常用的模块和另一个内核：</p><pre xmlns="http://www.w3.org/1999/xhtml" class="screen"><strong class="userinput"><code>unload</code></strong>
+<strong class="userinput"><code>set kernel="kernel.old"</code></strong>
+<strong class="userinput"><code>boot-conf</code></strong></pre></div></li><li class="listitem"><p>加载内核配置脚本：</p><pre class="screen"><strong class="userinput"><code>load -t userconfig_script /boot/kernel.conf</code></strong></pre></li></ul></div></div><div class="sect3"><div xmlns="" class="titlepage"><div><div><h4 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-splash"></a>13.3.3.4. 启动时的 Splash 图像</h4></div><div><span class="authorgroup">Contributed by <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Joseph J.</span> <span class="surname">Barbish</span></span>. </span></div></div></div><p>在启动时出现的 splash 图像比起原本的启动信息更加可视话。
+          这个图像将被始终显示在屏幕上直到出现控制台的登录提示或者
+          X 显示管理器提供了登录画面。</p><p>在 FreeBSD 系统中有两个基本的环境。
+          第一个是默认传统的控制台命令行环境。 在系统启动之后，
+          会在控制台上出现一个登录提示。 第二个环境是 X11
+          桌面图形环境。 在安装了 <a class="link" href="x-install.html" title="6.3. 安装 X11">X11</a>
+          和一种图形 <a class="link" href="x11-wm.html" title="6.7. 桌面环境">桌面环境</a>，
+          比如 <span class="application">GNOME</span>，
+	  <span class="application">KDE</span>， 或者
+	  <span class="application">XFce</span>，
+          X11 桌面可以用 <code class="command">startx</code> 命令运行。</p><p>比起传统基于字符的登录提示，有些用户可能更喜欢 X11
+          图形化的登录界面。 图形化的登录管理器像
+          Xorg 的 <span class="application">XDM</span>，
+          <span class="application">GNOME</span> 的 <span class="application">gdm</span>，
+          <span class="application">KDE</span> 的 <span class="application">kdm</span>
+          (还有其他 Port Collection 中的)
+          基本上都提供了一个图形化的登录界面代替控制台上的登录提示符。
+          在成功登录之后， 它们展现给用户一个图形化的桌面。</p><p>在命令行环境， splash
+          图像将在显示登录提示符之前隐藏所有启动时的监测与任务启动的消息。
+          在 X11 环境， 用户将会获得一个视觉上更加清爽启动体验，
+          类似于某些像 (<span class="trademark">Microsoft</span>® <span class="trademark">Windows</span>® 或者非 <span class="trademark">UNIX</span>® 类型的系统)
+          用户所希望体验到的。</p><div class="sect4"><div xmlns="" class="titlepage"><div><div><h5 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-splash-function"></a>13.3.3.4.1. Splash 图像功能</h5></div></div></div><p>目前的 splash 图像的功能仅限于支持 256 色的位图
+            (<code class="filename">.bmp</code>) 或者 ZSoft
+            <acronym class="acronym">PCX</acronym> (<code class="filename">.pcx</code>) 文件。
+            此外， splash 图像文件的分辨率必须是 320x200 像素或者更少，
+            才够能在标准 VGA 适配器上使用。</p><p>要使用尺寸更大的图像， 达到最大分辨率 1024x768 像素，
+            则需开启 FreeBSD 的 <acronym class="acronym">VESA</acronym> 支持。
+            这可以通过在系统启动时加载 <acronym class="acronym">VESA</acronym> 模块完成，
+            或者在内核配置文件中加入 <code class="literal">VESA</code> 选项并编译
+            (参阅 <a class="xref" href="kernelconfig.html" title="第 9 章 配置FreeBSD的内核">第 9 章 <em>配置FreeBSD的内核</em></a>)。 <acronym class="acronym">VESA</acronym>
+            支持给予了用户显示覆盖整个显示器的启动画面能力。</p><p>在启动的时候 splash 图像就会被显示在屏幕上，
+            它可以在任何时候都按任意键关闭。</p><p>Splash 图像同样也会是 X11 之外默认的屏幕保护。
+            在一段时间的闲置后，屏幕便会转为周期性的变换显示 splash 图像，
+            从明亮至暗淡， 周而复始。 默认的 splash 图像 (屏幕保护)
+            可由 <code class="filename">/etc/rc.conf</code> 中的
+            <code class="literal">saver=</code> 选项控制。
+            <code class="literal">saver=</code> 选项有一些内置的屏幕保护可供选择，
+            完整的列表可以再 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=splash&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">splash</span>(4)</span></a> 手册页中找到。
+            默认的屏幕保护被称为 <span class="quote">“<span class="quote">warp</span>”</span>。
+            请注意在 <code class="filename">/etc/rc.conf</code> 中所指定
+            <code class="literal">saver=</code> 选项仅限应用于虚拟控制台。
+            对于 X11 图形化的登录管理器无效。</p><p>一些有关启动引导器的信息，
+            包括启动选项菜单和一个定时倒数提示符都会在启动时显示，
+            即是开启了 splash 图像功能。</p><p>splash 图像文件样本可以从 <a class="link" href="http://artwork.freebsdgr.org/node/3/" target="_top">http://artwork.freebsdgr.org</a> 下载。
+	    安装了 <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/sysutils/bsd-splash-changer/pkg-descr">sysutils/bsd-splash-changer</a>
+	    port 之后， 每次启动的时候便能从集合中随机选择
+	    splash 图像。</p></div><div class="sect4"><div xmlns="" class="titlepage"><div><div><h5 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="boot-splash-enable"></a>13.3.3.4.2. 开启 Splash 图像功能</h5></div></div></div><p>Splash 图像 (<code class="filename">.bmp</code>) 或者
+            (<code class="filename">.pcx</code>) 文件必须放置在 root 分区上，
+            比如 <code class="filename">/boot</code> 目录。</p><p>对于默认的显示分辨率 (256 色，320x200 像素或更少)
+            编辑 <code class="filename">/boot/lodaer.conf</code>，
+            添加如下的设置：</p><pre class="programlisting">splash_bmp_load="YES"
+bitmap_load="YES"
+bitmap_name="<em class="replaceable"><code>/boot/splash.bmp</code></em>"</pre><p>对于更高的分辨率，最大至 1024x768 像素，
+            编辑 <code class="filename">/boot/lodaer.conf</code>，
+            添加如下的设置：</p><pre class="programlisting">vesa_load="YES"
+splash_bmp_load="YES"
+bitmap_load="YES"
+bitmap_name="<em class="replaceable"><code>/boot/splash.bmp</code></em>"</pre><p>以上这些设置假设
+            <code class="filename">/boot/splash.bmp</code>
+            为需要被使用的 splash 图像。 当需要使用 <acronym class="acronym">PCX</acronym>
+            文件的时候， 添加入下列设置， 根据分辨率的高低添加
+            <code class="literal">vesa_load="YES"</code>。</p><pre class="programlisting">splash_pcx_load="YES"
+bitmap_load="YES"
+bitmap_name="<em class="replaceable"><code>/boot/splash.pcx</code></em>"</pre><p>文件名并不限于以上例子中的 <span class="quote">“<span class="quote">splash</span>”</span>。
+            它可以是任何名称，只要是 <acronym class="acronym">BMP</acronym> 或者
+            <acronym class="acronym">PCX</acronym> 类型的文件， 比如
+	    <code class="filename">splash_640x400.bmp</code>
+            或者
+	    <code class="filename">blue_wave.pcx</code>.</p><p>一些有趣的 <code class="filename">loader.conf</code> 选项：</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">beastie_disable="YES"</code></span></dt><dd><p>这将关闭显示启动选项菜单，
+                  但是倒数记时仍然会出现。 即是在启动菜单选项被禁用的时候，
+                  在倒数记时段键入相应的启动选项仍然有效。</p></dd><dt><span class="term"><code class="literal">loader_logo="beastie"</code></span></dt><dd><p>这将替换启动选项菜单右侧默认显示的
+                  <span class="quote">“<span class="quote">FreeBSD</span>”</span> 为彩色的小魔鬼标志，
+                  就像以往的发行版那样。</p></dd></dl></div><p>请参阅 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=splash&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">splash</span>(4)</span></a>， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=loader.conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">loader.conf</span>(5)</span></a> 和
+            <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=vga&amp;sektion=4&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">vga</span>(4)</span></a> 手册页获取更多详细信息。</p></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="boot-introduction.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="boot.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="boot-kernel.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">13.2. 引导问题 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 13.4. 内核在引导时的交互</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

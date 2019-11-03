@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>22.7. 对象命名</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="vinum-vinum.html" title="第 22 章 Vinum 卷管理程序" /><link rel="prev" href="vinum-examples.html" title="22.6. 一些例子" /><link rel="next" href="vinum-config.html" title="22.8. 配置 Vinum" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">22.7. 对象命名</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vinum-examples.html">上一页</a> </td><th width="60%" align="center">第 22 章 Vinum 卷管理程序</th><td width="20%" align="right"> <a accesskey="n" href="vinum-config.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="vinum-object-naming"></a>22.7. 对象命名</h2></div></div></div><p>如前面所描述的那样， Vinum 会给 plex 和子盘指定默认的名字，
+      而这些名字也是可以定制的。 不推荐修改默认的名字：
+      使用允许给对象任意命名的 VERITAS
+      卷管理器的经验证明， 这一灵活性并没有带来太多的好处，
+      相反， 它很容易导致对象的混淆。</p><p>名字中可以包括任何非空白的字符， 但一般来说，
+      建议只使用字母、 数字和下划线。 卷、 plex， 以及子盘的名字，
+      可以包含最多 64 个字符， 而驱动器的名字， 则最长可以使用
+      32 个字符。</p><p>Vinum 对象会在
+      <code class="filename">/dev/gvinum</code> 之下生成设备节点。
+      前述的配置将使 Vinum 创建以下设备节点：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>每个卷对应的设备项。 这些是 Vinum 使用的主要设备。
+	  因此， 前述配置包括下列设备：
+	  <code class="filename">/dev/gvinum/myvol</code>、
+	  <code class="filename">/dev/gvinum/mirror</code>、
+	  <code class="filename">/dev/gvinum/striped</code>、
+	  <code class="filename">/dev/gvinum/raid5</code> 以及
+	  <code class="filename">/dev/gvinum/raid10</code>。</p></li><li class="listitem"><p>所有卷的直接项都存放在
+	  <code class="filename">/dev/gvinum/</code> 中。</p></li><li class="listitem"><p>目录
+	  <code class="filename">/dev/gvinum/plex</code>， 以及
+	  <code class="filename">/dev/gvinum/sd</code> 中相应地存放了每个 plex
+	  以及子盘的设备节点。</p></li></ul></div><p>例如， 考虑下面的配置文件：</p><pre class="programlisting">
+	drive drive1 device /dev/sd1h
+	drive drive2 device /dev/sd2h
+	drive drive3 device /dev/sd3h
+	drive drive4 device /dev/sd4h
+    volume s64 setupstate
+      plex org striped 64k
+        sd length 100m drive drive1
+        sd length 100m drive drive2
+        sd length 100m drive drive3
+        sd length 100m drive drive4</pre><p>处理这个文件之后， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=gvinum&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">gvinum</span>(8)</span></a> 将在
+      <code class="filename">/dev/gvinum</code> 中建立下面的结构：</p><pre class="programlisting">
+	drwxr-xr-x  2 root  wheel       512 Apr 13 16:46 plex
+	crwxr-xr--  1 root  wheel   91,   2 Apr 13 16:46 s64
+	drwxr-xr-x  2 root  wheel       512 Apr 13 16:46 sd
+
+    /dev/vinum/plex:
+    total 0
+    crwxr-xr--  1 root  wheel   25, 0x10000002 Apr 13 16:46 s64.p0
+
+    /dev/vinum/sd:
+    total 0
+    crwxr-xr--  1 root  wheel   91, 0x20000002 Apr 13 16:46 s64.p0.s0
+    crwxr-xr--  1 root  wheel   91, 0x20100002 Apr 13 16:46 s64.p0.s1
+    crwxr-xr--  1 root  wheel   91, 0x20200002 Apr 13 16:46 s64.p0.s2
+    crwxr-xr--  1 root  wheel   91, 0x20300002 Apr 13 16:46 s64.p0.s3</pre><p>虽然 plex 和子盘一般并不推荐指定名字， 但还是必须给 Vinum
+      驱动器命名。 这样， 当把驱动器转移到不同的地方时，
+      它仍然能够被自动地识别出来。 驱动器名最长可以包含
+      32 个字符。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65292152"></a>22.7.1. 创建文件系统</h3></div></div></div><p>对于系统而言， 卷和磁盘是一样的。
+	  唯一的例外是， 与 <span class="trademark">UNIX</span>® 驱动器不同， Vinum 并不对卷进行分区，
+	  因而它也就不包含分区表。 这要求修改某些磁盘工具，
+	  特别是 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=newfs&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">newfs</span>(8)</span></a>， 它会试图将 Vinum 卷名当作分区标识。
+	  例如， 磁盘驱动器的名字可能是
+          <code class="filename">/dev/ad0a</code> 或
+	  <code class="filename">/dev/da2h</code>。
+	  这些名字分别表达在第一个 (0) IDE (<code class="filename">ad</code>)
+	  磁盘上的第一个分区 (<code class="filename">a</code>)，
+	  以及第三个 (2) SCSI 磁盘 (<code class="filename">da</code>)
+	  上的第八个分区 (<code class="filename">h</code>)。
+	  而相比而言， Vinum 卷可能叫做
+	  <code class="filename">/dev/gvinum/concat</code>，
+	  这个名字和分区名没有什么关系。</p><p>要在这个卷上创建文件系统， 则需要使用
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=newfs&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">newfs</span>(8)</span></a>：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>newfs /dev/gvinum/concat</code></strong></pre></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vinum-examples.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="vinum-vinum.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="vinum-config.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">22.6. 一些例子 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 22.8. 配置 Vinum</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

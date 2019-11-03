@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>14.6. 修改帐户</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="users.html" title="第 14 章 用户和基本的帐户管理" /><link rel="prev" href="users-user.html" title="14.5. 用户帐户" /><link rel="next" href="users-limiting.html" title="14.7. 限制用户使用系统资源" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">14.6. 修改帐户</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="users-user.html">上一页</a> </td><th width="60%" align="center">第 14 章 用户和基本的帐户管理</th><td width="20%" align="right"> <a accesskey="n" href="users-limiting.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="users-modifying"></a>14.6. 修改帐户</h2></div></div></div><a id="idp58949624" class="indexterm"></a><p>在<span class="trademark">UNIX</span>® 的处理用户帐户的环境中有很多不同的命令可用.
+      最普通的命令如下， 接下来是详细使用它们的例子。</p><div class="informaltable"><table width="100%" border="0"><colgroup><col /><col /></colgroup><thead><tr><th>命令</th><th>摘要</th></tr></thead><tbody><tr><td><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=adduser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">adduser</span>(8)</span></a></td><td>在命令行添加新用户.</td></tr><tr><td><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=rmuser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">rmuser</span>(8)</span></a></td><td>在命令行删除用户.</td></tr><tr><td><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chpass</span>(1)</span></a></td><td>一个灵活的用于修改用户数据库信息的工具.</td></tr><tr><td><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=passwd&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">passwd</span>(1)</span></a></td><td>一个用于修改用户口令的简单的命令行工具.</td></tr><tr><td><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pw&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pw</span>(8)</span></a></td><td>一个强大灵活修改用户帐户的工具.</td></tr></tbody></table></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="users-adduser"></a>14.6.1. <code class="command">添加用户</code></h3></div></div></div><a id="idp59349752" class="indexterm"></a><a id="idp59363192" class="indexterm"></a><a id="idp59364088" class="indexterm"></a><a id="idp59364984" class="indexterm"></a><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=adduser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">adduser</span>(8)</span></a> 是一个简单的添加新用户的命令.  它为用户创建
+	<code class="filename">passwd</code> 和 <code class="filename">group</code>
+	文件。 它也为新用户创建一个主目录， 之后， 它会复制一组默认的配置文件
+	(<span class="quote">“<span class="quote">dotfiles</span>”</span>) 从 <code class="filename">/usr/share/skel</code>
+	这个目录， 然后给新用户发送一封带欢迎信息的邮件。</p><div class="example"><a id="idp59372152"></a><div class="example-title">例 14.1. 在 FreeBSD 中添加一个新用户</div><div class="example-contents"><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>adduser</code></strong>
+Username: <strong class="userinput"><code>jru</code></strong>
+Full name: <strong class="userinput"><code>J. Random User</code></strong> Uid (Leave empty for default):
+Login group [jru]:
+Login group is jru. Invite jru into other groups? []: <strong class="userinput"><code>wheel</code></strong>
+Login class [default]:
+Shell (sh csh tcsh zsh nologin) [sh]: <strong class="userinput"><code>zsh</code></strong>
+Home directory [/home/jru]:
+Home directory permissions (Leave empty for default):
+Use password-based authentication? [yes]:
+Use an empty password? (yes/no) [no]:
+Use a random password? (yes/no) [no]:
+Enter password:
+Enter password again:
+Lock out the account after creation? [no]:
+Username   : jru
+Password   : ****
+Full Name  : J. Random User
+Uid        : 1001
+Class      :
+Groups     : jru wheel
+Home       : /home/jru
+Shell      : /usr/local/bin/zsh
+Locked     : no
+OK? (yes/no): <strong class="userinput"><code>yes</code></strong>
+adduser: INFO: Successfully added (jru) to the user database.
+Add another user? (yes/no): <strong class="userinput"><code>no</code></strong> Goodbye!
+<code class="prompt">#</code></pre></div></div><br class="example-break" /><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">您输入的口令并不会回显到屏幕上， 此外系统也不会显示星号。 请务必确保没有输错口令。
+	  </p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="users-rmuser"></a>14.6.2. <code class="command">删除用户</code></h3></div></div></div><a id="idp59378424" class="indexterm"></a><a id="idp59383160" class="indexterm"></a><p>您可以使用<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=rmuser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">rmuser</span>(8)</span></a> 从系统中完全删除一个用户.
+	<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=rmuser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">rmuser</span>(8)</span></a> 执行如下步骤:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>删除用户的 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=crontab&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">crontab</span>(1)</span></a> 记录 (如果有的话).</p></li><li class="step"><p>删除属于用户的<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=at&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">at</span>(1)</span></a> 工作.</p></li><li class="step"><p>杀掉属于用户的所有进程.</p></li><li class="step"><p>删除本地口令文件中的用户.</p></li><li class="step"><p>删除用户的主目录 (如果他有自己的主目录).</p></li><li class="step"><p>删除来自 <code class="filename">/var/mail</code>属于用户的邮件.</p></li><li class="step"><p>删除所有诸如 <code class="filename">/tmp</code>的临时文件存储区中的文件.</p></li><li class="step"><p>最后, 删除 <code class="filename">/etc/group</code>中所有属于组的该用户名.</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果一个组变成空，而组名和用户名一样,组将被删除.
+		<a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=adduser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">adduser</span>(8)</span></a>命令建立每个用户唯一的组.</p></div></li></ol></div><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=rmuser&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">rmuser</span>(8)</span></a> 不能用来删除超级用户的帐户, 因为那样做是对系统极大的破坏.</p><p>默认情况下, 使用交互模式, 这样能够让您清楚的知道您在做什么.</p><div class="example"><a id="idp59402488"></a><div class="example-title">例 14.2. <code class="command">删除用户</code> 交互模式下的帐户删除</div><div class="example-contents"><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>rmuser jru</code></strong> Matching password entry:
+jru:*:1001:1001::0:0:J. Random User:/home/jru:/usr/local/bin/zsh Is this the entry you wish to remove? <strong class="userinput"><code>y</code></strong> Remove user's home directory (/home/jru)? <strong class="userinput"><code>y</code></strong> Updating password file, updating databases, done.
+Updating group file: trusted (removing group jru -- personal group is empty) done.
+Removing user's incoming mail file /var/mail/jru: done.
+Removing files belonging to jru from /tmp: done.
+Removing files belonging to jru from /var/tmp: done.
+Removing files belonging to jru from /var/tmp/vi.recover: done.
+<code class="prompt">#</code></pre></div></div><br class="example-break" /></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="users-chpass"></a>14.6.3. <code class="command">chpass</code></h3></div></div></div><a id="idp59406584" class="indexterm"></a><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chpass</span>(1)</span></a> 可以改变用户的口令, shells, 和包括个人信息在内的数据库信息.</p><p>只有系统管理员， 即超级用户， 才可以用 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chpass</span>(1)</span></a> 改变其他用户口令和信息。</p><p>除了可选择的用户名，
+	  不需要任何选项， <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chpass</span>(1)</span></a> 将显示一个包含用户信息的编辑器.  可以试图改变用户在数据库中的信息.</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">如果您不是超级用户的话， 在退出编辑状态之后，
+	 系统会询问您口令。</p></div><div class="example"><a id="idp59423608"></a><div class="example-title">例 14.3. 以超级用户交互执行 <code class="command">chpass</code> 命令</div><div class="example-contents"><pre class="screen">#Changing user database information for jru.
+Login: jru
+Password: *
+Uid [#]: 1001
+Gid [# or name]: 1001
+Change [month day year]:
+Expire [month day year]:
+Class:
+Home directory: /home/jru
+Shell: /usr/local/bin/zsh
+Full Name: J. Random User
+Office Location:
+Office Phone:
+Home Phone:
+Other information:</pre></div></div><br class="example-break" /><p>普通用户只能改变他们自己很少的一部分信息.</p><div class="example"><a id="idp59425528"></a><div class="example-title">例 14.4. 以普通用户交互执行 <code class="command">chpass</code> 命令</div><div class="example-contents"><pre class="screen">#Changing user database information for jru.
+Shell: /usr/local/bin/zsh
+Full Name: J. Random User
+Office Location:
+Office Phone:
+Home Phone:
+Other information:</pre></div></div><br class="example-break" /><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml"><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chfn&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chfn</span>(1)</span></a> 和 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chsh&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chsh</span>(1)</span></a> 只是到 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chpass</span>(1)</span></a> 的符号连接，
+	  类似地，
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ypchpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ypchpass</span>(1)</span></a>, <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ypchfn&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ypchfn</span>(1)</span></a>
+	  以及 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=ypchsh&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">ypchsh</span>(1)</span></a> 也是这样。
+	  NIS 是自动支持的，
+	  不一定要在命令前指定 <code class="literal">yp</code>。
+	  如果这让您有点不太明白， 不必担心，
+	  NIS 将在 <a class="xref" href="network-servers.html" title="第 30 章 网络服务器">第 30 章 <em>网络服务器</em></a> 介绍。</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="users-passwd"></a>14.6.4. <code class="command">passwd命令</code></h3></div></div></div><a id="idp59442296" class="indexterm"></a><a id="idp59442936" class="indexterm"></a><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=passwd&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">passwd</span>(1)</span></a> 是改变您自己作为一个普通用户口令或者作为超级用户口令常用的方法.</p><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">用户改变口令前必须键入原来的口令, 防止用户离开终端时非授权的用户进入改变合法用户的口令。</p></div><div class="example"><a id="idp59445880"></a><div class="example-title">例 14.5. 改变您的口令</div><div class="example-contents"><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>passwd</code></strong> Changing local password for jru.
+Old password:
+New password:
+Retype new password:
+passwd: updating the database...
+passwd: done</pre></div></div><br class="example-break" /><div class="example"><a id="idp59447672"></a><div class="example-title">例 14.6. 改变其他用户的口令同超级用户的一样</div><div class="example-contents"><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>passwd jru</code></strong> Changing local password for jru.
+New password:
+Retype new password:
+passwd: updating the database...
+passwd: done</pre></div></div><br class="example-break" /><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">就象 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=chpass&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">chpass</span>(1)</span></a>一样,
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=yppasswd&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">yppasswd</span>(1)</span></a> 只是一个到
+	  <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=passwd&amp;sektion=1&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">passwd</span>(1)</span></a>的连接, 所以NIS用任何一个命令都可以正常工作.</p></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="users-pw"></a>14.6.5. <code class="command">pw命令</code></h3></div></div></div><a id="idp59453688" class="indexterm"></a><p><a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pw&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pw</span>(8)</span></a> 是一个用来创建、删除、修改、显示用户和组的命令行工具。
+        它还有系统用户和组文件编辑器的功能。 <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=pw&amp;sektion=8&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">pw</span>(8)</span></a>
+        有一个非常强大的命令行选项设置，
+        但新用户可能会觉得它比这里讲的其它命令要复杂很多。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="users-user.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="users.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="users-limiting.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">14.5. 用户帐户 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 14.7. 限制用户使用系统资源</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

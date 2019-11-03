@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>6.5. 在 X11 中使用字体</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="x11.html" title="第 6 章 X Window 系统" /><link rel="prev" href="x-config.html" title="6.4. 配置 X11" /><link rel="next" href="x-xdm.html" title="6.6. X 显示管理器" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.5. 在 X11 中使用字体</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="x-config.html">上一页</a> </td><th width="60%" align="center">第 6 章 X Window 系统</th><td width="20%" align="right"> <a accesskey="n" href="x-xdm.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="x-fonts"></a>6.5. 在 X11 中使用字体</h2></div><div><span class="authorgroup">供稿<span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Murray</span> <span class="surname">Stokely</span></span>. </span></div></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="type1"></a>6.5.1. Type1 字体</h3></div></div></div><p>X11 使用的默认字体不是很理想。
+    大型的字体显得参差不齐，看起来很不专业， 并且， 在
+    <span class="application"><span class="trademark">Netscape</span>®</span> 中， 小字体简直无法看清。
+    有好几种免费、 高质量的字体可以很方便地用在 X11 中。 例如，URW字体集合
+    (<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11-fonts/urwfonts/pkg-descr">x11-fonts/urwfonts</a>) 就包括了高质量的
+    标准 type1 字体 (<span class="trademark">Times Roman</span>®,
+    <span class="trademark">Helvetica</span>®、 <span class="trademark">Palatino</span>® 和其他一些)。 在 Freefont 集合中
+    (<a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11-fonts/freefonts/pkg-descr">x11-fonts/freefonts</a>) 也包括更多的字体，
+    但它们中的绝大部分使用在图形软件中，如
+     <span class="application">Gimp</span>，在屏幕字体中使用并不完美。另外，
+     只要花很少的功夫，可以将
+    <span class="application"><span class="trademark">XFree86</span>™</span> 配置成能使用
+    <span class="trademark">TrueType</span>® 字体：请参见后面的
+    <a class="link" href="x-fonts.html#truetype" title="6.5.2. TrueType® 字体"><span class="trademark">TrueType</span>® 字体一节</a>。</p><p>如果希望使用
+      Ports Collection 来安装上面的 Type1 字体， 只需运行下面的命令：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/ports/x11-fonts/urwfonts</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>make install clean</code></strong></pre><p>freefont 或其他的字库和上面所说的大体类似。 为了让 X
+      服务器能够检测到这些字体， 需要在
+      X 服务器的配置文件 (<code class="filename">/etc/X11/xorg.conf</code>)
+      中增加下面的配置：</p><pre class="programlisting">FontPath "/usr/local/lib/X11/fonts/URW/"</pre><p>或者，也可以在命令行运行：</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>xset fp+ /usr/local/lib/X11/fonts/URW</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>xset fp rehash</code></strong></pre><p>这样会起作用，但是当 X 会话结束后就会丢失，
+    除非它被添加到启动文件 (<code class="filename">~/.xinitrc</code> 中，
+    针对一个寻常的 <code class="command">startx</code> 会话，或者当您通过一个类似
+      <span class="application">XDM</span> 的图形登录管理器登录时添加到
+     <code class="filename">~/.xsession</code> 中)。
+    第三种方法是使用新的
+    <code class="filename">/usr/local/etc/fonts/local.conf</code> 文件： 查看
+     <a class="link" href="x-fonts.html#antialias" title="6.5.3. Anti-Aliased 字体">anti-aliasing</a> 章节。
+    </p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="truetype"></a>6.5.2. <span class="trademark">TrueType</span>® 字体</h3></div></div></div><a id="idp53451640" class="indexterm"></a><a id="idp53452152" class="indexterm"></a><p><span class="application">Xorg</span> 已经内建了对
+    <span class="trademark">TrueType</span>® 字体的支持。有两个不同的模块能够启用这个功能。
+    在这个例子中使用 freetype 这个模块，因为它与其他的字体描绘后端
+    是兼容的。要启用 freetype 模块，只需要将下面这行添加到
+    <code class="filename">/etc/X11/xorg.conf</code> 文件的
+    <code class="literal">"Module"</code> 部分。</p><pre class="programlisting">Load "freetype"</pre><p>现在，为 <span class="trademark">TrueType</span>® 字体创建一个目录 (比如，
+      <code class="filename">/usr/local/lib/X11/fonts/TrueType</code>)
+      然后把所有的 <span class="trademark">TrueType</span>® 字体复制到这个目录。记住您不能直接从
+       <span class="trademark">Macintosh</span>® 计算机中提取 <span class="trademark">TrueType</span>® 字体；
+      能被 X11 使用的必须是
+       <span class="trademark">UNIX</span>®/<span class="trademark">MS-DOS</span>®/<span class="trademark">Windows</span>® 格式的。
+      一旦您已经将这些文件复制到了这个目录， 就可以用
+      <span class="application">ttmkfdir</span> 来创建
+      <code class="filename">fonts.dir</code> 文件，
+      以便让X字体引擎知道您已经安装了这些新文件。
+      <code class="command">ttmkfdir</code> 可以在 FreeBSD
+      Ports 套件中的
+      <a xmlns="" class="package" href="https://www.freebsd.org/cgi/url.cgi?ports/x11-fonts/ttmkfdir/pkg-descr">x11-fonts/ttmkfdir</a> 中找到。</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>cd /usr/local/lib/X11/fonts/TrueType</code></strong>
+<code class="prompt">#</code> <strong class="userinput"><code>ttmkfdir -o fonts.dir</code></strong></pre><p>现在把 <span class="trademark">TrueType</span>® 字体目录添加到字体路径中。
+      这和上面 <a class="link" href="x-fonts.html#type1" title="6.5.1. Type1 字体">Type1</a> 字体的步骤是一样的，
+      那就是，使用</p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code>xset fp+ /usr/local/lib/X11/fonts/TrueType</code></strong>
+<code class="prompt">%</code> <strong class="userinput"><code>xset fp rehash</code></strong></pre><p>或者把 <code class="literal">FontPath</code> 这行加到
+       <code class="filename">xorg.conf</code> 文件中。</p><p>就是这样。现在 <span class="application"><span class="trademark">Netscape</span>®</span>,
+        <span class="application">Gimp</span>,
+        <span class="application"><span class="trademark">StarOffice</span>™</span> 和其他所有的 X 应用程序
+        应该可以认出安装的 <span class="trademark">TrueType</span>®
+        字体。一些很小的字体(如在 Web 页面上高分辨率显示的文本)
+        和一些很大的字体(在
+        <span class="application"><span class="trademark">StarOffice</span>™</span> 下) 现在看起来已经很好了。
+
+        </p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="antialias"></a>6.5.3. Anti-Aliased 字体</h3></div><div><span class="authorgroup">Updated by <span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Joe Marcus</span> <span class="surname">Clarke</span></span>. </span></div></div></div><a id="idp53485560" class="indexterm"></a><a id="idp53486072" class="indexterm"></a><p>对于所有支持 Xft 的应用程序， 所有放到 X11
+      <code class="filename">/usr/local/lib/X11/fonts/</code> 和
+      <code class="filename">~/.fonts/</code> 中的字体都自动地被加入反走样支持。
+      绝大多数较新的程序都提供了 Xft 支持， 包括
+      <span class="application">KDE</span>、 <span class="application">GNOME</span> 以及
+      <span class="application">Firefox</span>。</p><p>要控制哪些字体是 anti-aliased，或者配置 anti-aliased 特性，
+      创建(或者编辑，如果文件已经存在的话)文件
+      <code class="filename">/usr/local/etc/fonts/local.conf</code>。Xft 字体系统的几个
+      高级特性都可以使用这个文件来调节；
+      这一部分只描述几种最简单的情况。要了解更多的细节，请查看
+      <a class="citerefentry" href="https://www.FreeBSD.org/cgi/man.cgi?query=fonts-conf&amp;sektion=5&amp;manpath=freebsd-release-ports"><span class="citerefentry"><span class="refentrytitle">fonts-conf</span>(5)</span></a>.</p><a id="idp53490936" class="indexterm"></a><p>这个文件一定是 XML 格式的。注意确保所有的标签都完全的关闭掉。
+      这个文件以一个很普通的 XML 头开始， 后跟一个 DOCTYPE 定义，
+      接下来是 <code class="literal">&lt;fontconfig&gt;</code> 标签：</p><pre class="programlisting">
+      &lt;?xml version="1.0"?&gt;
+      &lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
+      &lt;fontconfig&gt;
+    </pre><p>像前面所做的那样，在
+      <code class="filename">/usr/local/lib/X11/fonts/</code> 和
+      <code class="filename">~/.fonts/</code> 目录下的所有字体已经可以被支持 Xft 的
+      应用程序使用了。如果您想添加这两个目录以外的其他路径，
+      简单的添加下面这行到
+      <code class="filename">/usr/local/etc/fonts/local.conf</code>文件中：</p><pre class="programlisting">&lt;dir&gt;/path/to/my/fonts&lt;/dir&gt;</pre><p>添加了新的字体，尤其是添加了新的字体目录后，
+      您应该运行下面的命令重建字体缓存：</p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code>fc-cache -f</code></strong></pre><p>Anti-aliasing 会让字体边缘有些模糊，这样增加了非常小的文本的可读性，
+      并从大文本字体中删除 <span class="quote">“<span class="quote">锯齿</span>”</span>。
+      但如果使用普通的文本， 则可能引起眼疲劳。
+      要禁止 14磅 以下字体的反走样， 需要增加如下配置：</p><pre class="programlisting">        &lt;match target="font"&gt;
+            &lt;test name="size" compare="less"&gt;
+                &lt;double&gt;14&lt;/double&gt;
+            &lt;/test&gt;
+            &lt;edit name="antialias" mode="assign"&gt;
+                &lt;bool&gt;false&lt;/bool&gt;
+            &lt;/edit&gt;
+        &lt;/match&gt;
+        &lt;match target="font"&gt;
+            &lt;test name="pixelsize" compare="less" qual="any"&gt;
+                &lt;double&gt;14&lt;/double&gt;
+            &lt;/test&gt;
+            &lt;edit mode="assign" name="antialias"&gt;
+                &lt;bool&gt;false&lt;/bool&gt;
+            &lt;/edit&gt;
+        &lt;/match&gt;</pre><a id="idp53509368" class="indexterm"></a><p>用 anti-aliasing 来间隔一些等宽字体也是不适当的。
+      这似乎是 <span class="application">KDE</span> 的一个问题。
+      要修复这个问题需要确保每个字体之间的间距保持在100。
+      加入下面这些行：</p><pre class="programlisting">       &lt;match target="pattern" name="family"&gt;
+           &lt;test qual="any" name="family"&gt;
+               &lt;string&gt;fixed&lt;/string&gt;
+           &lt;/test&gt;
+           &lt;edit name="family" mode="assign"&gt;
+               &lt;string&gt;mono&lt;/string&gt;
+           &lt;/edit&gt;
+        &lt;/match&gt;
+        &lt;match target="pattern" name="family"&gt;
+            &lt;test qual="any" name="family"&gt;
+                &lt;string&gt;console&lt;/string&gt;
+            &lt;/test&gt;
+            &lt;edit name="family" mode="assign"&gt;
+                &lt;string&gt;mono&lt;/string&gt;
+            &lt;/edit&gt;
+        &lt;/match&gt;</pre><p>(这里把其他普通的修复的字体作为
+        <code class="literal">"mono"</code>)，然后加入：</p><pre class="programlisting">         &lt;match target="pattern" name="family"&gt;
+             &lt;test qual="any" name="family"&gt;
+                 &lt;string&gt;mono&lt;/string&gt;
+             &lt;/test&gt;
+             &lt;edit name="spacing" mode="assign"&gt;
+                 &lt;int&gt;100&lt;/int&gt;
+             &lt;/edit&gt;
+         &lt;/match&gt;      </pre><p>某些字体，比如 Helvetica，当 anti-aliased 的时候可能存在问题。
+	通常的表现为字体本身似乎被垂直的切成两半。
+	糟糕的时候，还可能导致应用程序崩溃。
+	为了避免这样的现象，考虑添加下面几行到
+	<code class="filename">local.conf</code>文件里面：</p><pre class="programlisting">         &lt;match target="pattern" name="family"&gt;
+             &lt;test qual="any" name="family"&gt;
+                 &lt;string&gt;Helvetica&lt;/string&gt;
+             &lt;/test&gt;
+             &lt;edit name="family" mode="assign"&gt;
+                 &lt;string&gt;sans-serif&lt;/string&gt;
+             &lt;/edit&gt;
+         &lt;/match&gt;        </pre><p>一旦您完成对
+        <code class="filename">local.conf</code> 文件的编辑，确保您使用了
+        <code class="literal">&lt;/fontconfig&gt;</code> 标签来结束文件。
+        不这样做将会导致您的更改被忽略。</p><p>最后，用户可以通过他们个人的
+        <code class="filename">.fonts.conf</code> 文件来添加自己的设定。
+        要完成此项工作， 用户只需简单地创建
+	<code class="filename">~/.fonts.conf</code> 并添加相关配置。
+	此文件也必须是 XML 格式的。</p><a id="idp53532408" class="indexterm"></a><a id="idp53532920" class="indexterm"></a><p>最后：对于LCD屏幕， 可能希望使用子像素的取样。 简单而言，
+        这是通过分别控制 (水平方向分开的) 红、绿、蓝 像素，
+        来改善水平分辨率； 这样做的效果一般会非常明显。
+        要启用它， 只需在
+         <code class="filename">local.conf</code> 文件的某个地方加入：</p><pre class="programlisting">
+         &lt;match target="font"&gt;
+             &lt;test qual="all" name="rgba"&gt;
+                 &lt;const&gt;unknown&lt;/const&gt;
+             &lt;/test&gt;
+             &lt;edit name="rgba" mode="assign"&gt;
+                 &lt;const&gt;rgb&lt;/const&gt;
+             &lt;/edit&gt;
+         &lt;/match&gt;
+       </pre><div xmlns="" class="note"><h3 class="admontitle">注意: </h3><p xmlns="http://www.w3.org/1999/xhtml">随您显示器的种类不同， 可能需要把
+	 <code class="literal">rgb</code> 改为 <code class="literal">bgr</code>、
+	 <code class="literal">vrgb</code> 或 <code class="literal">vbgr</code>：
+	 试验一下看看那个更好。</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="x-config.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="x11.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="x-xdm.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">6.4. 配置 X11 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 6.6. X 显示管理器</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

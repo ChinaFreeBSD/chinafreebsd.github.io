@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>25.9. 跟踪多台机器</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="updating-upgrading.html" title="第 25 章 更新与升级 FreeBSD" /><link rel="prev" href="make-delete-old.html" title="25.8. 删除过时的文件、 目录和函数库" /><link rel="next" href="dtrace.html" title="第 26 章 DTrace" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">25.9. 跟踪多台机器</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="make-delete-old.html">上一页</a> </td><th width="60%" align="center">第 25 章 更新与升级 FreeBSD</th><td width="20%" align="right"> <a accesskey="n" href="dtrace.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="small-lan"></a>25.9. 跟踪多台机器</h2></div><div><span class="authorgroup">贡献者<span xmlns="http://www.w3.org/1999/xhtml" class="author"><span class="firstname">Mike</span> <span class="surname">Meyer</span></span>. </span></div></div></div><a id="idp67224824" class="indexterm"></a><p>如果您有多台机器想跟踪同样的源码树，
+      那么让它们都下载源码并重建所有东西，看起有点浪费资源：
+      磁盘空间、网络带宽以及 CPU 周期。
+      解决的办法是让一台机器处理大部分的工作，而其它的机器通过
+      NFS 挂接 (mount) 这些工作。这部分列举了一种这样做的方法。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="small-lan-preliminaries"></a>25.9.1. 准备</h3></div></div></div><p>首先，确定一批机器，运行的二进制代码是同一套---我们称作
+	<span class="emphasis"><em>构建集群 (build set)</em></span>。 每台机器可以使用不同的定制内核，
+	但它们运行的是相同的用户区二进制文件(userland binaries)。
+	从这批机器中选择一台机器做为 <span class="emphasis"><em>构建机器(build machine)</em></span>。
+	这将是用于构建(build)系统和内核的机器。想像一下，它应该是一台快速的机器，
+	有足够的空余的 CPU 来执行<code class="command">make buildworld</code>。
+	您也想要选一台机器做为 <span class="emphasis"><em>测试机器(test machine)</em></span>，
+	这个将用于软件的更新生成产品之前对他们进行测试。这个
+	<span class="emphasis"><em>必须</em></span> 是一台您能提供的平时也可使用的机器。
+	它可以是<span class="quote">“<span class="quote">构建机器</span>”</span>，但没这个必要。</p><p>在这个<span class="quote">“<span class="quote">构建集群</span>”</span>里的所有机器需要从同一台机器、
+	同一个点上挂接 <code class="filename">/usr/obj</code> 和
+	<code class="filename">/usr/src</code>。理想地，
+	它们在<span class="quote">“<span class="quote">构建机器</span>”</span>上的两个不同的驱动器里，
+	但是在那台机器上可以进行 NFS 挂接。如果您有多个<span class="quote">“<span class="quote">构建集群</span>”</span>，
+	<code class="filename">/usr/src</code> 应该在某个<span class="quote">“<span class="quote">构建机器</span>”</span>上，
+	而在其它机器上进行 NFS 挂接。</p><p>最后，确认<span class="quote">“<span class="quote">构建集群</span>”</span>里所有机器上的
+	<code class="filename">/etc/make.conf</code> 和
+        <code class="filename">/etc/src.conf</code> 与<span class="quote">“<span class="quote">构建机器</span>”</span>里的相同。
+	这意味着<span class="quote">“<span class="quote">构建机器</span>”</span>必须构建部分基本系统用于
+	<span class="quote">“<span class="quote">构建集群</span>”</span>里所有机器的安装。同样，
+	每台<span class="quote">“<span class="quote">构建机器</span>”</span>要有它自已的内核名字，使用
+	<code class="filename">/etc/make.conf</code> 里的 <code class="varname">KERNCONF</code>
+	进行设置，并且每台<span class="quote">“<span class="quote">构建机器</span>”</span>应该把它们列在
+	<code class="varname">KERNCONF</code> 里，同时把自已的内核列在最前。
+	<span class="quote">“<span class="quote">构建机器</span>”</span>的
+	<code class="filename">/usr/src/sys/arch/conf</code>
+	里一定要有每台机器的内核配置文件，如果它想构建它们的内核的话。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="small-lan-base-system"></a>25.9.2. 基本系统</h3></div></div></div><p>既然所有的妥当了，就准备构建所有的东西。如<a class="xref" href="makeworld.html#make-buildworld" title="25.7.7.2. 编译基本系统">第 25.7.7.2 节 “编译基本系统”</a>中描述的一样在<span class="quote">“<span class="quote">构建机器</span>”</span>上构建内核和系统，
+	但是什么也不安装。在构建结束后，转到<span class="quote">“<span class="quote">测试机器</span>”</span>上，
+	安装您刚构建的内核。如果这台机器通过 NFS 挂接了
+	<code class="filename">/usr/src</code> 和 <code class="filename">/usr/obj</code>，
+	在您重启到单用户模式里，您需要启动网络然后挂接他们。
+	最简单的方式是启动到多用户模式下，然后执行 <code class="command">shutdown now</code>
+	转到单用户模式。一旦进入，您就可以安装新的内核和系统，并执行
+	<code class="command">mergemaster</code>，就像平常一样。完成后，
+	重启返回到一般多用户模式操作这台机器。</p><p>在您确信所有在 <span class="quote">“<span class="quote">测试机</span>”</span>里都工作正常后，
+	就使用相同的过程在 <span class="quote">“<span class="quote">构建集群</span>”</span>里的其它机器里安装新的软件。</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="small-lan-ports"></a>25.9.3. Ports</h3></div></div></div><p>类似的想法是使用 ports 树。
+	第一个关键的步骤是从同一台计算机上挂接
+	<code class="filename">/usr/ports</code> 到 <span class="quote">“<span class="quote">构建集群</span>”</span> 里的全部计算机。
+	然后正确设置 <code class="filename">/etc/make.conf</code> 共享
+	distfiles。您应把 <code class="varname">DISTDIR</code> 设置到一个共享的目录里，
+	那里可以被任何一个 <code class="systemitem">root</code> 用户写入， 并且是由您的
+	NFS 挂接映射的。 设置每一台机器的 <code class="varname">WRKDIRPREFIX</code>
+	到一个本地构建 (build) 目录。最后，如果您要构建和发布包
+	(packages)，那么您应该设置 <code class="varname">PACKAGES</code>
+	到一个类似于 <code class="varname">DISTDIR</code> 的目录。</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="make-delete-old.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="updating-upgrading.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="dtrace.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">25.8. 删除过时的文件、 目录和函数库 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 第 26 章 DTrace</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>

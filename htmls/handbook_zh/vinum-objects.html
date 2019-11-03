@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>22.5. Vinum 目标</title><link rel="stylesheet" type="text/css" href="docbook.css" /><link rev="made" href="mailto:doc@FreeBSD.org" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><link rel="home" href="index.html" title="FreeBSD 使用手册" /><link rel="up" href="vinum-vinum.html" title="第 22 章 Vinum 卷管理程序" /><link rel="prev" href="vinum-data-integrity.html" title="22.4. 数据的完整性" /><link rel="next" href="vinum-examples.html" title="22.6. 一些例子" /><link rel="copyright" href="legalnotice.html" title="版权声明" /><script xmlns="" type="text/javascript" src="https://www.freebsd.org/layout/js/google.js"></script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">22.5. Vinum 目标</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vinum-data-integrity.html">上一页</a> </td><th width="60%" align="center">第 22 章 Vinum 卷管理程序</th><td width="20%" align="right"> <a accesskey="n" href="vinum-examples.html">下一页</a></td></tr></table><hr /></div><div class="sect1"><div xmlns="" class="titlepage"><div><div><h2 xmlns="http://www.w3.org/1999/xhtml" class="title" style="clear: both"><a id="vinum-objects"></a>22.5. Vinum 目标</h2></div></div></div><p>为了解决这些问题，Vinum 提出了一个四层的目标结构：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>最显著的目标是虚拟磁盘, 叫做
+	    <span class="emphasis"><em>卷(volume)</em></span>.  卷本质上与一个UNIX 磁盘
+	    驱动器有同样的属性，虽然它们是有些不太一样。它们没有大小的限制。
+	    </p></li><li class="listitem"><p>卷下面是 <span class="emphasis"><em>plexes</em></span>,
+	    每一个表示卷的所有地址空间。在层次结构中的这个水平能够提供
+	    冗余功能。可以把plex 想象成用一个镜象排列的方式组织起来的
+	    独立磁盘，每个都包含同样的数据。</p></li><li class="listitem"><p>由于Vinum 存在于UNIX 磁盘存储框架中,所以它也可能
+	  使用UNIX 分区作为多个磁盘plex 的组成部分,
+	   但事实上这并不可靠:UNIX 磁盘只能有有限数量的分区。
+	    取而代之，Vinum 把一个简单的UNIX 分区 (the <span class="emphasis"><em>drive</em></span>)
+	    分解成叫做<span class="emphasis"><em>subdisks</em></span>的相邻区域, 它可以使用这个
+           来为plex 建立块。</p></li><li class="listitem"><p>Subdisks 位于 Vinum <span class="emphasis"><em>驱动器上</em></span>,
+	   当前的UNIX 分区。Vinum 驱动器可以包含很多的subdisks。
+	    除了驱动器开始的一小块区域用来存储配置和描述信息以外，整个
+	    驱动器都可以用于存储数据。</p></li></ul></div><p>下面的章节描述了这些目标提供了Vinum 所要求的功能的方法。</p><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65182712"></a>22.5.1. 卷的大小要求</h3></div></div></div><p>在Vinum的配置中，Plex可以把多个subdisk 分布在所有的驱动上。
+       结果, 每个独立的驱动器的大小都不会限制plex 的大小，从而不会限制卷的大小
+	</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65183864"></a>22.5.2. 多余的数据存储</h3></div></div></div><p>Vinum 通过给一个卷连上多个plex 来完成镜象的功能。
+	每个plex 是一个在一个卷中的数据的描述。一个卷可以包含一个
+	到八个plex。</p><p>虽然一个plex 描述了一个卷的所有数据，,
+	但可能描述的部分被物理地丢失了。可能是设计的问题
+	（没有为plex 部分定义一个subdisk）也可能是意外的故障
+	（由于驱动器的故障导致）。只要至少有一个plex 能够为
+	 卷的完全地址范围提供数据，卷就能够正常工作。
+	</p></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65185400"></a>22.5.3. 性能问题</h3></div></div></div><p>Vinum 在plex 水平既执行串联也执行分段：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>一个<span class="emphasis"><em>串连的plex</em></span>轮流使用
+	    每个subdisk 的地址空间。</p></li><li class="listitem"><p>一个 <span class="emphasis"><em>分段的plex</em></span> 在每个subdisk 上
+	  划分数据. Subdisk 必须是大小一样的，为了从一个连接的plex 中
+	  区分开它，必须至少有两个subdisk。 </p></li></ul></div></div><div class="sect2"><div xmlns="" class="titlepage"><div><div><h3 xmlns="http://www.w3.org/1999/xhtml" class="title"><a id="idp65189240"></a>22.5.4. 哪种plex 组织更有效？</h3></div></div></div><p>FreeBSD 12.0提供的Vinum 版本能实现两种plex:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>串联的plex 更加灵活：它们可以包含任何数量的subdisk，
+	  subdisk 也可能有不同的长度。Plex 可以通过添加额外的subdisk
+	  来得到扩展。  与分段 plex 不同， 它们需要的
+	    <acronym class="acronym">CPU</acronym> 时钟更少， 尽管
+	     <acronym class="acronym">CPU</acronym> 上的负载差异是不可测量的。
+	      另一方面，它们的负载可能不平衡，一个磁盘可能负载很重，
+	      而其他的可能很空闲。</p></li><li class="listitem"><p>分段(<acronym class="acronym">RAID-0</acronym>) plexes 的最大优点是
+	  它们减少了负载不平衡的情况: 通过选择一个最合适大小的分段
+	  (大约是256 kB), 您甚至可以在各个组成的驱动器上降低负载
+	    .  这种方法的缺点是在subdisk 上受到非常复杂的编码限制
+	    : 它们必须是同样大小, 通过添加新的subdisk 来扩展一个plex
+	    是非常复杂的,以至Vinum 当前没有实现它.  Vinum 利用一个额外
+	    的，代价不高的限制：一个分段的plex 必须有至少两个subdisk，
+	    否则， 它就无法区分连接的 plex 了。</p></li></ul></div><p><a class="xref" href="vinum-objects.html#vinum-comparison" title="表 22.1. Vinum Plex组织图">表 22.1 “Vinum Plex组织图”</a> 总结一下每个plex 组织
+      的优点和缺点.</p><div class="table"><a id="vinum-comparison"></a><div class="table-title">表 22.1. Vinum Plex组织图</div><div class="table-contents"><table summary="Vinum Plex组织图" border="0"><colgroup><col /><col /><col /><col /><col /></colgroup><thead><tr><th>Plex 类型</th><th>最少subdisks</th><th>可否添加subdisks</th><th>尺寸相同</th><th>应用</th></tr></thead><tbody><tr><td>串联 </td><td>1</td><td>可以</td><td>不必须</td><td>带有很大弹性和适中性能的大数据量存储。
+	        </td></tr><tr><td>分段</td><td>2</td><td>不可以</td><td>必须</td><td>大量并发访问时,具有较高性能。</td></tr></tbody></table></div></div><br class="table-break" /></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vinum-data-integrity.html">上一页</a> </td><td width="20%" align="center"><a accesskey="u" href="vinum-vinum.html">上一级</a></td><td width="40%" align="right"> <a accesskey="n" href="vinum-examples.html">下一页</a></td></tr><tr><td width="40%" align="left" valign="top">22.4. 数据的完整性 </td><td width="20%" align="center"><a accesskey="h" href="index.html">起始页</a></td><td width="40%" align="right" valign="top"> 22.6. 一些例子</td></tr></table></div><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>本文档和其它文档可从这里下载：
+    <a href="ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/">ftp://ftp.FreeBSD.org/pub/FreeBSD/doc/</a>.</small></p><p xmlns="http://www.w3.org/TR/xhtml1/transitional" align="center"><small>如果对于FreeBSD有问题，请先阅读
+    <a href="http://www.FreeBSD.org/docs.html">文档</a>，如不能解决再联系
+    &lt;<a href="mailto:questions@FreeBSD.org">questions@FreeBSD.org</a>&gt;.<br></br>
+    关于本文档的问题请发信联系
+    &lt;<a href="mailto:doc@FreeBSD.org">doc@FreeBSD.org</a>&gt;.</small></p></body></html>
