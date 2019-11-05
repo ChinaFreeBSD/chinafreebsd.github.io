@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      cpuset调控程序cpu时间抢占
-subtitle:   FaceSwap 实战详解
+subtitle:   spuset使用
 date:       2019-11-05
 author:     FormWeb
 header-img: img/post-bg-ios9-web.jpg
