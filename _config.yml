@@ -5,7 +5,7 @@ header-img: img/post-bg-desk.jpg
 email: mamaipee@outlook.com
 description: "你好！欢迎来到FreeBSD的世界。"
 keyword: "freebsd,china freebsd community,FreeBSD,China FreeBSD Community"
-url: "http://chinafreebsd.github.io"          # your host, for absolute URL
+url: "http://mpoes.com"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/chinafreebsd/chinafreebsd.github.io.git" # you code repository
 
